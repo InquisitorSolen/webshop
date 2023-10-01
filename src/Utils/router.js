@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import NotFoundPage from "../CustomerPages/NotFoundPage";
+import NotFoundPage from "../404/NotFoundPage";
 import CustomerLayout from "../Layouts/CustomerLayout";
 import Signup from "../CustomerPages/Signup";
 import Cart from "../CustomerPages/Cart";
