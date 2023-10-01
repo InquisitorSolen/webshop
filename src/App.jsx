@@ -1,5 +1,6 @@
 /* import { useEffect, useState } from "react";
 import firebase from "./Utils/firebase"; */
+import { AuthProvider } from "./Auth/Auth";
 import { Outlet, RouterProvider } from "react-router-dom";
 import router from "./Utils/router";
 
@@ -29,9 +30,11 @@ function App() {
   } */
 
   return (
-    <RouterProvider router={router}>
-      <Outlet />
-    </RouterProvider>
+    <AuthProvider>
+      <RouterProvider router={router}>
+        <Outlet />
+      </RouterProvider>
+    </AuthProvider>
   );
 }
 
