@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
-import firebase from "./firebase";
+/* import { useEffect, useState } from "react";
+import firebase from "./Utils/firebase"; */
+import { Outlet, RouterProvider } from "react-router-dom";
+import router from "./Utils/router";
 
 function App() {
-  const [users, setUsers] = useState([]);
+  /*   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const ref = firebase.firestore().collection("users");
@@ -24,18 +26,12 @@ function App() {
 
   if (loading) {
     return <h1>Loading</h1>;
-  }
+  } */
 
   return (
-    <div className="App">
-      <header className="App-header">
-        {users.map((user) => (
-          <div key={user.key}>
-            <h1>{user.name}</h1>
-          </div>
-        ))}
-      </header>
-    </div>
+    <RouterProvider router={router}>
+      <Outlet />
+    </RouterProvider>
   );
 }
 
