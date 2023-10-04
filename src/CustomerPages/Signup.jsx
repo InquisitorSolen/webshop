@@ -1,42 +1,119 @@
 import { Link } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import firebase from "../Utils/firebase";
+import pwCheck from "../Utils/pwCheck";
 
 export default function Signup() {
-  const nameRef = useRef();
+  const nameRef1 = useRef();
+  const nameRef2 = useRef();
   const emailRef = useRef();
-  const passwordRef = useRef();
-  const passwordConfirmRef = useRef();
+
+  const [pw, setPw] = useState();
+  const [pwConf, setPwConf] = useState();
+  const [pwMessage, setPwMessage] = useState();
+  const [pwSame, setPwSame] = useState(false);
+  const [pwCorrectMessage, setPwCorrectMessage] = useState(false);
 
   const onSubmit = (event) => {
     event.preventDefault();
+    if (!(pwSame || pwCorrectMessage)) {
+      console.log(pw);
+      /*       firebase
+        .auth()
+        .createUserWithEmailAndPassword(emailRef, pw)
+        .catch((err) => {
+          console.error(err);
+        }); */
+    }
+  };
+
+  const pwChangeHandler = (event) => {
+    console.log(event.target.value);
+    if (pwCheck(event.target.value)) {
+      if (event.target.value.length === 0) {
+        setPwCorrectMessage(false);
+      } else {
+        setPwCorrectMessage(true);
+      }
+      setPwMessage(pwCheck(event.target.value));
+    } else {
+      console.log("pwset");
+      setPwCorrectMessage(false);
+      setPw(pw);
+    }
+  };
+
+  const pwConfChangeHandler = (event) => {
+    if (event.target.value === pw) {
+      console.log("pwConf");
+      setPwConf(event.target.value);
+      setPwSame(false);
+    } else {
+      console.log("-----------------");
+      console.log(pw);
+      console.log(event.target.value);
+      console.log("-----------------");
+      if (event.target.value.length === 0) {
+        setPwSame(false);
+      } else {
+        setPwSame(true);
+      }
+    }
   };
 
   return (
-    <div className="login-signup-form animated fadeInDown">
-      <div className="form">
-        <form onSubmit={onSubmit}>
-          <h1>Signup for free</h1>
-          <input ref={nameRef} placeholder="Full Name"></input>
+    <div className="h-screen flex flex-col items-center justify-center">
+      <div className="border border-black shadow-xl rounded-3xl p-6 text-center min-w-[350px]">
+        <h1 className="mb-6 text-xl font-bold">Regisztrálj ingyenesen!</h1>
+        <form onSubmit={onSubmit} className="flex flex-col">
+          <input
+            type="text"
+            ref={nameRef1}
+            placeholder="Vezetéknév"
+            className="border-b my-2 px-2 focus:outline-none focus:border-b"
+          ></input>
+          <input
+            type="text"
+            ref={nameRef2}
+            placeholder="Keresztnev(ek)"
+            className="border-b my-2 px-2 focus:outline-none focus:border-b"
+          ></input>
           <input
             ref={emailRef}
             type="email"
-            placeholder="Email Address"
+            placeholder="Email cím"
+            className="border-b my-2 px-2 focus:outline-none focus:border-b"
           ></input>
+          {pwCorrectMessage && <p className="max-w-[300px]">{pwMessage}</p>}
           <input
-            ref={passwordRef}
+            value={pw}
+            onChange={pwChangeHandler}
             type="password"
-            placeholder="Password"
+            placeholder="Jelszó"
+            className="border-b my-2 px-2 focus:outline-none focus:border-b"
           ></input>
+          {pwSame && (
+            <p className="max-w-[300px]">A két jelszónak egyeznie kell!</p>
+          )}
           <input
-            ref={passwordConfirmRef}
+            value={pwConf}
+            onChange={pwConfChangeHandler}
             type="password"
-            placeholder="Password Confirmation"
+            placeholder="Jelszó megerősítése"
+            className="border-b my-2 px-2 focus:outline-none focus:border-b"
           ></input>
-          <button className="btn">Singup</button>
+          <button className="border border-black rounded-xl mx-16 my-6 px-2 py-1">
+            Regisztráció
+          </button>
         </form>
         <p>
-          Already registered?
-          <Link to="/">Sign in here</Link>
+          {"Már regisztrált? "}
+          <Link
+            to="/"
+            className="text-base underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+          >
+            Jelnetkezzen be itt
+          </Link>
         </p>
       </div>
     </div>

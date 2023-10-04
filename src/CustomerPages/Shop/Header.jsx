@@ -21,19 +21,21 @@ export default function Header() {
       <div className="flex flex-col items-end border-b py-2">
         <div>
           <form onSubmit={onSubmit} className="flex flex-row">
-            <div className="flex flex-col ">
+            <div className="flex flex-col">
               <input
+                type="email"
                 ref={emailRef}
                 placeholder="Email cím"
                 className="border border-black rounded my-1 px-2"
               ></input>
               <input
+                type="password"
                 ref={passwordRef}
                 placeholder="Jelszó"
                 className="border border-black rounded my-1 px-2"
               ></input>
             </div>
-            <button className="border border-black rounded mx-2 my-5 px-2">
+            <button className="border border-black rounded-xl mx-2 my-5 px-2">
               Belépés
             </button>
           </form>

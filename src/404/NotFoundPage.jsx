@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function NotFoundPage() {
   return (
-    <div className="h-screen flex flex-col items-center justify-center ">
+    <div className="h-screen flex flex-col items-center justify-center">
       <h1 className="text-[12rem]/[13rem] lg:text-[32rem]/[33rem] md:text-[16rem]/[17rem] sm:text-[12rem]/[13rem]">
         404
       </h1>
