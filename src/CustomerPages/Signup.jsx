@@ -1,13 +1,11 @@
 import { Link } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 export default function Signup() {
   const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-
-  const [errors, setErrors] = useState(null);
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -18,13 +16,6 @@ export default function Signup() {
       <div className="form">
         <form onSubmit={onSubmit}>
           <h1>Signup for free</h1>
-          {errors && (
-            <div>
-              {Object.keys(errors).map((key) => (
-                <p key={key}>{errors[key][0]}</p>
-              ))}
-            </div>
-          )}
           <input ref={nameRef} placeholder="Full Name"></input>
           <input
             ref={emailRef}
@@ -42,11 +33,11 @@ export default function Signup() {
             placeholder="Password Confirmation"
           ></input>
           <button className="btn">Singup</button>
-          <p>
-            Already registered?
-            <Link to="/login">Sign in here</Link>
-          </p>
         </form>
+        <p>
+          Already registered?
+          <Link to="/">Sign in here</Link>
+        </p>
       </div>
     </div>
   );

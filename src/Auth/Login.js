@@ -1,4 +1,4 @@
-import firebase from "../Utils/firebase";
+/* import firebase from "../Utils/firebase";
 
 const login = ({ email, pw }) => {
   firebase
@@ -10,3 +10,4 @@ const login = ({ email, pw }) => {
 };
 
 export default login();
+ */
