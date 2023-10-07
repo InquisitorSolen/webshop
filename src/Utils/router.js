@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     element: <Signup />,
   },
   {
-    path: "*",
+    path: "/*",
     element: <NotFoundPage />,
   },
 ]);
