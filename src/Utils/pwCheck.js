@@ -11,19 +11,19 @@ export default function pwCheck(password) {
   const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 
   if (!(password.length >= 8)) {
-    return "A jelszónak legalább 8 karakter hosszúságúnak kell lennie!";
+    return true;
   }
   if (!/[a-z]/.test(password)) {
-    return "A jelszónak tartalmaznia kell kis betüt";
+    return true;
   }
   if (!/[A-Z]/.test(password)) {
-    return "A jelszónak tartalmaznia kell nagy betüt";
+    return true;
   }
   if (!/\d/.test(password)) {
-    return "A jelszónak tartalmaznia kell számot";
+    return true;
   }
   if (!specialChars.test(password)) {
-    return "A jelszónak tartalmaznia kell speciális karaktert";
+    return true;
   }
   return false;
 }
