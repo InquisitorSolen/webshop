@@ -1,47 +1,23 @@
 import { Link } from "react-router-dom";
-import { getUser } from "../Slices/userSlice";
 import { AuthContext } from "../Auth/Auth";
-import { ReactReduxContext, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useContext, useRef } from "react";
 import firebase from "../Utils/firebase";
 
 export default function Header() {
   const { currentUser, login } = useContext(AuthContext);
-  const { store } = useContext(ReactReduxContext);
-  const userRefFB = firebase.firestore().collection("users");
-  const dispatch = useDispatch();
-
-  console.log(store.getState());
+  const userdata = useSelector((state) => state.userReducer);
 
   const emailRef = useRef();
   const pwRef = useRef();
 
-  const onSignIn = async (event) => {
+  const onSignIn = (event) => {
     event.preventDefault();
     try {
-      await login(emailRef.current.value, pwRef.current.value);
-      userRefFB
-        .doc("users")
-        .get(currentUser.email)
-        .then((doc) => {
-          if (doc) {
-            dispatch(
-              getUser({
-                email: doc.email,
-                familyName: doc.familyName,
-                surname: doc.surname,
-                lvl: doc.lvl,
-              })
-            );
-          } else {
-            console.error("error getting user");
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } catch {
+      login(emailRef.current.value, pwRef.current.value);
+    } catch (error) {
       console.error("login error");
+      console.error(error);
     }
   };
 
@@ -86,11 +62,15 @@ export default function Header() {
           </div>
         ) : (
           <div>
+            <div>
+              <p>{userdata.familyName}</p>
+              <p>{userdata.surname}</p>
+            </div>
             <button
               className="border border-black rounded-xl mx-2 my-5 px-2"
               onClick={onSignOut}
             >
-              Kilépés
+              Kijelentkezés
             </button>
           </div>
         )}

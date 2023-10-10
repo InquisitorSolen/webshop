@@ -1,6 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { email: "", familyName: "", surname: "", lvl: 0 };
+const initialState = {
+  email: "",
+  familyName: "",
+  surname: "",
+  lvl: 0,
+  admin: false,
+};
 
 export const userSlice = createSlice({
   name: "user",
@@ -11,6 +17,7 @@ export const userSlice = createSlice({
       state.familyName = action.payload.familyName;
       state.surname = action.payload.surname;
       state.lvl = action.payload.lvl;
+      state.admin = action.payload.admin;
     },
   },
 });

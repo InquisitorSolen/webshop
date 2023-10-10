@@ -25,7 +25,7 @@ export default function Signup() {
           if (res) {
             userRefFB
               .doc(email)
-              .set({ email, familyName, surname, lvl: 1 })
+              .set({ email, familyName, surname, lvl: 1, admin: false })
               .catch((err) => {
                 console.error(err);
               });
