@@ -1,10 +1,17 @@
-import { useContext, useRef } from "react";
 import { Link } from "react-router-dom";
-import firebase from "../Utils/firebase";
+import { getUser } from "../Slices/userSlice";
 import { AuthContext } from "../Auth/Auth";
+import { ReactReduxContext, useDispatch } from "react-redux";
+import { useContext, useRef } from "react";
+import firebase from "../Utils/firebase";
 
 export default function Header() {
   const { currentUser, login } = useContext(AuthContext);
+  const { store } = useContext(ReactReduxContext);
+  const userRefFB = firebase.firestore().collection("users");
+  const dispatch = useDispatch();
+
+  console.log(store.getState());
 
   const emailRef = useRef();
   const pwRef = useRef();
@@ -13,6 +20,26 @@ export default function Header() {
     event.preventDefault();
     try {
       await login(emailRef.current.value, pwRef.current.value);
+      userRefFB
+        .doc("users")
+        .get(currentUser.email)
+        .then((doc) => {
+          if (doc) {
+            dispatch(
+              getUser({
+                email: doc.email,
+                familyName: doc.familyName,
+                surname: doc.surname,
+                lvl: doc.lvl,
+              })
+            );
+          } else {
+            console.error("error getting user");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     } catch {
       console.error("login error");
     }
