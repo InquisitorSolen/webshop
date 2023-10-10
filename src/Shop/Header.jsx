@@ -28,9 +28,9 @@ export default function Header() {
 
   return (
     <header>
-      <div className="flex flex-col items-end border-b py-2">
+      <div className="flex flex-col items-end justify-center border-b min-h-[120px] max-h-[120px]">
         {currentUser === null ? (
-          <div>
+          <div className="py-2">
             <form onSubmit={onSignIn} className="flex flex-row">
               <div className="flex flex-col">
                 <input
@@ -46,9 +46,11 @@ export default function Header() {
                   className="border border-black rounded my-1 px-2"
                 ></input>
               </div>
-              <button className="border border-black rounded-xl mx-2 my-5 px-2">
-                Belépés
-              </button>
+              <div className="flex items-center justify-center">
+                <button className="border border-black rounded-xl mx-2  px-2">
+                  Belépés
+                </button>
+              </div>
             </form>
             <p className="text-center">
               {"Nincs fiókod? "}
@@ -61,17 +63,19 @@ export default function Header() {
             </p>
           </div>
         ) : (
-          <div>
-            <div>
+          <div className="flex-1 flex-col text-center items-center justify-center py-2 border-l px-6">
+            <div className="flex flex-col mb-2 font-bold text-lg">
               <p>{userdata.familyName}</p>
               <p>{userdata.surname}</p>
             </div>
-            <button
-              className="border border-black rounded-xl mx-2 my-5 px-2"
-              onClick={onSignOut}
-            >
-              Kijelentkezés
-            </button>
+            <div className="flex items-center justify-center">
+              <button
+                className="border border-black rounded-xl mx-2 px-2"
+                onClick={onSignOut}
+              >
+                Kijelentkezés
+              </button>
+            </div>
           </div>
         )}
       </div>
