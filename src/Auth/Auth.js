@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { getUser } from "../Slices/userSlice";
 import React, { useEffect, useState } from "react";
 import firebase from "../Utils/firebase";
+import Loader from "../UtilPages/Loader";
 
 export const AuthContext = React.createContext();
 
@@ -10,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
 
   const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   function login(email, password) {
     firebase
@@ -40,6 +42,7 @@ export const AuthProvider = ({ children }) => {
                   userLoading: false,
                 })
               );
+              setLoading(false);
             } else {
               console.error("error getting user");
             }
@@ -58,6 +61,7 @@ export const AuthProvider = ({ children }) => {
           })
         );
         setCurrentUser(null);
+        setLoading(false);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,5 +69,9 @@ export const AuthProvider = ({ children }) => {
 
   const value = { login, currentUser };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {loading ? <Loader /> : children}
+    </AuthContext.Provider>
+  );
 };
