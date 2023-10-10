@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import firebase from "../Utils/firebase";
 import { AuthContext } from "../Auth/Auth";
@@ -9,10 +9,13 @@ export default function Header() {
   const emailRef = useRef();
   const pwRef = useRef();
 
-  const onSignIn = (event) => {
+  const onSignIn = async (event) => {
     event.preventDefault();
-    console.log("login header");
-    login(emailRef.current.value, pwRef.current.value);
+    try {
+      await login(emailRef.current.value, pwRef.current.value);
+    } catch {
+      console.error("login error");
+    }
   };
 
   const onSignOut = (event) => {
