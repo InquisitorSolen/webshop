@@ -5,26 +5,34 @@ export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+
+  function login(email, password) {
+    console.log("login auth");
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        setCurrentUser(userCredential);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
-      setCurrentUser(user);
-      setLoading(false);
+      if (user) {
+        console.log("logged in");
+        setCurrentUser(user);
+      } else {
+        console.log("logged out");
+        setCurrentUser(null);
+      }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (loading) {
-    return (
-      <div>
-        <h1>Loading</h1>
-      </div>
-    );
-  }
+  const value = { login, currentUser };
 
-  return (
-    <AuthContext.Provider value={{ currentUser }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

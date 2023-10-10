@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Header from "../CustomerPages/Shop/Header";
+import Header from "../Shop/Header";
 
 export default function CustomerLayout() {
   return (

@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import NotFoundPage from "../404/NotFoundPage";
 import CustomerLayout from "../Layouts/CustomerLayout";
+import AdminLayout from "../Layouts/AdminLayout";
 import Signup from "../CustomerPages/Signup";
 import Cart from "../CustomerPages/Cart";
 
@@ -11,11 +12,16 @@ const router = createBrowserRouter([
     children: [{ path: "/cart", element: <Cart /> }],
   },
   {
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [],
+  },
+  {
     path: "/signup",
     element: <Signup />,
   },
   {
-    path: "/*",
+    path: "*",
     element: <NotFoundPage />,
   },
 ]);

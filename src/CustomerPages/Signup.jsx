@@ -21,7 +21,6 @@ export default function Signup() {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, pw)
-        .then((res) => (res.ok ? res : false))
         .then((res) => {
           if (res) {
             userRefFB
