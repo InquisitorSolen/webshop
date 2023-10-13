@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useContext, useRef } from "react";
 import firebase from "../Utils/firebase";
 import HeaderButtons from "./HeaderButtons";
+import Navbar from "./Navbar";
 
 export default function Header() {
   const { currentUser, login } = useContext(AuthContext);
@@ -30,8 +31,7 @@ export default function Header() {
   return (
     <header>
       <div className="flex flex-row items-center justify-end border-b">
-        <HeaderButtons />
-        <div className="flex flex-col min-h-[120px] max-h-[120px]">
+        <div className="flex flex-col min-h-[120px] max-h-[120px] px-6 border-l">
           {currentUser === null ? (
             <div className="py-2">
               <form onSubmit={onSignIn} className="flex flex-row">
@@ -66,7 +66,7 @@ export default function Header() {
               </p>
             </div>
           ) : (
-            <div className="flex-1 flex-col text-center items-center justify-center py-2 border-l px-6">
+            <div className="flex-1 flex-col text-center items-center justify-center py-2">
               <div className="flex flex-col mb-2 font-bold text-lg">
                 <p>{userdata.familyName}</p>
                 <p>{userdata.surname}</p>
