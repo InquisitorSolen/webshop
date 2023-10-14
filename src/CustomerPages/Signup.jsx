@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import firebase from "../Utils/firebase";
 import pwCheck from "../Utils/pwCheck";
 
 export default function Signup() {
   const userRefFB = firebase.firestore().collection("users");
+  const navigate = useNavigate();
 
   const [familyName, setFamilyName] = useState("");
   const [surname, setSurname] = useState("");
@@ -31,6 +32,7 @@ export default function Signup() {
               });
           }
         })
+        .then(navigate("/"))
         .catch((err) => {
           setEmailAlreadyInUse(true);
           console.error(err);

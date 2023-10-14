@@ -23,12 +23,12 @@ export default function LoginBtn({ setLoginModalOpen }) {
       {currentUser === null ? (
         <>
           <button
-            className="border border-black rounded-xl mx-2  px-2"
+            className="border border-black rounded-xl md:mx-2 md:px-2 mx-[30%]"
             onClick={login}
           >
             Bejelentkezés
           </button>
-          <p className="text-center">
+          <p className="text-center py-6 md:py-2">
             {"Nincs fiókod? "}
             <Link
               to="/signup"
@@ -39,9 +39,9 @@ export default function LoginBtn({ setLoginModalOpen }) {
           </p>
         </>
       ) : (
-        <div className="flex flex-row gap-4">
-          <div className="flex flex-col mb-2 font-bold text-lg">
-            <p>{userdata.familyName}</p>
+        <div className="flex flex-col md:flex-row md:gap-4">
+          <div className="flex flex-row md:flex-col mb-2 font-bold text-lg items-center justify-center">
+            <p className=" mx-1 md:mx-0">{userdata.familyName}</p>
             <p>{userdata.surname}</p>
           </div>
           <div className="flex items-center justify-center">

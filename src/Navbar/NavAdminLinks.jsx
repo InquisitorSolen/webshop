@@ -1,26 +1,15 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { BsChevronDown, BsChevronUp } from "react-icons/bs";
+import { adminLinks } from "../Utils/adminLinks";
 
-export default function NavLinks() {
-  const links = [
-    {
-      name: "Kategóriák",
-      submenu: true,
-      sublinks: [
-        {
-          name: "test",
-          link: "/cart",
-        },
-      ],
-    },
-  ];
-
-  const [showMobilesublinks, setShowMobileSunlinks] = useState("");
-
+export default function NavAdminLinks({
+  showMobilesublinks,
+  setShowMobileSunlinks,
+  setMobileNavOpen,
+}) {
   return (
     <>
-      {links.map((link) => (
+      {adminLinks.map((link) => (
         <div key={link.name}>
           <div className="px-3 text-left md:cursor-pointer group">
             <h1
@@ -74,7 +63,14 @@ export default function NavLinks() {
               <div key={sublink.name}>
                 <div>
                   <li className="py-4 pl-7 font-semibold md:pr-0 pr-5">
-                    <Link to={sublink.link} className="hover:text-primary">
+                    <Link
+                      to={sublink.link}
+                      className="hover:text-primary"
+                      onClick={() => {
+                        setShowMobileSunlinks("");
+                        setMobileNavOpen(false);
+                      }}
+                    >
                       {sublink.name}
                     </Link>
                   </li>

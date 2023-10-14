@@ -1,16 +1,18 @@
 import { Link } from "react-router-dom";
-import NavLinks from "./NavLinks";
-import LoginBtn from "./LoginBtn";
-import { useContext, useState } from "react";
 import { AuthContext } from "../Auth/Auth";
 import { useSelector } from "react-redux";
+import { useContext, useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import NavLinks from "./NavLinks";
+import LoginBtn from "./LoginBtn";
+import NavAdminLinks from "./NavAdminLinks";
 
 export default function Navbar({ setLoginModalOpen }) {
   const { currentUser } = useContext(AuthContext);
   const userdata = useSelector((state) => state.userReducer);
 
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [showMobilesublinks, setShowMobileSunlinks] = useState("");
 
   return (
     <nav className="bg-white ">
@@ -20,6 +22,7 @@ export default function Navbar({ setLoginModalOpen }) {
           <div
             className="text-3xl md:hidden"
             onClick={() => {
+              setShowMobileSunlinks("");
               setMobileNavOpen(!mobileNavOpen);
             }}
           >
@@ -37,7 +40,10 @@ export default function Navbar({ setLoginModalOpen }) {
               Kosár
             </Link>
           </li>
-          <NavLinks />
+          <NavLinks
+            showMobilesublinks={showMobilesublinks}
+            setShowMobileSunlinks={setShowMobileSunlinks}
+          />
           {currentUser !== null && (
             <li>
               <Link to="/profile" className="py-7 px-3 inline-block font-bold">
@@ -46,11 +52,10 @@ export default function Navbar({ setLoginModalOpen }) {
             </li>
           )}
           {userdata.admin && (
-            <li>
-              <Link to="/" className="py-7 px-3 inline-block font-bold">
-                Admin
-              </Link>
-            </li>
+            <NavAdminLinks
+              showMobilesublinks={showMobilesublinks}
+              setShowMobileSunlinks={setShowMobileSunlinks}
+            />
           )}
         </ul>
         <div className="md:block hidden">
@@ -62,34 +67,59 @@ export default function Navbar({ setLoginModalOpen }) {
             mobileNavOpen ? "left-0" : "left-[-100%]"
           }`}
         >
-          <li>
-            <Link to="/" className="py-7 px-3 inline-block font-bold">
+          <div className="py-5">
+            <LoginBtn setLoginModalOpen={setLoginModalOpen} />
+          </div>
+          <li className="border-t">
+            <Link
+              to="/"
+              className="py-7 px-3 inline-block font-bold"
+              onClick={() => {
+                setShowMobileSunlinks("");
+                setMobileNavOpen(!mobileNavOpen);
+              }}
+            >
               WebShop
             </Link>
           </li>
           <li>
-            <Link to="/cart" className="py-7 px-3 inline-block font-bold">
+            <Link
+              to="/cart"
+              className="py-7 px-3 inline-block font-bold"
+              onClick={() => {
+                setShowMobileSunlinks("");
+                setMobileNavOpen(!mobileNavOpen);
+              }}
+            >
               Kosár
             </Link>
           </li>
-          <NavLinks />
+          <NavLinks
+            showMobilesublinks={showMobilesublinks}
+            setShowMobileSunlinks={setShowMobileSunlinks}
+            setMobileNavOpen={setMobileNavOpen}
+          />
           {currentUser !== null && (
             <li>
-              <Link to="/profile" className="py-7 px-3 inline-block font-bold">
+              <Link
+                to="/profile"
+                className="py-7 px-3 inline-block font-bold"
+                onClick={() => {
+                  setShowMobileSunlinks("");
+                  setMobileNavOpen(!mobileNavOpen);
+                }}
+              >
                 Profil
               </Link>
             </li>
           )}
           {userdata.admin && (
-            <li>
-              <Link to="/profile" className="py-7 px-3 inline-block font-bold">
-                Admin
-              </Link>
-            </li>
+            <NavAdminLinks
+              showMobilesublinks={showMobilesublinks}
+              setShowMobileSunlinks={setShowMobileSunlinks}
+              setMobileNavOpen={setMobileNavOpen}
+            />
           )}
-          <div className="py-5">
-            <LoginBtn setLoginModalOpen={setLoginModalOpen} />
-          </div>
         </ul>
       </div>
     </nav>

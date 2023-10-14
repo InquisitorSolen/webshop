@@ -1,17 +1,16 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export default function AdminLayout() {
+export default function Finances() {
   const userdata = useSelector((state) => state.userReducer);
 
   if (!userdata.admin) {
-    return <Navigate to="/" />;
+    return <Navigate to="*" />;
   }
 
   return (
     <>
-      <h1>AdminLayer</h1>
-      <Outlet />
+      <h1>Finances</h1>
     </>
   );
 }

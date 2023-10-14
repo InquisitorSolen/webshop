@@ -1,34 +1,41 @@
+import { useRef, useState } from "react";
 import Modal from "react-modal";
+import firebase from "../Utils/firebase";
 import modalStyle from "../Utils/modalStyle";
-import { AuthContext } from "../Auth/Auth";
-import { useContext, useRef } from "react";
 
 export default function LoginModal({ setLoginModalOpen, loginModalOpen }) {
-  const { login } = useContext(AuthContext);
   const emailRef = useRef();
   const pwRef = useRef();
 
+  const [loginErrorFlag, setLoginErrorFlag] = useState(false);
+
   const closeModal = () => {
+    setLoginErrorFlag(false);
     setLoginModalOpen(false);
   };
 
   const onSignIn = (event) => {
     event.preventDefault();
-    try {
-      login(emailRef.current.value, pwRef.current.value);
-      closeModal();
-    } catch (error) {
-      console.error("login error");
-      console.error(error);
-    }
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(emailRef.current.value, pwRef.current.value)
+      .then((res) => {
+        if (res) {
+          closeModal();
+        }
+      })
+      .catch((err) => {
+        setLoginErrorFlag(true);
+        console.error(err);
+      });
   };
 
   return (
     <Modal
       isOpen={loginModalOpen}
       style={modalStyle}
-      onRequestClose={closeModal}
       ariaHideApp={false}
+      onRequestClose={closeModal}
     >
       <div className="flex flex-col gap-4">
         <p className="text-center font-medium">Lépjen be Fiókjába</p>
@@ -53,6 +60,11 @@ export default function LoginModal({ setLoginModalOpen, loginModalOpen }) {
             </button>
           </div>
         </form>
+        {loginErrorFlag && (
+          <p className="bg-danger text-center font-medium rounded-xl">
+            Hibás email vagy jelszó!
+          </p>
+        )}
       </div>
     </Modal>
   );

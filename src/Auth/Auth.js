@@ -13,15 +13,6 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  function login(email, password) {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .catch((err) => {
-        console.error(err);
-      });
-  }
-
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -67,7 +58,7 @@ export const AuthProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const value = { login, currentUser };
+  const value = { currentUser };
 
   return (
     <AuthContext.Provider value={value}>

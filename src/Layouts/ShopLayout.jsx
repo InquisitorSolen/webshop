@@ -1,11 +1,11 @@
 import { useSelector } from "react-redux";
 import Loader from "../UtilPages/Loader";
-import Navbar from "../Shop/Navbar";
+import Navbar from "../Navbar/Navbar";
 import { useState } from "react";
-import LoginModal from "../Shop/LoginModal";
+import LoginModal from "../Navbar/LoginModal";
 import { Outlet, useLocation } from "react-router";
 
-export default function CustomerLayout() {
+export default function ShopLayout() {
   const userdata = useSelector((state) => state.userReducer);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const currentPath = useLocation();
