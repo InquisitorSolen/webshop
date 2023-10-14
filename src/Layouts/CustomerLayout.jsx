@@ -9,7 +9,6 @@ export default function CustomerLayout() {
   const userdata = useSelector((state) => state.userReducer);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const currentPath = useLocation();
-  console.log(currentPath);
 
   if (userdata.userLoading) {
     return <Loader />;

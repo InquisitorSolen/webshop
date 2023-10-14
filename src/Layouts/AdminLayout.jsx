@@ -1,5 +1,4 @@
 import { Navigate, Outlet } from "react-router-dom";
-import Header from "../Shop/Header";
 import { useSelector } from "react-redux";
 
 export default function AdminLayout() {
@@ -11,7 +10,6 @@ export default function AdminLayout() {
 
   return (
     <>
-      <Header />
       <h1>AdminLayer</h1>
       <Outlet />
     </>
