@@ -4,6 +4,7 @@ import Navbar from "../Navbar/Navbar";
 import { useState } from "react";
 import LoginModal from "../Navbar/LoginModal";
 import { Outlet, useLocation } from "react-router";
+import MainPage from "../CustomerPages/MainPage";
 
 export default function ShopLayout() {
   const userdata = useSelector((state) => state.userReducer);
@@ -15,13 +16,13 @@ export default function ShopLayout() {
   }
 
   return (
-    <div className="bg-yellow-100 h-screen">
+    <div className="">
       <Navbar setLoginModalOpen={setLoginModalOpen} />
       <LoginModal
         setLoginModalOpen={setLoginModalOpen}
         loginModalOpen={loginModalOpen}
       />
-      {currentPath.pathname === "/" ? <h1>main page</h1> : <Outlet />}
+      {currentPath.pathname === "/" ? <MainPage /> : <Outlet />}
     </div>
   );
 }
