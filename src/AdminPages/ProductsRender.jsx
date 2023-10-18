@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import firebase from "../Utils/firebase";
 import Loader from "../UtilPages/Loader";
 import ProductsMobile from "./Products/ProductsMobile";
+import ProductsWeb from "./Products/ProductsWeb";
 
 export default function ProductsRender() {
   const productCategory = useSelector((state) => state.productCategoryReducer);
@@ -54,6 +55,10 @@ export default function ProductsRender() {
 
   return (
     <div>
+      <ProductsWeb
+        handleSelectChange={handleSelectChange}
+        categoryName={categoryName}
+      />
       {/* Mobile version */}
       <ProductsMobile
         handleSelectChange={handleSelectChange}

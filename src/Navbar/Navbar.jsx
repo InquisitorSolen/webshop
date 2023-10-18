@@ -15,7 +15,7 @@ export default function Navbar({ setLoginModalOpen }) {
   const [showMobilesublinks, setShowMobileSunlinks] = useState("");
 
   return (
-    <nav className="bg-white ">
+    <nav className="bg-white">
       <div className="flex items-center font-medium justify-around">
         <div className="z-50 p-5 md:w-auto w-full flex justify-between">
           <p>LOGO</p>
