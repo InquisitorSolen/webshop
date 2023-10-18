@@ -12,6 +12,7 @@ export const productCaregorySlice = createSlice({
     getCategories(state, action) {
       state.categories = action.payload.categories;
       state.categoriesLoading = action.payload.categoriesLoading;
+      state.categoryProducts = action.payload.categoryProducts;
     },
   },
 });

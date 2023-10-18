@@ -1,10 +1,12 @@
+import { Navigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { getCategories } from "../Slices/productCaregorySlice";
+import { useDispatch, useSelector } from "react-redux";
 import firebase from "../Utils/firebase";
-import MainPageRender from "./MainPageRender";
+import ProductsRender from "./ProductsRender";
 
-export default function MainPage() {
+export default function ProductsCalls() {
+  const userdata = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
   const productCategoriesRefFB = firebase
     .firestore()
@@ -20,7 +22,6 @@ export default function MainPage() {
 
           dispatch(
             getCategories({
-              categoryProducts: doc.data(),
               categories: categoriesArray,
               categoriesLoading: false,
             })
@@ -30,5 +31,8 @@ export default function MainPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <MainPageRender />;
+  if (!userdata.admin) {
+    return <Navigate to="*" />;
+  }
+  return <ProductsRender />;
 }

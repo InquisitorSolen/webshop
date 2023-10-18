@@ -5,7 +5,7 @@ import Signup from "../CustomerPages/Signup";
 import Cart from "../CustomerPages/Cart";
 import Profile from "../CustomerPages/Profile";
 import Finances from "../AdminPages/Finances";
-import Products from "../AdminPages/Products";
+import ProductsCalls from "../AdminPages/ProductsCalls";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/cart", element: <Cart /> },
       { path: "/profile", element: <Profile /> },
-      { path: "/admin/products", element: <Products /> },
+      { path: "/admin/products", element: <ProductsCalls /> },
       { path: "/admin/finances", element: <Finances /> },
     ],
   },
