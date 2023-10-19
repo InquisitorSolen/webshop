@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { getCategories } from "../../Slices/productCaregorySlice";
+import { useRef, useState } from "react";
 import Modal from "react-modal";
 import firebase from "../../Utils/firebase";
 import modalStyle from "../../Utils/modalStyle";
-import { getCategories } from "../../Slices/productCaregorySlice";
-import { useDispatch } from "react-redux";
 
 export default function ProductCategoryModal({
   addCategoryModalOpen,
@@ -16,6 +16,11 @@ export default function ProductCategoryModal({
   const productRefFB = firebase.firestore().collection("Products");
 
   const [categoryName, setCategoryName] = useState("");
+
+  const productNameRef = useRef("");
+  const productTypeRef = useRef("");
+  const productNumberRef = useRef(0);
+  const productQuantityRef = useRef("");
 
   const closeModal = () => {
     setAddCategoryModalOpen(false);
@@ -45,7 +50,14 @@ export default function ProductCategoryModal({
       await productCategoriesRefFB
         .doc("categoryNames")
         .set({ [categoryName]: categoryName }, { merge: true });
-      await productRefFB.doc(categoryName).set({ 0: 0 });
+      await productRefFB.doc(categoryName).set({
+        [productNameRef.current.value]: {
+          name: productNameRef.current.value,
+          type: productTypeRef.current.value,
+          number: parseInt(productNumberRef.current.value),
+          quantity: productQuantityRef.current.value,
+        },
+      });
       getProductCategories();
     } catch (error) {
       console.error(error);
@@ -62,19 +74,59 @@ export default function ProductCategoryModal({
       ariaHideApp={false}
       onRequestClose={closeModal}
     >
-      <div className="flex flex-col gap-4">
-        <p className="text-center font-medium">Új kategória Felvitele</p>
+      <div className="flex flex-col gap-4 ">
+        <p className="text-center font-bold text-lg">Új Termék kategória</p>
         <form onSubmit={addCategory} className="flex flex-col gap-3">
           <input
-            type="string"
+            type="text"
             value={categoryName}
             onChange={(event) => setCategoryName(event.target.value)}
             placeholder="Új kategória neve"
             required
             className="border border-black rounded my-1 px-2"
           ></input>
+          <div>
+            <p className="text-center font-bold text-lg">
+              Új Termék kategóriában
+            </p>
+            <div className="flex flex-row mt-6">
+              <div className="flex flex-col gap-3 mr-3">
+                <input
+                  type="text"
+                  ref={productNameRef}
+                  placeholder="Új termék neve"
+                  required
+                  className="border border-black rounded my-1 px-2"
+                ></input>
+                <input
+                  type="text"
+                  ref={productTypeRef}
+                  placeholder="Új termék típusa"
+                  required
+                  className="border border-black rounded my-1 px-2"
+                ></input>
+              </div>
+              <div className="flex flex-col gap-3">
+                <input
+                  type="number"
+                  ref={productNumberRef}
+                  placeholder="Új termék mennyisége"
+                  required
+                  className="border border-black rounded my-1 px-2"
+                ></input>
+                <input
+                  type="text"
+                  ref={productQuantityRef}
+                  placeholder="Új termék ürtartalma"
+                  required
+                  className="border border-black rounded my-1 px-2"
+                ></input>
+              </div>
+            </div>
+          </div>
+
           <div className="flex items-center justify-center">
-            <button className="border border-black rounded-xl mx-2  px-2">
+            <button className="border border-black rounded-xl px-3 py-1 text-center text-base font-bold">
               Felvitel
             </button>
           </div>

@@ -18,7 +18,10 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
   }, [productItems.product]);
 
   const uploadToFB = (localarray) => {
-    const FBObj = Object.assign({}, localarray);
+    const FBObj = {};
+    for (let i = 0; i < localarray.length; i++) {
+      Object.assign(FBObj, { [localarray[i].name]: localarray[i] });
+    }
     productRefFB
       .doc(categoryName)
       .set(FBObj)
@@ -34,6 +37,7 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
           name: product.name,
           number: product.number === 0 ? 0 : product.number - 1,
           type: product.type,
+          quantity: product.quantity,
         };
         return localproduct;
       } else {
@@ -51,6 +55,7 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
           name: product.name,
           number: product.number === 0 ? 0 : product.number + 1,
           type: product.type,
+          quantity: product.quantity,
         };
         return localproduct;
       } else {
@@ -89,7 +94,7 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
             <div>
               {productsArray.map((product) => (
                 <div
-                  key={product.name}
+                  key={`${product.name}${product.type}`}
                   className="flex justify-between mx-4 items-center border-b"
                 >
                   <p>{product.name}</p>
