@@ -198,16 +198,16 @@ export default function ProductsWeb({ handleSelectChange, categoryName }) {
                     </td>
                     <td className="border-x border-dotted border-black">
                       <button
-                        onClick={() => deleteProd(product.name)}
-                        className="mx-2"
-                      >
-                        <AiOutlineDelete />
-                      </button>
-                      <button
                         onClick={() => editProd(product.name)}
                         className="mx-2"
                       >
                         <AiOutlineEdit />
+                      </button>
+                      <button
+                        onClick={() => deleteProd(product.name)}
+                        className="mx-2"
+                      >
+                        <AiOutlineDelete />
                       </button>
                     </td>
                   </tr>
