@@ -32,15 +32,7 @@ export default function Signup() {
                 surname,
                 lvl: 1,
                 admin: false,
-                addresses: [
-                  {
-                    postalCode: "",
-                    city: "",
-                    building: "",
-                    floor: "",
-                    doorNumber: "",
-                  },
-                ],
+                addresses: [],
               })
               .catch((err) => {
                 console.error(err);

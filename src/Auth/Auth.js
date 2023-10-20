@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
                   lvl: doc.data().lvl,
                   admin: doc.data().admin,
                   userLoading: false,
-                  adresses: doc.data().adresses,
+                  addresses: doc.data().addresses,
                 })
               );
               setLoading(false);

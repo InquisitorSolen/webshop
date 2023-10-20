@@ -49,7 +49,7 @@ export default function LoginBtn({ setLoginModalOpen }) {
               className="border border-black rounded-xl mx-2 px-2"
               onClick={onSignOut}
             >
-              Kijelentkezés
+              <Link to="/">Kijelentkezés</Link>
             </button>
           </div>
         </div>

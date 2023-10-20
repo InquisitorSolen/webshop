@@ -1,15 +1,16 @@
 import { AuthProvider } from "./Auth/Auth";
-import { Outlet, RouterProvider } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import router from "./Utils/router";
 import store from "./Utils/store";
 import { Provider } from "react-redux";
+import ShopLayout from "./Layouts/ShopLayout";
 
 function App() {
   return (
     <Provider store={store}>
       <AuthProvider>
         <RouterProvider router={router}>
-          <Outlet />
+          <ShopLayout />
         </RouterProvider>
       </AuthProvider>
     </Provider>

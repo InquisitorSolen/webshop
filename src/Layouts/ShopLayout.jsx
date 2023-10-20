@@ -16,7 +16,7 @@ export default function ShopLayout() {
   }
 
   return (
-    <div className="">
+    <div className="h-full flex flex-col">
       <Navbar setLoginModalOpen={setLoginModalOpen} />
       <LoginModal
         setLoginModalOpen={setLoginModalOpen}

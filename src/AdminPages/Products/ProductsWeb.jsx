@@ -116,9 +116,9 @@ export default function ProductsWeb({ handleSelectChange, categoryName }) {
   };
 
   return (
-    <div className="hidden md:flex flex-row">
+    <div className="hidden md:flex flex-row grow">
       {/* Categories List*/}
-      <div className="text-center border border-black rounded-xl bg-white m-6 w-fit h-[86vh]">
+      <div className="text-center border border-black rounded-xl bg-white m-6 w-fit grow">
         <div>
           <h1 className="font-bold my-3 mx-6 text-xl">Termékkategóriák</h1>
           <div className="flex flex-col">
@@ -143,7 +143,7 @@ export default function ProductsWeb({ handleSelectChange, categoryName }) {
         setAddCategoryModalOpen={setAddCategoryModalOpen}
       />
       {/* Products Table*/}
-      <div className="text-center border border-black rounded-xl bg-white m-6 h-[86vh] w-full">
+      <div className="text-center border border-black rounded-xl bg-white m-6 grow w-full">
         {categoryName === undefined ? (
           <Loader />
         ) : (

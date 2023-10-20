@@ -54,7 +54,7 @@ export default function ProductsRender() {
   }
 
   return (
-    <div>
+    <div className="w-full flex flex-col grow">
       <ProductsWeb
         handleSelectChange={handleSelectChange}
         categoryName={categoryName}

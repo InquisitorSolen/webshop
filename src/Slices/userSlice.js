@@ -17,7 +17,7 @@ export const userSlice = createSlice({
       state.surname = action.payload.surname;
       state.lvl = action.payload.lvl;
       state.admin = action.payload.admin;
-      state.adresses = action.payload.adresses;
+      state.addresses = action.payload.addresses;
     },
   },
 });
