@@ -26,7 +26,22 @@ export default function Signup() {
           if (res) {
             userRefFB
               .doc(email)
-              .set({ email, familyName, surname, lvl: 1, admin: false })
+              .set({
+                email,
+                familyName,
+                surname,
+                lvl: 1,
+                admin: false,
+                addresses: [
+                  {
+                    postalCode: "",
+                    city: "",
+                    building: "",
+                    floor: "",
+                    doorNumber: "",
+                  },
+                ],
+              })
               .catch((err) => {
                 console.error(err);
               });
