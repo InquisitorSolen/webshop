@@ -67,7 +67,7 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
   };
 
   return (
-    <div className="md:hidden flex justify-center items-center mt-6 flex-col">
+    <div className="md:hidden flex justify-start items-center mt-6 flex-col h-full w-full">
       <div className="text-center">
         <h1 className="font-bold mb-3 text-xl">Termékkategóriák</h1>
         <select
@@ -86,38 +86,33 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
           ))}
         </select>
       </div>
-      <div className="text-center border border-black rounded-xl bg-white mt-6 w-[80%] h-[70vh]">
-        {Object.keys(productItems.product).length === 0 ? (
-          <Loader />
-        ) : (
-          <div>
-            <div>
-              {productsArray.map((product) => (
-                <div
-                  key={`${product.name}${product.type}`}
-                  className="flex justify-between mx-4 items-center border-b"
-                >
-                  <p>{product.name}</p>
-                  <div>
-                    <button
-                      onClick={() => addNum(product.name)}
-                      className="my-2"
-                    >
-                      <AiOutlinePlus />
-                    </button>
-                    <p>{product.number}</p>
-                    <button
-                      onClick={() => removeNum(product.name)}
-                      className="my-2"
-                    >
-                      <AiOutlineMinus />
-                    </button>
-                  </div>
+      <div className="w-full flex flex-col">
+        <div className="text-center border border-black rounded-xl bg-white mt-6 mx-6 flex flex-col grow justify-between ">
+          {Object.keys(productItems.product).length === 0 ? (
+            <Loader />
+          ) : (
+            productsArray.map((product) => (
+              <div
+                key={`${product.name}${product.type}`}
+                className="flex justify-between mx-4 items-center border-b grow"
+              >
+                <p>{product.name}</p>
+                <div>
+                  <button onClick={() => addNum(product.name)} className="my-2">
+                    <AiOutlinePlus />
+                  </button>
+                  <p>{product.number}</p>
+                  <button
+                    onClick={() => removeNum(product.name)}
+                    className="my-2"
+                  >
+                    <AiOutlineMinus />
+                  </button>
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
