@@ -116,20 +116,19 @@ export default function Profile() {
   }
 
   return (
-    <div className="w-full flex flex-row grow justify-center items-center">
-      <div className="text-center border border-black rounded-xl m-6 bg-white h-fit grow">
-        <div className="flex flex-row h-full w-full">
+    <div className="w-full flex flex-col md:flex-row md:grow justify-center items-center grow">
+      <div className="text-center border border-black rounded-xl m-6 bg-white md:h-fit h-full md:w-full grow">
+        <div className="flex flex-col md:flex-row h-full w-full">
           <form
-            className="flex flex-col mx-6 my-6 border-r pr-10 items-center"
+            className="flex flex-col m-6 md:border-r border-b pb-6 md:pb-0 md:border-b-0 md:pr-10 items-center"
             onSubmit={saveName}
           >
             <h1 className="text-2xl font-bold">Profil adatok</h1>
-            <div className="flex flex-col justify-center grow gap-6">
+            <div className="flex flex-col justify-center grow gap-6 mb-6 md:mb-0">
               <div className="flex flex-col ">
                 <label>E-mail cím:</label>
                 <input
                   type="text"
-                  placeholder="Termék ürtartalma"
                   value={user.email}
                   required
                   disabled
@@ -146,7 +145,7 @@ export default function Profile() {
                   onChange={(e) => setFamilyName(e.target.value)}
                   required
                   size={width}
-                  className="border-b border-black my-1 px-2 text-center focus:outline-none focus:border-b"
+                  className="border-b border-black my-1 px-2 text-center md:focus:outline-none md:focus:border-b"
                 ></input>
               </div>
               <div className="flex flex-col">
@@ -158,7 +157,7 @@ export default function Profile() {
                   onChange={(e) => setSurname(e.target.value)}
                   required
                   size={width}
-                  className="border-b border-black my-1 px-2 text-center focus:outline-none focus:border-b"
+                  className="border-b border-black my-1 px-2 text-center md:focus:outline-none md:focus:border-b"
                 ></input>
               </div>
             </div>
@@ -199,7 +198,7 @@ export default function Profile() {
                 className="m-3 my-6 gap-3 flex flex-col grow w-full items-center justify-between"
                 onSubmit={addAddress}
               >
-                <div className="flex flex-row justify-evenly w-full items-center my-6 grow">
+                <div className="flex md:flex-row flex-col justify-evenly w-full items-center my-6 grow">
                   <div className="flex flex-col gap-6">
                     <div className="flex flex-col">
                       <label>Irányítószám:</label>
@@ -209,7 +208,7 @@ export default function Profile() {
                         value={postalCode}
                         onChange={(e) => setPostalCode(e.target.value)}
                         required
-                        className="border-b border-black my-1 px-2 text-center"
+                        className="border-b border-black my-1 px-2 text-center md:focus:outline-none md:focus:border-b"
                       ></input>
                     </div>
                     <div className="flex flex-col">
@@ -220,7 +219,7 @@ export default function Profile() {
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         required
-                        className="border-b border-black my-1 px-2 text-center"
+                        className="border-b border-black my-1 px-2 text-center md:focus:outline-none md:focus:border-b"
                       ></input>
                     </div>
                     <div className="flex flex-col">
@@ -231,7 +230,7 @@ export default function Profile() {
                         value={street}
                         onChange={(e) => setStreet(e.target.value)}
                         required
-                        className="border-b border-black my-1 px-2 text-center"
+                        className="border-b border-black my-1 px-2 text-center md:focus:outline-none md:focus:border-b"
                       ></input>
                     </div>
                   </div>
@@ -244,7 +243,7 @@ export default function Profile() {
                         value={building}
                         onChange={(e) => setBuilding(e.target.value)}
                         required
-                        className="border-b border-black my-1 px-2 text-center"
+                        className="border-b border-black my-1 px-2 text-center md:focus:outline-none md:focus:border-b"
                       ></input>
                     </div>
                     <div className="flex flex-col">
@@ -255,7 +254,7 @@ export default function Profile() {
                         value={floor}
                         onChange={(e) => setFloor(e.target.value)}
                         required
-                        className="border-b border-black my-1 px-2 text-center"
+                        className="border-b border-black my-1 px-2 text-center md:focus:outline-none md:focus:border-b"
                       ></input>
                     </div>
                     <div className="flex flex-col">
@@ -266,7 +265,7 @@ export default function Profile() {
                         value={doorNumber}
                         onChange={(e) => setDoorNumber(e.target.value)}
                         required
-                        className="border-b border-black my-1 px-2 text-center"
+                        className="border-b border-black my-1 px-2 text-center md:focus:outline-none md:focus:border-b"
                       ></input>
                     </div>
                   </div>
