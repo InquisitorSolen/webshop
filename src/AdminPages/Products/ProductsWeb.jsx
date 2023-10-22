@@ -13,7 +13,11 @@ import firebase from "../../Utils/firebase";
 import ProductsEditModal from "./ProductsEditModal";
 import ProductCategoryModal from "./ProductCategoryModal";
 
-export default function ProductsWeb({ handleSelectChange, categoryName }) {
+export default function ProductsWeb({
+  handleSelectChange,
+  categoryName,
+  productName,
+}) {
   const productCategory = useSelector((state) => state.productCategoryReducer);
   const productItems = useSelector((state) => state.productReducer);
   const productRefFB = firebase.firestore().collection("Products");
@@ -149,7 +153,7 @@ export default function ProductsWeb({ handleSelectChange, categoryName }) {
         ) : (
           <div className="flex flex-col">
             <div className="flex flex-row justify-center items-center">
-              <h1 className="font-bold my-3 mx-3 text-3xl">{categoryName}</h1>
+              <h1 className="font-bold my-3 mx-3 text-3xl">{productName}</h1>
               <button onClick={addProduct}>
                 <AiOutlinePlusCircle className="text-2xl mt-1" />
               </button>

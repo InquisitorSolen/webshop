@@ -18,11 +18,11 @@ export default function ProductsCalls() {
       .get()
       .then((doc) => {
         if (doc.exists) {
-          const categoriesArray = Object.keys(doc.data());
-
           dispatch(
             getCategories({
-              categories: categoriesArray,
+              categories: Object.values(doc.data()),
+              categoriesNames: Object.keys(doc.data()),
+              ProductCategories: doc.data(),
               categoriesLoading: false,
             })
           );

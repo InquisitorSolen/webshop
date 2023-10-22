@@ -13,8 +13,9 @@ export default function ProductsRender() {
   const productRefFB = firebase.firestore().collection("Products");
 
   const [categoryName, setCategoryName] = useState(
-    productCategory.categories[0]
+    productCategory.categoriesNames[0]
   );
+  const [productName, setProductName] = useState(productCategory.categories[0]);
 
   const getProductFB = () => {
     productRefFB
@@ -34,7 +35,7 @@ export default function ProductsRender() {
 
   useEffect(() => {
     if (categoryName === undefined) {
-      setCategoryName(productCategory.categories[0]);
+      setCategoryName(productCategory.categoriesNames[0]);
     } else {
       getProductFB();
     }
@@ -43,7 +44,14 @@ export default function ProductsRender() {
 
   const handleSelectChange = (event) => {
     event.preventDefault();
-    setCategoryName(event.target.value);
+    setProductName(event.target.value);
+    const combining = /[\u0300-\u036F]/g;
+    setCategoryName(
+      event.target.value
+        .replace(/\s/g, "")
+        .normalize("NFKD")
+        .replace(combining, "")
+    );
   };
 
   if (
@@ -58,6 +66,7 @@ export default function ProductsRender() {
       <ProductsWeb
         handleSelectChange={handleSelectChange}
         categoryName={categoryName}
+        productName={productName}
       />
       {/* Mobile version */}
       <ProductsMobile

@@ -55,10 +55,15 @@ export default function ProductsEditModal({
 
   const editProduct = async (event) => {
     event.preventDefault();
+    const combining = /[\u0300-\u036F]/g;
+    const productAsciiName = productName
+      .replace(/\s/g, "")
+      .normalize("NFKD")
+      .replace(combining, "");
 
     try {
       await productRefFB.doc(categoryName).update({
-        [productName]: {
+        [productAsciiName]: {
           name: productName,
           type: productType,
           number: parseInt(productNumber),

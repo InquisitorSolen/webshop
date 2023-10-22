@@ -13,8 +13,6 @@ export default function NavLinks({
     return { name: product, link: `/product/${product}` };
   });
 
-  console.log(categoriesSublinks);
-
   const links = [
     {
       name: "Kategóriák",

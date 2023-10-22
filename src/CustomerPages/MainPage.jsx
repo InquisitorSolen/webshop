@@ -16,12 +16,11 @@ export default function MainPage() {
       .get()
       .then((doc) => {
         if (doc.exists) {
-          const categoriesArray = Object.keys(doc.data());
-
           dispatch(
             getCategories({
-              categoryProducts: doc.data(),
-              categories: categoriesArray,
+              categories: Object.values(doc.data()),
+              categoriesNames: Object.keys(doc.data()),
+              ProductCategories: doc.data(),
               categoriesLoading: false,
             })
           );

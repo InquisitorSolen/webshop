@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  categoriesNames: [],
   categories: [],
   categoriesLoading: true,
+  ProductCategories: {},
 };
 
 export const productCaregorySlice = createSlice({
@@ -12,7 +14,8 @@ export const productCaregorySlice = createSlice({
     getCategories(state, action) {
       state.categories = action.payload.categories;
       state.categoriesLoading = action.payload.categoriesLoading;
-      state.categoryProducts = action.payload.categoryProducts;
+      state.categoriesNames = action.payload.categoriesNames;
+      state.ProductCategories = action.payload.ProductCategories;
     },
   },
 });

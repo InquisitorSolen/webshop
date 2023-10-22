@@ -32,11 +32,11 @@ export default function ProductCategoryModal({
       .get()
       .then((doc) => {
         if (doc.exists) {
-          const categoriesArray = Object.keys(doc.data());
-
           dispatch(
             getCategories({
-              categories: categoriesArray,
+              categories: Object.values(doc.data()),
+              categoriesNames: Object.keys(doc.data()),
+              ProductCategories: doc.data(),
               categoriesLoading: false,
             })
           );
@@ -46,12 +46,24 @@ export default function ProductCategoryModal({
 
   const addCategory = async (event) => {
     event.preventDefault();
+
+    const combining = /[\u0300-\u036F]/g;
+    const categoryAsciiName = categoryName
+      .replace(/\s/g, "")
+      .normalize("NFKD")
+      .replace(combining, "");
+
+    const productAsciiName = productNameRef.current.value
+      .replace(/\s/g, "")
+      .normalize("NFKD")
+      .replace(combining, "");
+
     try {
       await productCategoriesRefFB
         .doc("categoryNames")
-        .set({ [categoryName]: categoryName }, { merge: true });
-      await productRefFB.doc(categoryName).set({
-        [productNameRef.current.value]: {
+        .set({ [categoryAsciiName]: categoryName }, { merge: true });
+      await productRefFB.doc(categoryAsciiName).set({
+        [productAsciiName]: {
           name: productNameRef.current.value,
           type: productTypeRef.current.value,
           number: parseInt(productNumberRef.current.value),
