@@ -1,21 +1,25 @@
 import { Link } from "react-router-dom";
 import { BsChevronDown, BsChevronUp } from "react-icons/bs";
+import { useSelector } from "react-redux";
 
 export default function NavLinks({
   showMobilesublinks,
   setShowMobileSunlinks,
   setMobileNavOpen,
 }) {
+  const productCategory = useSelector((state) => state.productCategoryReducer);
+
+  const categoriesSublinks = productCategory.categories.map((product) => {
+    return { name: product, link: `/product/${product}` };
+  });
+
+  console.log(categoriesSublinks);
+
   const links = [
     {
       name: "Kategóriák",
       submenu: true,
-      sublinks: [
-        {
-          name: "test",
-          link: "/cart",
-        },
-      ],
+      sublinks: categoriesSublinks,
     },
   ];
 
