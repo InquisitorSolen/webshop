@@ -12,10 +12,11 @@ export default function ProductsRender() {
   const dispatch = useDispatch();
   const productRefFB = firebase.firestore().collection("Products");
 
-  const [categoryName, setCategoryName] = useState(
-    productCategory.categoriesNames[0]
-  );
-  const [productName, setProductName] = useState(productCategory.categories[0]);
+  const sortedCategoryNames = productCategory.categories.map((e) => e).sort();
+  const sortedNames = productCategory.categoriesNames.map((e) => e).sort();
+
+  const [categoryName, setCategoryName] = useState(sortedCategoryNames[0]);
+  const [productName, setProductName] = useState(sortedNames[0]);
 
   const getProductFB = () => {
     productRefFB

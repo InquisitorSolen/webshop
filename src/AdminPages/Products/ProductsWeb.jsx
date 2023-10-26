@@ -12,6 +12,7 @@ import Loader from "../../UtilPages/Loader";
 import firebase from "../../Utils/firebase";
 import ProductsEditModal from "./ProductsEditModal";
 import ProductCategoryModal from "./ProductCategoryModal";
+import { compare } from "../../Utils/utilFunctions";
 
 export default function ProductsWeb({
   handleSelectChange,
@@ -22,16 +23,17 @@ export default function ProductsWeb({
   const productItems = useSelector((state) => state.productReducer);
   const productRefFB = firebase.firestore().collection("Products");
   const dispatch = useDispatch();
+  const sortedCategoryNames = productCategory.categories.map((e) => e).sort();
 
   const [addCategoryModalOpen, setAddCategoryModalOpen] = useState(false);
   const [editProductModalOpen, seteditProductModalOpen] = useState(false);
   const [editProductName, setEditProductName] = useState("");
   const [productsArray, setProductsArray] = useState(
-    Object.values(productItems.product)
+    Object.values(productItems.product).sort(compare)
   );
 
   useEffect(() => {
-    setProductsArray(Object.values(productItems.product));
+    setProductsArray(Object.values(productItems.product).sort(compare));
   }, [productItems.product]);
 
   const getProductFB = () => {
@@ -87,6 +89,8 @@ export default function ProductsWeb({
           number: product.number === 0 ? 0 : product.number - 1,
           type: product.type,
           quantity: product.quantity,
+          src: product.src,
+          price: product.price,
         };
         return localproduct;
       } else {
@@ -105,6 +109,8 @@ export default function ProductsWeb({
           number: product.number === 0 ? 0 : product.number + 1,
           type: product.type,
           quantity: product.quantity,
+          src: product.src,
+          price: product.price,
         };
         return localproduct;
       } else {
@@ -126,7 +132,7 @@ export default function ProductsWeb({
         <div>
           <h1 className="font-bold my-3 mx-6 text-xl">Termékkategóriák</h1>
           <div className="flex flex-col">
-            {productCategory.categories.map((category) => (
+            {sortedCategoryNames.map((category) => (
               <button
                 key={category}
                 value={category}

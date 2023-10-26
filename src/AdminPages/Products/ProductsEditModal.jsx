@@ -23,6 +23,8 @@ export default function ProductsEditModal({
   const [productType, setProductType] = useState("");
   const [productNumber, setProductNumber] = useState(0);
   const [productQuantity, setProductQuantity] = useState("");
+  const [productSrc, setProductSrc] = useState("");
+  const [productPrice, setProductPrice] = useState("");
 
   useEffect(() => {
     if (selectedProduct !== undefined) {
@@ -30,6 +32,8 @@ export default function ProductsEditModal({
       setProductType(selectedProduct.type);
       setProductNumber(selectedProduct.number);
       setProductQuantity(selectedProduct.quantity);
+      setProductSrc(selectedProduct.src);
+      setProductPrice(selectedProduct.price);
     }
   }, [selectedProduct]);
 
@@ -68,6 +72,8 @@ export default function ProductsEditModal({
           type: productType,
           number: parseInt(productNumber),
           quantity: productQuantity,
+          src: productSrc,
+          price: parseInt(productPrice),
         },
       });
       getProductFB();
@@ -124,6 +130,16 @@ export default function ProductsEditModal({
                     className="border border-black rounded my-1 px-2"
                   ></input>
                 </div>
+                <div className="flex flex-col">
+                  <label>Kép Link:</label>
+                  <input
+                    type="text"
+                    placeholder="Kép Link"
+                    value={productSrc}
+                    onChange={(e) => setProductSrc(e.target.value)}
+                    className="border border-black rounded my-1 px-2"
+                  ></input>
+                </div>
               </div>
               <div className="flex flex-col gap-3">
                 <div className="flex flex-col">
@@ -145,6 +161,17 @@ export default function ProductsEditModal({
                     required
                     value={productQuantity}
                     onChange={(e) => setProductQuantity(e.target.value)}
+                    className="border border-black rounded my-1 px-2"
+                  ></input>
+                </div>
+                <div className="flex flex-col">
+                  <label>Termék ára:</label>
+                  <input
+                    type="number"
+                    placeholder="Termék ára"
+                    required
+                    value={productPrice}
+                    onChange={(e) => setProductPrice(e.target.value)}
                     className="border border-black rounded my-1 px-2"
                   ></input>
                 </div>

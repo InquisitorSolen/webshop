@@ -1,12 +1,19 @@
+import { compare } from "../../Utils/utilFunctions";
 import { useSelector } from "react-redux";
+import ProductCard from "./ProductCard";
 
-export default function ProductPageRender() {
+export default function ProductPageRender({ pathname }) {
   const productItems = useSelector((state) => state.productReducer);
 
-  /*   console.log(productItems.product); */
+  const productsArray = Object.values(productItems.product).sort(compare);
+
   return (
     <>
-      <h1>ProductPageRender</h1>
+      {productsArray.map((product) => (
+        <div key={`${product.name}${product.type}`}>
+          <ProductCard product={product} type={pathname} />
+        </div>
+      ))}
     </>
   );
 }

@@ -38,6 +38,8 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
           number: product.number === 0 ? 0 : product.number - 1,
           type: product.type,
           quantity: product.quantity,
+          src: product.src,
+          price: product.price,
         };
         return localproduct;
       } else {
@@ -56,6 +58,8 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
           number: product.number === 0 ? 0 : product.number + 1,
           type: product.type,
           quantity: product.quantity,
+          src: product.src,
+          price: product.price,
         };
         return localproduct;
       } else {

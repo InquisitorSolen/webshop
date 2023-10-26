@@ -9,23 +9,20 @@ import Loader from "../../UtilPages/Loader";
 
 export default function ProductPageCalls() {
   const productCategory = useSelector((state) => state.productCategoryReducer);
-  const productItems = useSelector((state) => state.productReducer);
 
   const productRefFB = firebase.firestore().collection("Products");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentPath = useLocation();
+  const pathname = currentPath.pathname.split("/product/")[1];
 
   const [loading, setLoading] = useState(true);
-
-  console.log(productItems);
-  console.log(loading);
 
   const getProductFB = async () => {
     setLoading(true);
     productRefFB
-      .doc(currentPath.pathname.split("/product/")[1])
+      .doc(pathname)
       .get()
       .then((doc) => {
         if (doc.exists) {
@@ -42,11 +39,7 @@ export default function ProductPageCalls() {
 
   useEffect(() => {
     setLoading(true);
-    if (
-      !productCategory.categoriesNames.includes(
-        currentPath.pathname.split("/product/")[1]
-      )
-    ) {
+    if (!productCategory.categoriesNames.includes(pathname)) {
       navigate("/*");
     } else {
       getProductFB();
@@ -58,5 +51,5 @@ export default function ProductPageCalls() {
     return <Loader />;
   }
 
-  return <ProductPageRender />;
+  return <ProductPageRender pathname={pathname} />;
 }

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { BsChevronDown, BsChevronUp } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import { compare } from "../Utils/utilFunctions";
 
 export default function NavLinks({
   showMobilesublinks,
@@ -19,7 +20,7 @@ export default function NavLinks({
     {
       name: "Kategóriák",
       submenu: true,
-      sublinks: categoriesSublinks,
+      sublinks: categoriesSublinks.sort(compare),
     },
   ];
 
