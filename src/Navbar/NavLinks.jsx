@@ -8,8 +8,6 @@ export default function NavLinks({
   setMobileNavOpen,
 }) {
   const productCategory = useSelector((state) => state.productCategoryReducer);
-  console.log(productCategory);
-
   const categoriesSublinks = productCategory.categories.map((product, key) => {
     return {
       name: product,

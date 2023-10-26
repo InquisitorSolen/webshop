@@ -6,7 +6,7 @@ import Cart from "../CustomerPages/Cart";
 import Profile from "../CustomerPages/Profile";
 import Finances from "../AdminPages/Finances";
 import ProductsCalls from "../AdminPages/ProductsCalls";
-import ProductPage from "../CustomerPages/ProductPage";
+import ProductPageCalls from "../CustomerPages/ProductPage/ProductPageCalls";
 
 const router = createBrowserRouter([
   {
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/cart", element: <Cart /> },
       { path: "/profile", element: <Profile /> },
-      { path: "/product/*", element: <ProductPage /> },
+      { path: "/product/*", element: <ProductPageCalls /> },
       { path: "/admin/products", element: <ProductsCalls /> },
       { path: "/admin/finances", element: <Finances /> },
     ],
