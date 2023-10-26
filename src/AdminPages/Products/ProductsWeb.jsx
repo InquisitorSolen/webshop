@@ -171,6 +171,7 @@ export default function ProductsWeb({
                   <th className="border-l border-black">Termék típusa</th>
                   <th className="border-l border-black">Termék űrtartalma</th>
                   <th className="border-l border-black">Termék mennyisége</th>
+                  <th className="border-l border-black">Termék ára</th>
                   <th className="border-l border-black">Termék akciók</th>
                 </tr>
               </thead>
@@ -205,6 +206,9 @@ export default function ProductsWeb({
                           <AiOutlineMinus />
                         </button>
                       </div>
+                    </td>
+                    <td className="border-x border-dotted border-black">
+                      {product.price} Ft
                     </td>
                     <td className="border-x border-dotted border-black">
                       <button
