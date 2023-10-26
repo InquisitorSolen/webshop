@@ -199,7 +199,7 @@ export default function Profile() {
                 onSubmit={addAddress}
               >
                 <div className="flex md:flex-row flex-col justify-evenly w-full items-center my-6 grow">
-                  <div className="flex flex-col gap-6">
+                  <div className="flex flex-col gap-6 mb-6 md:mb-0">
                     <div className="flex flex-col">
                       <label>Irányítószám:</label>
                       <input

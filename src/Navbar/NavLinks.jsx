@@ -52,7 +52,7 @@ export default function NavLinks({
             {link.submenu && (
               <div>
                 <div className="absolute hidden group-hover:md:block hover:md:block">
-                  <div className="bg-white p-2.5">
+                  <div className="bg-white p-2.5 border rounded-lg">
                     {link.sublinks.map((sublink) => (
                       <div key={sublink.name}>
                         <li className=" my-2.5">

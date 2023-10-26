@@ -3,18 +3,21 @@ import { useEffect, useState } from "react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import Loader from "../../UtilPages/Loader";
 import firebase from "../../Utils/firebase";
+import { compare } from "../../Utils/utilFunctions";
 
 export default function ProductsMobile({ handleSelectChange, categoryName }) {
   const productCategory = useSelector((state) => state.productCategoryReducer);
   const productItems = useSelector((state) => state.productReducer);
   const productRefFB = firebase.firestore().collection("Products");
 
+  const sortedCategoryNames = productCategory.categories.map((e) => e).sort();
+
   const [productsArray, setProductsArray] = useState(
-    Object.values(productItems.product)
+    Object.values(productItems.product).sort(compare)
   );
 
   useEffect(() => {
-    setProductsArray(Object.values(productItems.product));
+    setProductsArray(Object.values(productItems.product).sort(compare));
   }, [productItems.product]);
 
   const uploadToFB = (localarray) => {
@@ -79,7 +82,7 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
           defaultValue={categoryName}
           className="py-2 px-6 rounded-lg"
         >
-          {productCategory.categories.map((category) => (
+          {sortedCategoryNames.map((category) => (
             <option
               key={category}
               value={category}
