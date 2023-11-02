@@ -1,21 +1,19 @@
 import { Link } from "react-router-dom";
-import { AuthContext } from "../Auth/Auth";
 import { useSelector } from "react-redux";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import NavLinks from "./NavLinks";
 import LoginBtn from "./LoginBtn";
 import NavAdminLinks from "./NavAdminLinks";
 
 export default function Navbar({ setLoginModalOpen }) {
-  const { currentUser } = useContext(AuthContext);
   const userdata = useSelector((state) => state.userReducer);
 
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [showMobilesublinks, setShowMobileSunlinks] = useState("");
 
   return (
-    <nav className="bg-white">
+    <nav className="bg-white border-b border-black">
       <div className="flex items-center font-medium justify-around">
         <div className="z-50 p-5 md:w-auto w-full flex justify-between">
           <p>LOGO</p>
@@ -44,13 +42,6 @@ export default function Navbar({ setLoginModalOpen }) {
             showMobilesublinks={showMobilesublinks}
             setShowMobileSunlinks={setShowMobileSunlinks}
           />
-          {currentUser !== null && (
-            <li>
-              <Link to="/profile" className="py-7 px-3 inline-block font-bold">
-                Profil
-              </Link>
-            </li>
-          )}
           {userdata.admin && (
             <NavAdminLinks
               showMobilesublinks={showMobilesublinks}
@@ -59,7 +50,7 @@ export default function Navbar({ setLoginModalOpen }) {
           )}
         </ul>
         <div className="md:block hidden">
-          <LoginBtn setLoginModalOpen={setLoginModalOpen} />
+          <LoginBtn setLoginModalOpen={setLoginModalOpen} mobile={false} />
         </div>
         {/* Mobile nav bar */}
         <ul
@@ -68,7 +59,13 @@ export default function Navbar({ setLoginModalOpen }) {
           }`}
         >
           <div className="py-5">
-            <LoginBtn setLoginModalOpen={setLoginModalOpen} />
+            <LoginBtn
+              setLoginModalOpen={setLoginModalOpen}
+              setShowMobileSunlinks={setShowMobileSunlinks}
+              setMobileNavOpen={setMobileNavOpen}
+              mobileNavOpen={mobileNavOpen}
+              mobile={true}
+            />
           </div>
           <li className="border-t">
             <Link
@@ -99,20 +96,6 @@ export default function Navbar({ setLoginModalOpen }) {
             setShowMobileSunlinks={setShowMobileSunlinks}
             setMobileNavOpen={setMobileNavOpen}
           />
-          {currentUser !== null && (
-            <li>
-              <Link
-                to="/profile"
-                className="py-7 px-3 inline-block font-bold"
-                onClick={() => {
-                  setShowMobileSunlinks("");
-                  setMobileNavOpen(!mobileNavOpen);
-                }}
-              >
-                Profil
-              </Link>
-            </li>
-          )}
           {userdata.admin && (
             <NavAdminLinks
               showMobilesublinks={showMobilesublinks}
