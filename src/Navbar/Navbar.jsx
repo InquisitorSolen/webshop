@@ -8,6 +8,7 @@ import NavAdminLinks from "./NavAdminLinks";
 
 export default function Navbar({ setLoginModalOpen }) {
   const userdata = useSelector((state) => state.userReducer);
+  const cart = useSelector((state) => state.cartReducer);
 
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [showMobilesublinks, setShowMobileSunlinks] = useState("");
@@ -33,10 +34,20 @@ export default function Navbar({ setLoginModalOpen }) {
               WebShop
             </Link>
           </li>
-          <li>
-            <Link to="/cart" className="py-7 px-3 inline-block font-bold">
+          <li className="flex">
+            <Link
+              to="/cart"
+              className={`py-7 pl-3 inline-block font-bold ${
+                cart.cartItemNumber === 0 ? "pr-4" : "pr-3"
+              }`}
+            >
               Kosár
             </Link>
+            {cart.cartItemNumber !== 0 && (
+              <div className="mt-5 border border-warning rounded-full w-5 h-5 bg-danger flex items-center justify-center">
+                <p>{cart.cartItemNumber}</p>
+              </div>
+            )}
           </li>
           <NavLinks
             showMobilesublinks={showMobilesublinks}
