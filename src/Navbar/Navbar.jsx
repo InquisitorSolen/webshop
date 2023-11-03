@@ -38,14 +38,14 @@ export default function Navbar({ setLoginModalOpen }) {
             <Link
               to="/cart"
               className={`py-7 pl-3 inline-block font-bold ${
-                cart.cartItemNumber === 0 ? "pr-4" : "pr-3"
+                cart.cartItemNumber === 0 ? "pr-5" : "pr-0"
               }`}
             >
               Kosár
             </Link>
             {cart.cartItemNumber !== 0 && (
-              <div className="mt-5 border border-warning rounded-full w-5 h-5 bg-danger flex items-center justify-center">
-                <p>{cart.cartItemNumber}</p>
+              <div className="mt-5 border border-warning rounded-full w-5 h-5 bg-danger flex items-center justify-center text-sm">
+                <p className="text-sm">{cart.cartItemNumber}</p>
               </div>
             )}
           </li>
