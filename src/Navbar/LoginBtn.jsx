@@ -48,7 +48,7 @@ export default function LoginBtn({
         <div className="flex flex-col md:flex-row md:gap-4">
           <Link
             to="/profile"
-            className="flex flex-col mb-2 font-bold text-lg items-center justify-center pb-3"
+            className="flex flex-col mb-2 font-bold text-lg items-center pb-3 md:pb-0 md:mb-0"
             onClick={() => {
               if (mobile) {
                 setShowMobileSunlinks("");
