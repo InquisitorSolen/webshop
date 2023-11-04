@@ -7,12 +7,16 @@ import Loader from "../UtilPages/Loader";
 import Navbar from "../Navbar/Navbar";
 import LoginModal from "../Navbar/LoginModal";
 import MainPage from "../CustomerPages/MainPage";
+import Cookies from "js-cookie";
+import { getCart } from "../Slices/cartSlice";
 
 export default function ShopLayout() {
   const userdata = useSelector((state) => state.userReducer);
   const productCategory = useSelector((state) => state.productCategoryReducer);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const currentPath = useLocation();
+
+  console.log(JSON.parse(Cookies.get("cart")));
 
   const dispatch = useDispatch();
   const productCategoriesRefFB = firebase
@@ -35,6 +39,9 @@ export default function ShopLayout() {
           );
         }
       });
+    if (Cookies.get("cart") !== undefined) {
+      dispatch(getCart(JSON.parse(Cookies.get("cart"))));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

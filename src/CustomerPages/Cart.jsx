@@ -1,6 +1,7 @@
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { getCart } from "../Slices/cartSlice";
+import Cookies from "js-cookie";
 
 export default function Cart() {
   const cart = useSelector((state) => state.cartReducer);
@@ -17,7 +18,6 @@ export default function Cart() {
         return item;
       }
     });
-
     dispatch(
       getCart({
         cartProducts: localCart,
@@ -25,7 +25,17 @@ export default function Cart() {
         cartItemNumber: cart.cartItemNumber + 1,
       })
     );
+    Cookies.set(
+      "cart",
+      JSON.stringify({
+        cartProducts: localCart,
+        cartPrice: cart.cartPrice + itemPrice,
+        cartItemNumber: cart.cartItemNumber + 1,
+      }),
+      { expires: 2 }
+    );
   };
+
   const decreaseAmount = (name) => {
     const itemPrice = cart.cartProducts
       .map((item) => (item.name === name ? item.price : 0))
@@ -49,6 +59,19 @@ export default function Cart() {
         cartItemNumber: cart.cartItemNumber - 1,
       })
     );
+    if (cart.cartItemNumber - 1 !== 0) {
+      Cookies.set(
+        "cart",
+        JSON.stringify({
+          cartProducts: localCart,
+          cartPrice: cart.cartPrice - itemPrice,
+          cartItemNumber: cart.cartItemNumber - 1,
+        }),
+        { expires: 2 }
+      );
+    } else {
+      Cookies.remove("cart");
+    }
   };
 
   return (

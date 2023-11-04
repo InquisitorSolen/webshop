@@ -1,6 +1,7 @@
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { getCart } from "../../Slices/cartSlice";
+import Cookies from "js-cookie";
 
 export default function ProductCard({ product, type }) {
   const productCategory = useSelector((state) => state.productCategoryReducer);
@@ -42,6 +43,19 @@ export default function ProductCard({ product, type }) {
         cartItemNumber: cart.cartItemNumber - 1,
       })
     );
+    if (cart.cartItemNumber - 1 !== 0) {
+      Cookies.set(
+        "cart",
+        JSON.stringify({
+          cartProducts: localCart,
+          cartPrice: cart.cartPrice - product.price,
+          cartItemNumber: cart.cartItemNumber - 1,
+        }),
+        { expires: 2 }
+      );
+    } else {
+      Cookies.remove("cart");
+    }
   };
 
   const increaseNumInCart = () => {
@@ -59,6 +73,15 @@ export default function ProductCard({ product, type }) {
         cartItemNumber: cart.cartItemNumber + 1,
       })
     );
+    Cookies.set(
+      "cart",
+      JSON.stringify({
+        cartProducts: localCart,
+        cartPrice: cart.cartPrice + product.price,
+        cartItemNumber: cart.cartItemNumber + 1,
+      }),
+      { expires: 2 }
+    );
   };
 
   const addToCart = () => {
@@ -71,6 +94,15 @@ export default function ProductCard({ product, type }) {
         cartPrice: cart.cartPrice + product.price,
         cartItemNumber: cart.cartItemNumber + 1,
       })
+    );
+    Cookies.set(
+      "cart",
+      JSON.stringify({
+        cartProducts: localCart,
+        cartPrice: cart.cartPrice + product.price,
+        cartItemNumber: cart.cartItemNumber + 1,
+      }),
+      { expires: 2 }
     );
   };
 
