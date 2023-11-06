@@ -1,9 +1,10 @@
+import { getProductAsync } from "../../Slices/productSlice";
 import { useDispatch } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import firebase from "../../Utils/firebase";
 import modalStyle from "../../Utils/modalStyle";
-import { useEffect, useState } from "react";
-import { getProduct } from "../../Slices/productSlice";
 
 export default function ProductsEditModal({
   editProductModalOpen,
@@ -19,71 +20,77 @@ export default function ProductsEditModal({
     (product) => product.name === editProductName
   );
 
-  const [productName, setProductName] = useState("");
-  const [productType, setProductType] = useState("");
-  const [productNumber, setProductNumber] = useState(0);
-  const [productQuantity, setProductQuantity] = useState("");
-  const [productSrc, setProductSrc] = useState("");
-  const [productPrice, setProductPrice] = useState("");
+  const defaultProduct = {
+    name: "",
+    type: "",
+    number: 0,
+    quantity: "",
+    src: "",
+    price: 0,
+    description: "",
+  };
+
+  const [localproduct, setLocalProduct] = useState(defaultProduct);
 
   useEffect(() => {
     if (selectedProduct !== undefined) {
-      setProductName(selectedProduct.name);
-      setProductType(selectedProduct.type);
-      setProductNumber(selectedProduct.number);
-      setProductQuantity(selectedProduct.quantity);
-      setProductSrc(selectedProduct.src);
-      setProductPrice(selectedProduct.price);
+      setLocalProduct(selectedProduct);
     }
   }, [selectedProduct]);
 
-  const getProductFB = () => {
-    productRefFB
-      .doc(categoryName)
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          dispatch(
-            getProduct({
-              product: doc.data(),
-              productLoading: false,
-            })
-          );
-        }
-      });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLocalProduct((localproduct) => ({ ...localproduct, [name]: value }));
   };
 
   const closeModal = () => {
     seteditProductModalOpen(false);
+    setLocalProduct(defaultProduct);
   };
 
   const editProduct = async (event) => {
     event.preventDefault();
-    const combining = /[\u0300-\u036F]/g;
-    const productAsciiName = productName
-      .replace(/\s/g, "")
-      .normalize("NFKD")
-      .replace(combining, "");
 
-    try {
-      await productRefFB.doc(categoryName).update({
-        [productAsciiName]: {
-          name: productName,
-          type: productType,
-          number: parseInt(productNumber),
-          quantity: productQuantity,
-          src: productSrc,
-          price: parseInt(productPrice),
-        },
-      });
-      getProductFB();
-      setProductName("");
-      setProductType("");
-      setProductNumber(0);
-      setProductQuantity("");
-      seteditProductModalOpen(false);
-    } catch (error) {
-      console.error(error);
+    if (selectedProduct !== undefined) {
+      const id = uuidv4();
+      try {
+        await productRefFB.doc(categoryName).update({
+          [id]: {
+            name: localproduct.name,
+            type: localproduct.type,
+            number: parseInt(localproduct.number),
+            quantity: localproduct.quantity,
+            src: localproduct.src,
+            price: parseInt(localproduct.price),
+            description: localproduct.localproduct,
+          },
+        });
+        dispatch(getProductAsync(categoryName));
+        setLocalProduct(defaultProduct);
+        seteditProductModalOpen(false);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      const id = uuidv4();
+      try {
+        await productRefFB.doc(categoryName).update({
+          [id]: {
+            name: localproduct.name,
+            type: localproduct.type,
+            number: parseInt(localproduct.number),
+            quantity: localproduct.quantity,
+            src: localproduct.src,
+            price: parseInt(localproduct.price),
+            description: localproduct.localproduct,
+          },
+        });
+        dispatch(getProductAsync(categoryName));
+        setLocalProduct(defaultProduct);
+        seteditProductModalOpen(false);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -112,10 +119,11 @@ export default function ProductsEditModal({
                   <label>Termék neve:</label>
                   <input
                     type="text"
+                    name="name"
                     placeholder="Termék neve"
                     required
-                    value={productName}
-                    onChange={(e) => setProductName(e.target.value)}
+                    value={localproduct.name}
+                    onChange={handleChange}
                     className="border border-black rounded my-1 px-2"
                   ></input>
                 </div>
@@ -123,10 +131,11 @@ export default function ProductsEditModal({
                   <label>Termék típusa:</label>
                   <input
                     type="text"
+                    name="type"
                     placeholder="Termék típusa"
                     required
-                    value={productType}
-                    onChange={(e) => setProductType(e.target.value)}
+                    value={localproduct.type}
+                    onChange={handleChange}
                     className="border border-black rounded my-1 px-2"
                   ></input>
                 </div>
@@ -134,9 +143,10 @@ export default function ProductsEditModal({
                   <label>Kép Link:</label>
                   <input
                     type="text"
+                    name="src"
                     placeholder="Kép Link"
-                    value={productSrc}
-                    onChange={(e) => setProductSrc(e.target.value)}
+                    value={localproduct.src}
+                    onChange={handleChange}
                     className="border border-black rounded my-1 px-2"
                   ></input>
                 </div>
@@ -146,9 +156,10 @@ export default function ProductsEditModal({
                   <label>Termék mennyisége:</label>
                   <input
                     type="number"
+                    name="number"
                     placeholder="Termék mennyisége"
-                    value={productNumber}
-                    onChange={(e) => setProductNumber(e.target.value)}
+                    value={localproduct.number}
+                    onChange={handleChange}
                     required
                     className="border border-black rounded my-1 px-2"
                   ></input>
@@ -159,8 +170,8 @@ export default function ProductsEditModal({
                     type="text"
                     placeholder="Termék ürtartalma"
                     required
-                    value={productQuantity}
-                    onChange={(e) => setProductQuantity(e.target.value)}
+                    value={localproduct.quantity}
+                    onChange={handleChange}
                     className="border border-black rounded my-1 px-2"
                   ></input>
                 </div>
@@ -170,8 +181,8 @@ export default function ProductsEditModal({
                     type="number"
                     placeholder="Termék ára"
                     required
-                    value={productPrice}
-                    onChange={(e) => setProductPrice(e.target.value)}
+                    value={localproduct.price}
+                    onChange={handleChange}
                     className="border border-black rounded my-1 px-2"
                   ></input>
                 </div>

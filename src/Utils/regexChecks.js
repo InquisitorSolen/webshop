@@ -1,4 +1,4 @@
-export default function pwCheck(password) {
+export function pwCheck(password) {
   /* pw must contain:
    *Length 8
    *Uppercase
@@ -26,4 +26,13 @@ export default function pwCheck(password) {
     return true;
   }
   return false;
+}
+
+export function asciify(name) {
+  const combining = /[\u0300-\u036F]/g;
+  const asciiName = name
+    .replace(/\s/g, "")
+    .normalize("NFKD")
+    .replace(combining, "");
+  return asciiName;
 }

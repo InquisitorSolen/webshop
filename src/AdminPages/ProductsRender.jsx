@@ -1,5 +1,6 @@
+import { asciify } from "../Utils/regexChecks";
+import { getProductAsync } from "../Slices/productSlice";
 import { useEffect, useState } from "react";
-import { getProduct } from "../Slices/productSlice";
 import { useDispatch, useSelector } from "react-redux";
 import firebase from "../Utils/firebase";
 import Loader from "../UtilPages/Loader";
@@ -8,62 +9,30 @@ import ProductsWeb from "./Products/ProductsWeb";
 
 export default function ProductsRender() {
   const productCategory = useSelector((state) => state.productCategoryReducer);
-  const productItems = useSelector((state) => state.productReducer);
   const dispatch = useDispatch();
   const productRefFB = firebase.firestore().collection("Products");
 
-  const sortedCategoryNames = productCategory.categories.map((e) => e).sort();
-  const sortedNames = productCategory.categoriesNames.map((e) => e).sort();
-
-  const [categoryName, setCategoryName] = useState(sortedCategoryNames[0]);
-  const [productName, setProductName] = useState(sortedNames[0]);
-
-  const getProductFB = () => {
-    productRefFB
-      .doc(categoryName)
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          dispatch(
-            getProduct({
-              product: doc.data(),
-              productLoading: false,
-            })
-          );
-        }
-      });
-  };
+  const [categoryName, setCategoryName] = useState(
+    productCategory.categoriesNames[0]
+  );
+  const [productName, setProductName] = useState(productCategory.categories[0]);
 
   useEffect(() => {
-    if (categoryName === undefined) {
-      setCategoryName(productCategory.categoriesNames[0]);
-    } else {
-      getProductFB();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categoryName, productCategory.categories]);
+    dispatch(getProductAsync(categoryName));
+  }, [categoryName, dispatch, productRefFB]);
 
   const handleSelectChange = (event) => {
     event.preventDefault();
     setProductName(event.target.value);
-    const combining = /[\u0300-\u036F]/g;
-    setCategoryName(
-      event.target.value
-        .replace(/\s/g, "")
-        .normalize("NFKD")
-        .replace(combining, "")
-    );
+    setCategoryName(asciify(event.target.value));
   };
 
-  if (
-    productCategory.categoriesLoading ||
-    Object.keys(productItems.product).length === 0
-  ) {
+  if (productCategory.categoriesLoading) {
     return <Loader />;
   }
 
   return (
-    <div className="w-full flex flex-col grow">
+    <div className="grow">
       <ProductsWeb
         handleSelectChange={handleSelectChange}
         categoryName={categoryName}

@@ -16,8 +16,6 @@ export default function ShopLayout() {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const currentPath = useLocation();
 
-  console.log(JSON.parse(Cookies.get("cart")));
-
   const dispatch = useDispatch();
   const productCategoriesRefFB = firebase
     .firestore()
@@ -31,8 +29,8 @@ export default function ShopLayout() {
         if (doc.exists) {
           dispatch(
             getCategories({
-              categories: Object.values(doc.data()),
-              categoriesNames: Object.keys(doc.data()),
+              categories: Object.values(doc.data()).sort(),
+              categoriesNames: Object.keys(doc.data()).sort(),
               ProductCategories: doc.data(),
               categoriesLoading: false,
             })

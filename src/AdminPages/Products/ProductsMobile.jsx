@@ -13,12 +13,12 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
   const sortedCategoryNames = productCategory.categories.map((e) => e).sort();
 
   const [productsArray, setProductsArray] = useState(
-    Object.values(productItems.product).sort(compare)
+    Object.values(productItems.productObj).sort(compare)
   );
 
   useEffect(() => {
-    setProductsArray(Object.values(productItems.product).sort(compare));
-  }, [productItems.product]);
+    setProductsArray(Object.values(productItems.productObj).sort(compare));
+  }, [productItems.productObj]);
 
   const uploadToFB = (localarray) => {
     const FBObj = {};
@@ -95,7 +95,7 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
       </div>
       <div className="w-full flex flex-col">
         <div className="text-center border border-black rounded-xl bg-white mt-6 mx-6 flex flex-col grow justify-between ">
-          {Object.keys(productItems.product).length === 0 ? (
+          {Object.keys(productItems.productObj).length === 0 ? (
             <Loader />
           ) : (
             productsArray.map((product) => (

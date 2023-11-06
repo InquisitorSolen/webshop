@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import firebase from "../Utils/firebase";
-import pwCheck from "../Utils/pwCheck";
+import { pwCheck } from "../Utils/regexChecks";
 
 export default function Signup() {
   const userRefFB = firebase.firestore().collection("users");

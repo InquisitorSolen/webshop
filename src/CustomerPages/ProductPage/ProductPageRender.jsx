@@ -16,7 +16,7 @@ export default function ProductPageRender({ pathname }) {
     })
     .find((element) => element !== "");
 
-  const productsArray = Object.values(productItems.product).sort(compare);
+  const productsArray = Object.values(productItems.productObj).sort(compare);
 
   return (
     <div className="flex flex-col border border-black rounded-xl p-6 bg-white m-6 text-center grow">

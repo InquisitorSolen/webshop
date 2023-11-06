@@ -5,14 +5,14 @@ import {
   AiOutlinePlus,
   AiOutlinePlusCircle,
 } from "react-icons/ai";
-import { getProduct } from "../../Slices/productSlice";
+import { compare } from "../../Utils/utilFunctions";
+import { getProductAsync } from "../../Slices/productSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../UtilPages/Loader";
 import firebase from "../../Utils/firebase";
 import ProductsEditModal from "./ProductsEditModal";
 import ProductCategoryModal from "./ProductCategoryModal";
-import { compare } from "../../Utils/utilFunctions";
 
 export default function ProductsWeb({
   handleSelectChange,
@@ -29,28 +29,12 @@ export default function ProductsWeb({
   const [editProductModalOpen, seteditProductModalOpen] = useState(false);
   const [editProductName, setEditProductName] = useState("");
   const [productsArray, setProductsArray] = useState(
-    Object.values(productItems.product).sort(compare)
+    Object.values(productItems.productObj).sort(compare)
   );
 
   useEffect(() => {
-    setProductsArray(Object.values(productItems.product).sort(compare));
-  }, [productItems.product]);
-
-  const getProductFB = () => {
-    productRefFB
-      .doc(categoryName)
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          dispatch(
-            getProduct({
-              product: doc.data(),
-              productLoading: false,
-            })
-          );
-        }
-      });
-  };
+    setProductsArray(Object.values(productItems.productObj).sort(compare));
+  }, [productItems.productObj]);
 
   const uploadToFB = async (localarray) => {
     const FBObj = {};
@@ -59,7 +43,7 @@ export default function ProductsWeb({
     }
     try {
       await productRefFB.doc(categoryName).set(FBObj);
-      getProductFB();
+      dispatch(getProductAsync(categoryName));
     } catch (error) {
       console.error(error);
     }
@@ -73,6 +57,7 @@ export default function ProductsWeb({
   };
 
   const addProduct = () => {
+    setEditProductName("");
     seteditProductModalOpen(true);
   };
 
@@ -85,12 +70,14 @@ export default function ProductsWeb({
     const localarray = productsArray.map((product) => {
       if (product.name === name) {
         const localproduct = {
+          id: product.id,
           name: product.name,
           number: product.number === 0 ? 0 : product.number - 1,
           type: product.type,
           quantity: product.quantity,
           src: product.src,
           price: product.price,
+          description: product.description,
         };
         return localproduct;
       } else {
@@ -105,12 +92,14 @@ export default function ProductsWeb({
     const localarray = productsArray.map((product) => {
       if (product.name === name) {
         const localproduct = {
+          id: product.id,
           name: product.name,
           number: product.number === 0 ? 0 : product.number + 1,
           type: product.type,
           quantity: product.quantity,
           src: product.src,
           price: product.price,
+          description: product.description,
         };
         return localproduct;
       } else {
@@ -126,7 +115,7 @@ export default function ProductsWeb({
   };
 
   return (
-    <div className="hidden md:flex flex-row grow">
+    <div className="hidden md:flex w-full h-full">
       {/* Categories List*/}
       <div className="text-center border border-black rounded-xl bg-white m-6 w-fit grow">
         <div>
@@ -164,6 +153,7 @@ export default function ProductsWeb({
                 <AiOutlinePlusCircle className="text-2xl mt-1" />
               </button>
             </div>
+
             <table className="mx-3 border border-black table-fixed">
               <thead>
                 <tr className="border-b-2 border-black">

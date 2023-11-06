@@ -18,8 +18,8 @@ export default function MainPage() {
         if (doc.exists) {
           dispatch(
             getCategories({
-              categories: Object.values(doc.data()),
-              categoriesNames: Object.keys(doc.data()),
+              categories: Object.values(doc.data()).sort(),
+              categoriesNames: Object.keys(doc.data()).sort(),
               ProductCategories: doc.data(),
               categoriesLoading: false,
             })
