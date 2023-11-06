@@ -1,14 +1,13 @@
-import { getCategories } from "../Slices/productCaregorySlice";
+import { getCart } from "../Slices/cartSlice";
 import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router";
+import { getProductCategories } from "../Slices/productCaregorySlice";
 import { useDispatch, useSelector } from "react-redux";
-import firebase from "../Utils/firebase";
 import Loader from "../UtilPages/Loader";
 import Navbar from "../Navbar/Navbar";
 import LoginModal from "../Navbar/LoginModal";
 import MainPage from "../CustomerPages/MainPage";
 import Cookies from "js-cookie";
-import { getCart } from "../Slices/cartSlice";
 
 export default function ShopLayout() {
   const userdata = useSelector((state) => state.userReducer);
@@ -17,31 +16,13 @@ export default function ShopLayout() {
   const currentPath = useLocation();
 
   const dispatch = useDispatch();
-  const productCategoriesRefFB = firebase
-    .firestore()
-    .collection("productCategories");
 
   useEffect(() => {
-    productCategoriesRefFB
-      .doc("categoryNames")
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          dispatch(
-            getCategories({
-              categories: Object.values(doc.data()).sort(),
-              categoriesNames: Object.keys(doc.data()).sort(),
-              ProductCategories: doc.data(),
-              categoriesLoading: false,
-            })
-          );
-        }
-      });
+    dispatch(getProductCategories());
     if (Cookies.get("cart") !== undefined) {
       dispatch(getCart(JSON.parse(Cookies.get("cart"))));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
   if (userdata.userLoading || productCategory.categoriesLoading) {
     return <Loader />;

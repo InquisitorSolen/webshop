@@ -1,24 +1,43 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import firebase from "../Utils/firebase";
 
 const initialState = {
-  categoriesNames: [],
-  categories: [],
+  productCategories: {},
+  productCategoriesNames: [],
+  productCategoriesKeys: [],
   categoriesLoading: true,
-  ProductCategories: {},
 };
+
+export const getProductCategories = createAsyncThunk(
+  "productCategories/getCategories",
+  async () => {
+    const response = await firebase
+      .firestore()
+      .collection("productCategories")
+      .doc("categoryNames")
+      .get();
+    return response.data();
+  }
+);
 
 export const productCaregorySlice = createSlice({
   name: "productCategories",
   initialState,
-  reducers: {
-    getCategories(state, action) {
-      state.categories = action.payload.categories;
-      state.categoriesLoading = action.payload.categoriesLoading;
-      state.categoriesNames = action.payload.categoriesNames;
-      state.ProductCategories = action.payload.ProductCategories;
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getProductCategories.pending, (state) => {
+      state.categoriesLoading = true;
+    });
+    builder.addCase(getProductCategories.fulfilled, (state, action) => {
+      state.categoriesLoading = false;
+      state.productCategories = action.payload;
+      state.productCategoriesNames = Object.values(action.payload).sort();
+      state.productCategoriesKeys = Object.keys(action.payload).sort();
+    });
+    builder.addCase(getProductCategories.rejected, (state) => {
+      state.categoriesLoading = true;
+    });
   },
 });
 
-export const { getCategories } = productCaregorySlice.actions;
 export default productCaregorySlice.reducer;

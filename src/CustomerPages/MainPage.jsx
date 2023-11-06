@@ -1,33 +1,18 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { getCategories } from "../Slices/productCaregorySlice";
-import firebase from "../Utils/firebase";
-import MainPageRender from "./MainPageRender";
+import { useSelector } from "react-redux";
+import Loader from "../UtilPages/Loader";
 
 export default function MainPage() {
-  const dispatch = useDispatch();
-  const productCategoriesRefFB = firebase
-    .firestore()
-    .collection("productCategories");
+  const ProductCategory = useSelector((state) => state.productCategoryReducer);
 
-  useEffect(() => {
-    productCategoriesRefFB
-      .doc("categoryNames")
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          dispatch(
-            getCategories({
-              categories: Object.values(doc.data()).sort(),
-              categoriesNames: Object.keys(doc.data()).sort(),
-              ProductCategories: doc.data(),
-              categoriesLoading: false,
-            })
-          );
-        }
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  if (ProductCategory.categoriesLoading) {
+    return <Loader />;
+  }
 
-  return <MainPageRender />;
+  return (
+    <>
+      {ProductCategory.productCategoriesNames.map((category) => (
+        <p key={category}>{category}</p>
+      ))}
+    </>
+  );
 }

@@ -29,7 +29,7 @@ export const productSlice = createSlice({
     });
     builder.addCase(getProductAsync.fulfilled, (state, action) => {
       state.productObj = action.payload;
-      state.productArray = Object.values(action.payload);
+      state.productArray = Object.values(action.payload).sort();
       state.productLoading = false;
     });
     builder.addCase(getProductAsync.rejected, (state) => {

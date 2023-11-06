@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { getCategories } from "../../Slices/productCaregorySlice";
+import { getProductCategories } from "../../Slices/productCaregorySlice";
 import { useRef, useState } from "react";
 import Modal from "react-modal";
 import firebase from "../../Utils/firebase";
@@ -30,25 +30,6 @@ export default function ProductCategoryModal({
   const closeModal = () => {
     setAddCategoryModalOpen(false);
   };
-
-  const getProductCategories = () => {
-    productCategoriesRefFB
-      .doc("categoryNames")
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          dispatch(
-            getCategories({
-              categories: Object.values(doc.data()).sort(),
-              categoriesNames: Object.keys(doc.data()).sort(),
-              ProductCategories: doc.data(),
-              categoriesLoading: false,
-            })
-          );
-        }
-      });
-  };
-
   const addCategory = async (event) => {
     event.preventDefault();
 
@@ -71,7 +52,7 @@ export default function ProductCategoryModal({
           description: productDescription.current.value,
         },
       });
-      getProductCategories();
+      dispatch(getProductCategories());
     } catch (error) {
       console.error(error);
     }
