@@ -6,11 +6,14 @@ import ProductsRender from "./ProductsRender";
 
 export default function ProductsCalls() {
   const userdata = useSelector((state) => state.userReducer);
+  const productCategory = useSelector((state) => state.productCategoryReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getProductCategories());
-  }, [dispatch]);
+    if (productCategory.categoriesLoading) {
+      dispatch(getProductCategories());
+    }
+  }, [dispatch, productCategory.categoriesLoading]);
 
   if (!userdata.admin) {
     return <Navigate to="*" />;

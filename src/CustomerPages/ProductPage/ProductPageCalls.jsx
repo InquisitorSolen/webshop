@@ -15,7 +15,7 @@ export default function ProductPageCalls() {
   const pathname = currentPath.pathname.split("/product/")[1];
 
   useEffect(() => {
-    if (!productCategory.categoriesNames.includes(pathname)) {
+    if (!productCategory.productCategoriesKeys.includes(pathname)) {
       navigate("/*");
     } else {
       dispatch(getProductAsync(pathname));
@@ -25,7 +25,7 @@ export default function ProductPageCalls() {
     dispatch,
     navigate,
     pathname,
-    productCategory.categoriesNames,
+    productCategory.productCategoriesKeys,
   ]);
 
   if (productCategory.productLoading) {

@@ -13,9 +13,11 @@ export default function ProductsRender() {
   const productRefFB = firebase.firestore().collection("Products");
 
   const [categoryName, setCategoryName] = useState(
-    productCategory.categoriesNames[0]
+    productCategory.productCategoriesKeys[0]
   );
-  const [productName, setProductName] = useState(productCategory.categories[0]);
+  const [productName, setProductName] = useState(
+    productCategory.productCategoriesNames[0]
+  );
 
   useEffect(() => {
     dispatch(getProductAsync(categoryName));

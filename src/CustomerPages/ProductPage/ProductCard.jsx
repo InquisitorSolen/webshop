@@ -12,10 +12,10 @@ export default function ProductCard({ product, type }) {
     (item) => item.name === product.name
   );
 
-  const typeName = productCategory.categoriesNames
+  const typeName = productCategory.productCategoriesKeys
     .map((product, key) => {
       if (product === type) {
-        return productCategory.categories[key];
+        return productCategory.productCategoriesNames[key];
       } else {
         return "";
       }

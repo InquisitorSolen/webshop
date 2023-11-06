@@ -6,10 +6,10 @@ export default function ProductPageRender({ pathname }) {
   const productItems = useSelector((state) => state.productReducer);
   const productCategory = useSelector((state) => state.productCategoryReducer);
 
-  const categoryName = productCategory.categoriesNames
+  const categoryName = productCategory.productCategoriesKeys
     .map((product, key) => {
       if (product === pathname) {
-        return productCategory.categories[key];
+        return productCategory.productCategoriesNames[key];
       } else {
         return "";
       }

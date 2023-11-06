@@ -10,8 +10,6 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
   const productItems = useSelector((state) => state.productReducer);
   const productRefFB = firebase.firestore().collection("Products");
 
-  const sortedCategoryNames = productCategory.categories.map((e) => e).sort();
-
   const [productsArray, setProductsArray] = useState(
     Object.values(productItems.productObj).sort(compare)
   );
@@ -82,7 +80,7 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
           defaultValue={categoryName}
           className="py-2 px-6 rounded-lg"
         >
-          {sortedCategoryNames.map((category) => (
+          {productCategory.productCategoriesNames.map((category) => (
             <option
               key={category}
               value={category}

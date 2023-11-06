@@ -23,7 +23,6 @@ export default function ProductsWeb({
   const productItems = useSelector((state) => state.productReducer);
   const productRefFB = firebase.firestore().collection("Products");
   const dispatch = useDispatch();
-  const sortedCategoryNames = productCategory.categories.map((e) => e).sort();
 
   const [addCategoryModalOpen, setAddCategoryModalOpen] = useState(false);
   const [editProductModalOpen, seteditProductModalOpen] = useState(false);
@@ -121,7 +120,7 @@ export default function ProductsWeb({
         <div>
           <h1 className="font-bold my-3 mx-6 text-xl">Termékkategóriák</h1>
           <div className="flex flex-col">
-            {sortedCategoryNames.map((category) => (
+            {productCategory.productCategoriesNames.map((category) => (
               <button
                 key={category}
                 value={category}
