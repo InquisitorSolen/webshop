@@ -1,74 +1,45 @@
-import { useSelector } from "react-redux";
+import { asciify } from "../../Utils/regexChecks";
+import { updateProduct } from "../../Slices/productSlice";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import Loader from "../../UtilPages/Loader";
-import firebase from "../../Utils/firebase";
-import { compare } from "../../Utils/utilFunctions";
 
 export default function ProductsMobile({ handleSelectChange, categoryName }) {
   const productCategory = useSelector((state) => state.productCategoryReducer);
   const productItems = useSelector((state) => state.productReducer);
-  const productRefFB = firebase.firestore().collection("Products");
+  const dispatch = useDispatch();
 
-  const [productsArray, setProductsArray] = useState(
-    Object.values(productItems.productObj).sort(compare)
-  );
+  const [productsArray, setProductsArray] = useState(productItems.productArray);
 
   useEffect(() => {
-    setProductsArray(Object.values(productItems.productObj).sort(compare));
-  }, [productItems.productObj]);
+    setProductsArray(productItems.productArray);
+  }, [productItems.productArray]);
 
-  const uploadToFB = (localarray) => {
-    const FBObj = {};
-    for (let i = 0; i < localarray.length; i++) {
-      Object.assign(FBObj, { [localarray[i].name]: localarray[i] });
-    }
-    productRefFB
-      .doc(categoryName)
-      .set(FBObj)
-      .catch((err) => {
-        console.error(err);
-      });
+  const removeNum = (id) => {
+    const obj = productsArray.find((product) => product.id === id);
+    const newObj = { ...obj, number: obj.number === 0 ? 0 : obj.number - 1 };
+
+    dispatch(
+      updateProduct({
+        categoryName: asciify(categoryName),
+        product: id,
+        data: newObj,
+      })
+    );
   };
 
-  const removeNum = (name) => {
-    const localarray = productsArray.map((product) => {
-      if (product.name === name) {
-        const localproduct = {
-          name: product.name,
-          number: product.number === 0 ? 0 : product.number - 1,
-          type: product.type,
-          quantity: product.quantity,
-          src: product.src,
-          price: product.price,
-        };
-        return localproduct;
-      } else {
-        return product;
-      }
-    });
-    setProductsArray(localarray);
-    uploadToFB(localarray);
-  };
+  const addNum = (id) => {
+    const obj = productsArray.find((product) => product.id === id);
+    const newObj = { ...obj, number: obj.number + 1 };
 
-  const addNum = (name) => {
-    const localarray = productsArray.map((product) => {
-      if (product.name === name) {
-        const localproduct = {
-          name: product.name,
-          number: product.number === 0 ? 0 : product.number + 1,
-          type: product.type,
-          quantity: product.quantity,
-          src: product.src,
-          price: product.price,
-        };
-        return localproduct;
-      } else {
-        return product;
-      }
-    });
-    setProductsArray(localarray);
-    uploadToFB(localarray);
+    dispatch(
+      updateProduct({
+        categoryName: asciify(categoryName),
+        product: id,
+        data: newObj,
+      })
+    );
   };
 
   return (
@@ -103,12 +74,12 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
               >
                 <p>{product.name}</p>
                 <div>
-                  <button onClick={() => addNum(product.name)} className="my-2">
+                  <button onClick={() => addNum(product.id)} className="my-2">
                     <AiOutlinePlus />
                   </button>
                   <p>{product.number}</p>
                   <button
-                    onClick={() => removeNum(product.name)}
+                    onClick={() => removeNum(product.id)}
                     className="my-2"
                   >
                     <AiOutlineMinus />

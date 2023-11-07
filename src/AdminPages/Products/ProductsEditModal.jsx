@@ -1,99 +1,69 @@
-import { getProduct } from "../../Slices/productSlice";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { useEffect, useState } from "react";
+import { updateProduct } from "../../Slices/productSlice";
 import Modal from "react-modal";
-import firebase from "../../Utils/firebase";
 import modalStyle from "../../Utils/modalStyle";
 
 export default function ProductsEditModal({
   editProductModalOpen,
   seteditProductModalOpen,
-  editProductName,
-  productsArray,
+  editProduct,
+  setEditProduct,
   categoryName,
+  defaultproduct,
 }) {
   const dispatch = useDispatch();
-  const productRefFB = firebase.firestore().collection("Products");
-
-  const selectedProduct = productsArray.find(
-    (product) => product.name === editProductName
-  );
-
-  const defaultProduct = {
-    name: "",
-    type: "",
-    number: 0,
-    quantity: "",
-    src: "",
-    price: 0,
-    description: "",
-  };
-
-  const [localproduct, setLocalProduct] = useState(defaultProduct);
-
-  useEffect(() => {
-    if (selectedProduct !== undefined) {
-      setLocalProduct(selectedProduct);
-    }
-  }, [selectedProduct]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setLocalProduct((localproduct) => ({ ...localproduct, [name]: value }));
+    setEditProduct({ ...editProduct, [name]: value });
   };
 
   const closeModal = () => {
     seteditProductModalOpen(false);
-    setLocalProduct(defaultProduct);
+    setEditProduct(defaultproduct);
   };
 
-  const editProduct = async (event) => {
+  const updateProductData = (event) => {
     event.preventDefault();
-
-    if (selectedProduct !== undefined) {
+    if (editProduct.id === "") {
       const id = uuidv4();
-      try {
-        await productRefFB.doc(categoryName).update({
-          [id]: {
+      dispatch(
+        updateProduct({
+          categoryName,
+          product: id,
+          data: {
             id: id,
-            name: localproduct.name,
-            type: localproduct.type,
-            number: parseInt(localproduct.number),
-            quantity: localproduct.quantity,
-            src: localproduct.src,
-            price: parseInt(localproduct.price),
-            description: localproduct.description,
+            name: editProduct.name,
+            type: editProduct.type,
+            number: parseInt(editProduct.number),
+            quantity: editProduct.quantity,
+            src: editProduct.src,
+            price: parseInt(editProduct.price),
+            description: editProduct.description,
           },
-        });
-        dispatch(getProduct(categoryName));
-        setLocalProduct(defaultProduct);
-        seteditProductModalOpen(false);
-      } catch (error) {
-        console.error(error);
-      }
+        })
+      );
     } else {
-      const id = uuidv4();
-      try {
-        await productRefFB.doc(categoryName).update({
-          [id]: {
-            id: id,
-            name: localproduct.name,
-            type: localproduct.type,
-            number: parseInt(localproduct.number),
-            quantity: localproduct.quantity,
-            src: localproduct.src,
-            price: parseInt(localproduct.price),
-            description: localproduct.description,
+      dispatch(
+        updateProduct({
+          categoryName,
+          product: editProduct.id,
+          data: {
+            id: editProduct.id,
+            name: editProduct.name,
+            type: editProduct.type,
+            number: parseInt(editProduct.number),
+            quantity: editProduct.quantity,
+            src: editProduct.src,
+            price: parseInt(editProduct.price),
+            description: editProduct.description,
           },
-        });
-        dispatch(getProduct(categoryName));
-        setLocalProduct(defaultProduct);
-        seteditProductModalOpen(false);
-      } catch (error) {
-        console.error(error);
-      }
+        })
+      );
     }
+    setEditProduct(defaultproduct);
+    seteditProductModalOpen(false);
   };
 
   return (
@@ -104,15 +74,15 @@ export default function ProductsEditModal({
       onRequestClose={closeModal}
     >
       <div className="flex flex-col gap-4 ">
-        <form onSubmit={editProduct} className="flex flex-col gap-3">
+        <form onSubmit={updateProductData} className="flex flex-col gap-3">
           <div>
-            {selectedProduct === undefined ? (
+            {editProduct.id === "" ? (
               <p className="text-center font-bold text-lg">
-                Termék felvétele: {editProductName}
+                Termék felvétele: {editProduct.name}
               </p>
             ) : (
               <p className="text-center font-bold text-lg">
-                Termék módosítása: {editProductName}
+                Termék módosítása: {editProduct.name}
               </p>
             )}
             <div className="flex flex-row mt-3">
@@ -124,7 +94,7 @@ export default function ProductsEditModal({
                     name="name"
                     placeholder="Termék neve"
                     required
-                    value={localproduct.name}
+                    value={editProduct.name}
                     onChange={handleChange}
                     className="border border-black rounded my-1 px-2"
                   ></input>
@@ -136,7 +106,7 @@ export default function ProductsEditModal({
                     name="type"
                     placeholder="Termék típusa"
                     required
-                    value={localproduct.type}
+                    value={editProduct.type}
                     onChange={handleChange}
                     className="border border-black rounded my-1 px-2"
                   ></input>
@@ -147,7 +117,7 @@ export default function ProductsEditModal({
                     type="text"
                     name="src"
                     placeholder="Kép Link"
-                    value={localproduct.src}
+                    value={editProduct.src}
                     onChange={handleChange}
                     className="border border-black rounded my-1 px-2"
                   ></input>
@@ -160,7 +130,7 @@ export default function ProductsEditModal({
                     type="number"
                     name="number"
                     placeholder="Termék mennyisége"
-                    value={localproduct.number}
+                    value={editProduct.number}
                     onChange={handleChange}
                     required
                     className="border border-black rounded my-1 px-2"
@@ -173,7 +143,7 @@ export default function ProductsEditModal({
                     name="quantity"
                     placeholder="Termék ürtartalma"
                     required
-                    value={localproduct.quantity}
+                    value={editProduct.quantity}
                     onChange={handleChange}
                     className="border border-black rounded my-1 px-2"
                   ></input>
@@ -185,16 +155,26 @@ export default function ProductsEditModal({
                     name="price"
                     placeholder="Termék ára"
                     required
-                    value={localproduct.price}
+                    value={editProduct.price}
                     onChange={handleChange}
                     className="border border-black rounded my-1 px-2"
                   ></input>
                 </div>
               </div>
             </div>
+            <div className="mt-3">
+              <label>Termék leírása:</label>
+              <textarea
+                className="border border-black rounded my-1 px-2 w-full"
+                rows={8}
+                name="description"
+                value={editProduct.description}
+                onChange={handleChange}
+              ></textarea>
+            </div>
           </div>
           <div className="flex items-center justify-center">
-            {selectedProduct === undefined ? (
+            {editProduct.id === "" ? (
               <button className="border border-black rounded-xl px-3 py-1 text-center text-base font-bold">
                 Felvétel
               </button>

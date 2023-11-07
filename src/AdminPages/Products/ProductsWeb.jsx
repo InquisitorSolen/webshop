@@ -5,15 +5,14 @@ import {
   AiOutlinePlus,
   AiOutlinePlusCircle,
 } from "react-icons/ai";
-import { getProduct } from "../../Slices/productSlice";
+import { asciify } from "../../Utils/regexChecks";
 import { useEffect, useState } from "react";
+import { deleteProductCategory } from "../../Slices/productCaregorySlice";
 import { useDispatch, useSelector } from "react-redux";
+import { deleteProduct, updateProduct } from "../../Slices/productSlice";
 import Loader from "../../UtilPages/Loader";
-import firebase from "../../Utils/firebase";
 import ProductsEditModal from "./ProductsEditModal";
 import ProductCategoryModal from "./ProductCategoryModal";
-import { asciify } from "../../Utils/regexChecks";
-import { deleteProductCategory } from "../../Slices/productCaregorySlice";
 
 export default function ProductsWeb({
   handleSelectChange,
@@ -22,32 +21,29 @@ export default function ProductsWeb({
 }) {
   const productCategory = useSelector((state) => state.productCategoryReducer);
   const productItems = useSelector((state) => state.productReducer);
-  const productRefFB = firebase.firestore().collection("Products");
   const dispatch = useDispatch();
 
+  const defaultproduct = {
+    id: "",
+    name: "",
+    type: "",
+    number: 0,
+    quantity: "",
+    src: "",
+    price: 0,
+    description: "",
+  };
+
   const [addCategoryModalOpen, setAddCategoryModalOpen] = useState(false);
+  const [editProductModalOpen, seteditProductModalOpen] = useState(false);
+  const [productsArray, setProductsArray] = useState(productItems.productArray);
   const [productCategoryName, setProductCategoryName] = useState("");
   const [oldCategoryName, setOldCategoryName] = useState("");
-  const [editProductModalOpen, seteditProductModalOpen] = useState(false);
-  const [editProductName, setEditProductName] = useState("");
-  const [productsArray, setProductsArray] = useState(productItems.productArray);
+  const [editProduct, setEditProduct] = useState(defaultproduct);
 
   useEffect(() => {
     setProductsArray(productItems.productArray);
   }, [productItems.productArray]);
-
-  const uploadToFB = async (localarray) => {
-    const FBObj = {};
-    for (let i = 0; i < localarray.length; i++) {
-      Object.assign(FBObj, { [localarray[i].name]: localarray[i] });
-    }
-    try {
-      await productRefFB.doc(categoryName).set(FBObj);
-      dispatch(getProduct(categoryName));
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const deleteCategory = (name) => {
     const key = asciify(name);
@@ -60,65 +56,47 @@ export default function ProductsWeb({
     setAddCategoryModalOpen(true);
   };
 
-  const deleteProd = (name) => {
-    const selectedProduct = productsArray.filter(
-      (product) => product.name !== name
-    );
-    uploadToFB(selectedProduct);
-  };
-
   const addProduct = () => {
-    setEditProductName("");
+    setEditProduct(defaultproduct);
     seteditProductModalOpen(true);
   };
 
-  const editProd = (name) => {
-    setEditProductName(name);
+  const editProd = (id) => {
+    const selectedProduct = productsArray.find((product) => product.id === id);
+    setEditProduct(selectedProduct);
     seteditProductModalOpen(true);
   };
 
-  const removeNum = (name) => {
-    const localarray = productsArray.map((product) => {
-      if (product.name === name) {
-        const localproduct = {
-          id: product.id,
-          name: product.name,
-          number: product.number === 0 ? 0 : product.number - 1,
-          type: product.type,
-          quantity: product.quantity,
-          src: product.src,
-          price: product.price,
-          description: product.description,
-        };
-        return localproduct;
-      } else {
-        return product;
-      }
-    });
-    setProductsArray(localarray);
-    uploadToFB(localarray);
+  const deleteProd = (id) => {
+    dispatch(
+      deleteProduct({ categoryName: asciify(categoryName), product: id })
+    );
   };
 
-  const addNum = (name) => {
-    const localarray = productsArray.map((product) => {
-      if (product.name === name) {
-        const localproduct = {
-          id: product.id,
-          name: product.name,
-          number: product.number === 0 ? 0 : product.number + 1,
-          type: product.type,
-          quantity: product.quantity,
-          src: product.src,
-          price: product.price,
-          description: product.description,
-        };
-        return localproduct;
-      } else {
-        return product;
-      }
-    });
-    setProductsArray(localarray);
-    uploadToFB(localarray);
+  const removeNum = (id) => {
+    const obj = productsArray.find((product) => product.id === id);
+    const newObj = { ...obj, number: obj.number === 0 ? 0 : obj.number - 1 };
+
+    dispatch(
+      updateProduct({
+        categoryName: asciify(categoryName),
+        product: id,
+        data: newObj,
+      })
+    );
+  };
+
+  const addNum = (id) => {
+    const obj = productsArray.find((product) => product.id === id);
+    const newObj = { ...obj, number: obj.number + 1 };
+
+    dispatch(
+      updateProduct({
+        categoryName: asciify(categoryName),
+        product: id,
+        data: newObj,
+      })
+    );
   };
 
   const addCategory = () => {
@@ -203,7 +181,7 @@ export default function ProductsWeb({
               <tbody className="border-b border-black">
                 {productsArray.map((product) => (
                   <tr
-                    key={`${product.name}${product.type}`}
+                    key={product.id}
                     className="border-b border-dotted border-black"
                   >
                     <td className="border-r border-dotted border-black">
@@ -218,14 +196,14 @@ export default function ProductsWeb({
                     <td>
                       <div className="flex flex-row items-center justify-center">
                         <button
-                          onClick={() => addNum(product.name)}
+                          onClick={() => addNum(product.id)}
                           className="my-2"
                         >
                           <AiOutlinePlus />
                         </button>
                         <p className="px-6">{product.number}</p>
                         <button
-                          onClick={() => removeNum(product.name)}
+                          onClick={() => removeNum(product.id)}
                           className="my-2"
                         >
                           <AiOutlineMinus />
@@ -237,13 +215,13 @@ export default function ProductsWeb({
                     </td>
                     <td className="border-x border-dotted border-black">
                       <button
-                        onClick={() => editProd(product.name)}
+                        onClick={() => editProd(product.id)}
                         className="mx-2"
                       >
                         <AiOutlineEdit />
                       </button>
                       <button
-                        onClick={() => deleteProd(product.name)}
+                        onClick={() => deleteProd(product.id)}
                         className="mx-2"
                       >
                         <AiOutlineDelete />
@@ -258,9 +236,11 @@ export default function ProductsWeb({
         <ProductsEditModal
           editProductModalOpen={editProductModalOpen}
           seteditProductModalOpen={seteditProductModalOpen}
-          editProductName={editProductName}
+          editProduct={editProduct}
+          setEditProduct={setEditProduct}
           productsArray={productsArray}
           categoryName={categoryName}
+          defaultproduct={defaultproduct}
         />
       </div>
     </div>

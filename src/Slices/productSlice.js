@@ -28,7 +28,20 @@ export const deleteProduct = createAsyncThunk(
       .collection("Products")
       .doc(categoryName)
       .update({ [product]: firebase.firestore.FieldValue.delete() });
-    thunkAPI.dispatch(getProduct());
+    thunkAPI.dispatch(getProduct(categoryName));
+    return response;
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  "productItems/updateProduct",
+  async ({ categoryName, product, data }, thunkAPI) => {
+    const response = await firebase
+      .firestore()
+      .collection("Products")
+      .doc(categoryName)
+      .update({ [product]: data });
+    thunkAPI.dispatch(getProduct(categoryName));
     return response;
   }
 );
@@ -57,6 +70,16 @@ export const productSlice = createSlice({
       state.productLoading = false;
     });
     builder.addCase(deleteProduct.rejected, (state) => {
+      state.productLoading = true;
+    });
+
+    builder.addCase(updateProduct.pending, (state) => {
+      state.productLoading = true;
+    });
+    builder.addCase(updateProduct.fulfilled, (state) => {
+      state.productLoading = false;
+    });
+    builder.addCase(updateProduct.rejected, (state) => {
       state.productLoading = true;
     });
   },
