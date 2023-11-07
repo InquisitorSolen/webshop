@@ -1,6 +1,6 @@
 import { useLocation } from "react-router";
 import { useNavigate } from "react-router-dom";
-import { getProductAsync } from "../../Slices/productSlice";
+import { getProduct } from "../../Slices/productSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProductPageRender from "./ProductPageRender";
@@ -18,7 +18,7 @@ export default function ProductPageCalls() {
     if (!productCategory.productCategoriesKeys.includes(pathname)) {
       navigate("/*");
     } else {
-      dispatch(getProductAsync(pathname));
+      dispatch(getProduct(pathname));
     }
   }, [
     currentPath.pathname,

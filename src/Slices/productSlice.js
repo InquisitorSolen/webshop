@@ -1,3 +1,4 @@
+import { compare } from "../Utils/utilFunctions";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import firebase from "../Utils/firebase";
 
@@ -7,8 +8,8 @@ const initialState = {
   productLoading: true,
 };
 
-export const getProductAsync = createAsyncThunk(
-  "productItems/getProductThunk",
+export const getProduct = createAsyncThunk(
+  "productItems/getProduct",
   async (categoryName) => {
     const response = await firebase
       .firestore()
@@ -19,20 +20,43 @@ export const getProductAsync = createAsyncThunk(
   }
 );
 
+export const deleteProduct = createAsyncThunk(
+  "productItems/deleteProduct",
+  async ({ categoryName, product }, thunkAPI) => {
+    const response = await firebase
+      .firestore()
+      .collection("Products")
+      .doc(categoryName)
+      .update({ [product]: firebase.firestore.FieldValue.delete() });
+    thunkAPI.dispatch(getProduct());
+    return response;
+  }
+);
+
 export const productSlice = createSlice({
   name: "productItems",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getProductAsync.pending, (state) => {
+    builder.addCase(getProduct.pending, (state) => {
       state.productLoading = true;
     });
-    builder.addCase(getProductAsync.fulfilled, (state, action) => {
+    builder.addCase(getProduct.fulfilled, (state, action) => {
       state.productObj = action.payload;
-      state.productArray = Object.values(action.payload).sort();
+      state.productArray = Object.values(action.payload).sort(compare);
       state.productLoading = false;
     });
-    builder.addCase(getProductAsync.rejected, (state) => {
+    builder.addCase(getProduct.rejected, (state) => {
+      state.productLoading = true;
+    });
+
+    builder.addCase(deleteProduct.pending, (state) => {
+      state.productLoading = true;
+    });
+    builder.addCase(deleteProduct.fulfilled, (state) => {
+      state.productLoading = false;
+    });
+    builder.addCase(deleteProduct.rejected, (state) => {
       state.productLoading = true;
     });
   },

@@ -1,4 +1,4 @@
-import { getProductAsync } from "../../Slices/productSlice";
+import { getProduct } from "../../Slices/productSlice";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { useEffect, useState } from "react";
@@ -56,16 +56,17 @@ export default function ProductsEditModal({
       try {
         await productRefFB.doc(categoryName).update({
           [id]: {
+            id: id,
             name: localproduct.name,
             type: localproduct.type,
             number: parseInt(localproduct.number),
             quantity: localproduct.quantity,
             src: localproduct.src,
             price: parseInt(localproduct.price),
-            description: localproduct.localproduct,
+            description: localproduct.description,
           },
         });
-        dispatch(getProductAsync(categoryName));
+        dispatch(getProduct(categoryName));
         setLocalProduct(defaultProduct);
         seteditProductModalOpen(false);
       } catch (error) {
@@ -76,16 +77,17 @@ export default function ProductsEditModal({
       try {
         await productRefFB.doc(categoryName).update({
           [id]: {
+            id: id,
             name: localproduct.name,
             type: localproduct.type,
             number: parseInt(localproduct.number),
             quantity: localproduct.quantity,
             src: localproduct.src,
             price: parseInt(localproduct.price),
-            description: localproduct.localproduct,
+            description: localproduct.description,
           },
         });
-        dispatch(getProductAsync(categoryName));
+        dispatch(getProduct(categoryName));
         setLocalProduct(defaultProduct);
         seteditProductModalOpen(false);
       } catch (error) {
@@ -168,6 +170,7 @@ export default function ProductsEditModal({
                   <label>Termék ürtartalma:</label>
                   <input
                     type="text"
+                    name="quantity"
                     placeholder="Termék ürtartalma"
                     required
                     value={localproduct.quantity}
@@ -179,6 +182,7 @@ export default function ProductsEditModal({
                   <label>Termék ára:</label>
                   <input
                     type="number"
+                    name="price"
                     placeholder="Termék ára"
                     required
                     value={localproduct.price}

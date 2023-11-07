@@ -1,5 +1,5 @@
 import { asciify } from "../Utils/regexChecks";
-import { getProductAsync } from "../Slices/productSlice";
+import { getProduct } from "../Slices/productSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import firebase from "../Utils/firebase";
@@ -20,7 +20,7 @@ export default function ProductsRender() {
   );
 
   useEffect(() => {
-    dispatch(getProductAsync(categoryName));
+    dispatch(getProduct(categoryName));
   }, [categoryName, dispatch, productRefFB]);
 
   const handleSelectChange = (event) => {

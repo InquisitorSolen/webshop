@@ -5,14 +5,15 @@ import {
   AiOutlinePlus,
   AiOutlinePlusCircle,
 } from "react-icons/ai";
-import { compare } from "../../Utils/utilFunctions";
-import { getProductAsync } from "../../Slices/productSlice";
+import { getProduct } from "../../Slices/productSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../UtilPages/Loader";
 import firebase from "../../Utils/firebase";
 import ProductsEditModal from "./ProductsEditModal";
 import ProductCategoryModal from "./ProductCategoryModal";
+import { asciify } from "../../Utils/regexChecks";
+import { deleteProductCategory } from "../../Slices/productCaregorySlice";
 
 export default function ProductsWeb({
   handleSelectChange,
@@ -25,15 +26,15 @@ export default function ProductsWeb({
   const dispatch = useDispatch();
 
   const [addCategoryModalOpen, setAddCategoryModalOpen] = useState(false);
+  const [productCategoryName, setProductCategoryName] = useState("");
+  const [oldCategoryName, setOldCategoryName] = useState("");
   const [editProductModalOpen, seteditProductModalOpen] = useState(false);
   const [editProductName, setEditProductName] = useState("");
-  const [productsArray, setProductsArray] = useState(
-    Object.values(productItems.productObj).sort(compare)
-  );
+  const [productsArray, setProductsArray] = useState(productItems.productArray);
 
   useEffect(() => {
-    setProductsArray(Object.values(productItems.productObj).sort(compare));
-  }, [productItems.productObj]);
+    setProductsArray(productItems.productArray);
+  }, [productItems.productArray]);
 
   const uploadToFB = async (localarray) => {
     const FBObj = {};
@@ -42,10 +43,21 @@ export default function ProductsWeb({
     }
     try {
       await productRefFB.doc(categoryName).set(FBObj);
-      dispatch(getProductAsync(categoryName));
+      dispatch(getProduct(categoryName));
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const deleteCategory = (name) => {
+    const key = asciify(name);
+    dispatch(deleteProductCategory(key));
+  };
+
+  const editCategory = (name) => {
+    setOldCategoryName(name);
+    setProductCategoryName(name);
+    setAddCategoryModalOpen(true);
   };
 
   const deleteProd = (name) => {
@@ -117,28 +129,52 @@ export default function ProductsWeb({
     <div className="hidden md:flex w-full h-full">
       {/* Categories List*/}
       <div className="text-center border border-black rounded-xl bg-white m-6 w-fit grow">
-        <div>
-          <h1 className="font-bold my-3 mx-6 text-xl">Termékkategóriák</h1>
-          <div className="flex flex-col">
-            {productCategory.productCategoriesNames.map((category) => (
-              <button
-                key={category}
-                value={category}
-                onClick={handleSelectChange}
-                className="text-center text-lg py-1 border-b mx-8"
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
-        <button className=" mt-6 text-2xl" onClick={addCategory}>
-          <AiOutlinePlus />
-        </button>
+        {productCategory.categoriesLoading ? (
+          <Loader />
+        ) : (
+          <>
+            <h1 className="font-bold my-3 mx-6 text-xl">Termékkategóriák</h1>
+            <div className="flex flex-col">
+              {productCategory.productCategoriesNames.map((category) => (
+                <div
+                  className="flex py-1 border-b mx-8 items-center justify-between"
+                  key={category}
+                >
+                  <button
+                    onClick={() => editCategory(category)}
+                    className="mr-3"
+                  >
+                    <AiOutlineEdit />
+                  </button>
+                  <button
+                    value={category}
+                    onClick={handleSelectChange}
+                    className="text-center text-lg"
+                  >
+                    {category}
+                  </button>
+                  <button
+                    onClick={() => deleteCategory(category)}
+                    className="ml-3"
+                  >
+                    <AiOutlineDelete />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button className=" mt-6 text-2xl" onClick={addCategory}>
+              <AiOutlinePlus />
+            </button>
+          </>
+        )}
       </div>
       <ProductCategoryModal
         addCategoryModalOpen={addCategoryModalOpen}
         setAddCategoryModalOpen={setAddCategoryModalOpen}
+        productCategoryName={productCategoryName}
+        setProductCategoryName={setProductCategoryName}
+        oldCategoryName={oldCategoryName}
+        setOldCategoryName={setOldCategoryName}
       />
       {/* Products Table*/}
       <div className="text-center border border-black rounded-xl bg-white m-6 grow w-full">
