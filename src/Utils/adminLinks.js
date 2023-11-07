@@ -11,6 +11,10 @@ export const adminLinks = [
         name: "Pénzügyek",
         link: "/admin/finances",
       },
+      {
+        name: "Felhasználók",
+        link: "/admin/users",
+      },
     ],
   },
 ];

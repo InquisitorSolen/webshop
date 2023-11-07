@@ -7,6 +7,7 @@ import Profile from "../CustomerPages/Profile";
 import Finances from "../AdminPages/Finances";
 import ProductsCalls from "../AdminPages/ProductsCalls";
 import ProductPageCalls from "../CustomerPages/ProductPage/ProductPageCalls";
+import Users from "../AdminPages/Users";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
       { path: "/product/*", element: <ProductPageCalls /> },
       { path: "/admin/products", element: <ProductsCalls /> },
       { path: "/admin/finances", element: <Finances /> },
+      { path: "/admin/users", element: <Users /> },
     ],
   },
   {

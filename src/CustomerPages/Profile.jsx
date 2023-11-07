@@ -1,113 +1,100 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "../Slices/userSlice";
+import { updateAdmin, updateCustomer } from "../Slices/userSlice";
 import Loader from "../UtilPages/Loader";
-import firebase from "../Utils/firebase";
 
 export default function Profile() {
   const user = useSelector((state) => state.userReducer);
-  const usersRefFB = firebase.firestore().collection("users");
   const dispatch = useDispatch();
+
+  const defaultAddress = {
+    postalCode: "",
+    city: "",
+    street: "",
+    building: "",
+    floor: "",
+    doorNumber: "",
+  };
+
+  useEffect(() => {
+    setFamilyName(user.familyName);
+    setSurname(user.surname);
+    setAddress(user.addresses[0]);
+  }, [user.addresses, user.familyName, user.surname]);
 
   const [familyName, setFamilyName] = useState(user.familyName);
   const [surname, setSurname] = useState(user.surname);
-  const [postalCode, setPostalCode] = useState(
-    user.addresses.length === 0 ? "" : user.addresses[0].postalCode
-  );
-  const [city, setCity] = useState(
-    user.addresses.length === 0 ? "" : user.addresses[0].city
-  );
-  const [street, setStreet] = useState(
-    user.addresses.length === 0 ? "" : user.addresses[0].street
-  );
-  const [building, setBuilding] = useState(
-    user.addresses.length === 0 ? "" : user.addresses[0].building
-  );
-  const [floor, setFloor] = useState(
-    user.addresses.length === 0 ? "" : user.addresses[0].floor
-  );
-  const [doorNumber, setDoorNumber] = useState(
-    user.addresses.length === 0 ? "" : user.addresses[0].doorNumber
-  );
-
   const [selectVal, setSelectVal] = useState("1");
+  const [address, setAddress] = useState(
+    user.addresses.length === 0 ? defaultAddress : user.addresses[0]
+  );
 
   const width = user.email.length;
 
-  const getUsers = () => {
-    usersRefFB
-      .doc(user.email)
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          dispatch(
-            getUser({
-              email: doc.data().email,
-              familyName: doc.data().familyName,
-              surname: doc.data().surname,
-              lvl: doc.data().lvl,
-              admin: doc.data().admin,
-              userLoading: false,
-              addresses: doc.data().addresses,
-            })
-          );
-        }
-      });
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+    setAddress({ ...address, [name]: value });
   };
 
   const handleSelectChange = (event) => {
     const val = parseInt(event.target.value);
     if (val === 0) {
-      setPostalCode("");
-      setCity("");
-      setStreet("");
-      setBuilding("");
-      setFloor("");
-      setDoorNumber("");
+      setAddress(defaultAddress);
       setSelectVal("0");
     } else {
       setSelectVal(val);
-      setPostalCode(user.addresses[val - 1].postalCode);
-      setCity(user.addresses[val - 1].city);
-      setStreet(user.addresses[val - 1].street);
-      setBuilding(user.addresses[val - 1].building);
-      setFloor(user.addresses[val - 1].floor);
-      setDoorNumber(user.addresses[val - 1].doorNumber);
+      setAddress(user.addresses[val - 1]);
     }
   };
 
   const saveName = async (event) => {
     event.preventDefault();
-    try {
-      await usersRefFB.doc(user.email).update({ surname, familyName });
-      getUsers();
-    } catch (err) {
-      console.error(err);
+
+    if (user.admin) {
+      dispatch(
+        updateAdmin({
+          id: user.id,
+          data: { ...user, familyName: familyName, surname: surname },
+        })
+      );
+    } else {
+      dispatch(
+        updateCustomer({
+          id: user.id,
+          data: { ...user, familyName: familyName, surname: surname },
+        })
+      );
     }
   };
 
   const addAddress = async (event) => {
     event.preventDefault();
-
-    const address = { postalCode, city, street, building, floor, doorNumber };
-
-    if (user.addresses.length === 0) {
-      try {
-        await usersRefFB.doc(user.email).update({ addresses: [address] });
-        getUsers();
-      } catch (err) {
-        console.error(err);
+    const localAddress = user.addresses.map((adr) => adr);
+    if (user.admin) {
+      if (parseInt(selectVal) === 0) {
+        localAddress.push(address);
+      } else {
+        localAddress.splice(selectVal - 1, 1, address);
       }
+      console.log(localAddress);
+      dispatch(
+        updateAdmin({
+          id: user.id,
+          data: { ...user, addresses: localAddress },
+        })
+      );
     } else {
-      const localAddress = user.addresses.map((adr) => adr);
-      localAddress.push(address);
-      try {
-        await usersRefFB.doc(user.email).update({ addresses: localAddress });
-        getUsers();
-        setSelectVal(localAddress.length);
-      } catch (err) {
-        console.error(err);
+      if (parseInt(selectVal) === 0) {
+        localAddress.push(address);
+      } else {
+        localAddress.splice(selectVal - 1, 1, address);
       }
+      dispatch(
+        updateCustomer({
+          id: user.id,
+          data: { ...user, addresses: localAddress },
+        })
+      );
     }
   };
 
@@ -165,6 +152,7 @@ export default function Profile() {
               Mentés
             </button>
           </form>
+          {/* Address card */}
           <div className="w-full h-full flex flex-col">
             <div>
               <h1 className="text-2xl mt-6 font-bold">Kiszállítási cím</h1>
@@ -204,9 +192,10 @@ export default function Profile() {
                       <label>Irányítószám:</label>
                       <input
                         type="text"
+                        name="postalCode"
                         placeholder="Irányítószám"
-                        value={postalCode}
-                        onChange={(e) => setPostalCode(e.target.value)}
+                        value={address.postalCode}
+                        onChange={changeHandler}
                         required
                         className="border-b border-black my-1 px-2 text-center md:focus:outline-none md:focus:border-b"
                       ></input>
@@ -215,20 +204,22 @@ export default function Profile() {
                       <label>Város neve:</label>
                       <input
                         type="text"
+                        name="city"
                         placeholder="Város neve"
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
+                        value={address.city}
+                        onChange={changeHandler}
                         required
                         className="border-b border-black my-1 px-2 text-center md:focus:outline-none md:focus:border-b"
                       ></input>
                     </div>
                     <div className="flex flex-col">
-                      <label>Utca neve és megnevezése:</label>
+                      <label>Közterület neve és megnevezése:</label>
                       <input
                         type="text"
+                        name="street"
                         placeholder="Utca neve és megnevezése"
-                        value={street}
-                        onChange={(e) => setStreet(e.target.value)}
+                        value={address.street}
+                        onChange={changeHandler}
                         required
                         className="border-b border-black my-1 px-2 text-center md:focus:outline-none md:focus:border-b"
                       ></input>
@@ -239,9 +230,10 @@ export default function Profile() {
                       <label>Épület száma:</label>
                       <input
                         type="text"
+                        name="building"
                         placeholder="Épület száma"
-                        value={building}
-                        onChange={(e) => setBuilding(e.target.value)}
+                        value={address.building}
+                        onChange={changeHandler}
                         required
                         className="border-b border-black my-1 px-2 text-center md:focus:outline-none md:focus:border-b"
                       ></input>
@@ -250,9 +242,10 @@ export default function Profile() {
                       <label>Emelet:</label>
                       <input
                         type="text"
+                        name="floor"
                         placeholder="Emelet"
-                        value={floor}
-                        onChange={(e) => setFloor(e.target.value)}
+                        value={address.floor}
+                        onChange={changeHandler}
                         required
                         className="border-b border-black my-1 px-2 text-center md:focus:outline-none md:focus:border-b"
                       ></input>
@@ -261,9 +254,10 @@ export default function Profile() {
                       <label>Ajtó:</label>
                       <input
                         type="text"
+                        name="doorNumber"
                         placeholder="Ajtó"
-                        value={doorNumber}
-                        onChange={(e) => setDoorNumber(e.target.value)}
+                        value={address.doorNumber}
+                        onChange={changeHandler}
                         required
                         className="border-b border-black my-1 px-2 text-center md:focus:outline-none md:focus:border-b"
                       ></input>

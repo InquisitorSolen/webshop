@@ -1,12 +1,12 @@
-import { useDispatch } from "react-redux";
 import {
   editProductCategory,
   getProductCategories,
 } from "../../Slices/productCaregorySlice";
+import { asciify } from "../../Utils/regexChecks";
+import { useDispatch } from "react-redux";
 import Modal from "react-modal";
 import firebase from "../../Utils/firebase";
 import modalStyle from "../../Utils/modalStyle";
-import { asciify } from "../../Utils/regexChecks";
 
 export default function ProductCategoryModal({
   addCategoryModalOpen,

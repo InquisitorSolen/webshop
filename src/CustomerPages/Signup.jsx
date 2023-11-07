@@ -1,7 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import firebase from "../Utils/firebase";
 import { pwCheck } from "../Utils/regexChecks";
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { Link, useNavigate } from "react-router-dom";
+import firebase from "../Utils/firebase";
 
 export default function Signup() {
   const userRefFB = firebase.firestore().collection("users");
@@ -24,15 +25,19 @@ export default function Signup() {
         .createUserWithEmailAndPassword(email, pw)
         .then((res) => {
           if (res) {
+            const id = uuidv4();
             userRefFB
-              .doc(email)
-              .set({
-                email,
-                familyName,
-                surname,
-                lvl: 1,
-                admin: false,
-                addresses: [],
+              .doc("customer")
+              .update({
+                [id]: {
+                  id,
+                  email,
+                  familyName,
+                  surname,
+                  lvl: 1,
+                  admin: false,
+                  addresses: [],
+                },
               })
               .catch((err) => {
                 console.error(err);

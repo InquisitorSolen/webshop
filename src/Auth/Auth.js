@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { getUser } from "../Slices/userSlice";
+import { getUser, getUserAsync } from "../Slices/userSlice";
 import React, { useEffect, useState } from "react";
 import firebase from "../Utils/firebase";
 import Loader from "../UtilPages/Loader";
@@ -7,7 +7,6 @@ import Loader from "../UtilPages/Loader";
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
-  const userRefFB = firebase.firestore().collection("users");
   const dispatch = useDispatch();
 
   const [currentUser, setCurrentUser] = useState(null);
@@ -16,40 +15,19 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        dispatch(getUser({ lvl: 0, admin: false, userLoading: true }));
         setCurrentUser(user);
-        userRefFB
-          .doc(user.email)
-          .get()
-          .then((doc) => {
-            if (doc.exists) {
-              dispatch(
-                getUser({
-                  email: doc.data().email,
-                  familyName: doc.data().familyName,
-                  surname: doc.data().surname,
-                  lvl: doc.data().lvl,
-                  admin: doc.data().admin,
-                  userLoading: false,
-                  addresses: doc.data().addresses,
-                })
-              );
-              setLoading(false);
-            } else {
-              console.error("error getting user");
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        dispatch(getUserAsync(user.email));
+        setLoading(false);
       } else {
+        console.log("-----");
         dispatch(
           getUser({
+            lvl: 0,
             email: "",
             familyName: "",
             surname: "",
-            lvl: 0,
             admin: false,
+            addresses: [],
           })
         );
         setCurrentUser(null);
