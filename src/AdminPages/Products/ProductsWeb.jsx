@@ -261,31 +261,33 @@ export default function ProductsWeb({
               </table>
             </div>
             <div className="flex justify-center">
-              <div className="flex flex-row mb-1 mt-1">
-                {pagesArray.map((value) => {
-                  if (currentPage === value) {
-                    return (
-                      <button
-                        key={value}
-                        className=" border border-primary mx-1 w-8 h-8 bg-white font-bold text-center text-xl"
-                        onClick={() => pageChangeHandler(value)}
-                      >
-                        {value}
-                      </button>
-                    );
-                  } else {
-                    return (
-                      <button
-                        key={value}
-                        className=" border mx-1 w-8 h-8 bg-white text-center text-xl"
-                        onClick={() => pageChangeHandler(value)}
-                      >
-                        {value}
-                      </button>
-                    );
-                  }
-                })}
-              </div>
+              {productItems.productArray.length > 30 && (
+                <div className="flex flex-row mb-1 mt-1">
+                  {pagesArray.map((value) => {
+                    if (currentPage === value) {
+                      return (
+                        <button
+                          key={value}
+                          className=" border border-primary mx-1 w-8 h-8 bg-white font-bold text-center text-xl"
+                          onClick={() => pageChangeHandler(value)}
+                        >
+                          {value}
+                        </button>
+                      );
+                    } else {
+                      return (
+                        <button
+                          key={value}
+                          className=" border mx-1 w-8 h-8 bg-white text-center text-xl"
+                          onClick={() => pageChangeHandler(value)}
+                        >
+                          {value}
+                        </button>
+                      );
+                    }
+                  })}
+                </div>
+              )}
             </div>
           </div>
         )}
