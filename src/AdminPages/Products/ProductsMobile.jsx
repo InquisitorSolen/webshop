@@ -69,7 +69,7 @@ export default function ProductsMobile({ handleSelectChange, categoryName }) {
           ) : (
             productsArray.map((product) => (
               <div
-                key={`${product.name}${product.type}`}
+                key={product.id}
                 className="flex justify-between mx-4 items-center border-b grow"
               >
                 <p>{product.name}</p>

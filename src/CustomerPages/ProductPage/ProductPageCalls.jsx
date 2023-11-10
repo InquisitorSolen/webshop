@@ -8,6 +8,7 @@ import Loader from "../../UtilPages/Loader";
 
 export default function ProductPageCalls() {
   const productCategory = useSelector((state) => state.productCategoryReducer);
+  const productItems = useSelector((state) => state.productReducer);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export default function ProductPageCalls() {
     productCategory.productCategoriesKeys,
   ]);
 
-  if (productCategory.productLoading) {
+  if (productCategory.productLoading || productItems.productLoading) {
     return <Loader />;
   }
 
