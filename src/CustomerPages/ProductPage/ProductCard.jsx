@@ -8,9 +8,7 @@ export default function ProductCard({ product, type }) {
   const cart = useSelector((state) => state.cartReducer);
   const dispatch = useDispatch();
 
-  const itemInCart = cart.cartProducts.find(
-    (item) => item.name === product.name
-  );
+  const itemInCart = cart.cartProducts.find((item) => item.id === product.id);
 
   const typeName = productCategory.productCategoriesKeys
     .map((product, key) => {
@@ -117,26 +115,25 @@ export default function ProductCard({ product, type }) {
         <p>{product.quantity}</p>
         <p>{product.price} Ft</p>
       </div>
-      <div>
-        {itemInCart ? (
-          <div className="flex justify-evenly">
-            <button onClick={decreaseNumInCart}>
-              <AiOutlineMinus />
-            </button>
-            <p>{itemInCart.inCartAmount}</p>
-            <button onClick={increaseNumInCart}>
-              <AiOutlinePlus />
-            </button>
-          </div>
-        ) : (
-          <button
-            className="border border-black rounded-xl px-2 py-1 text-center text-base font-bold"
-            onClick={addToCart}
-          >
-            Hozzáadás
+
+      {itemInCart ? (
+        <div className="flex flex-row mb-1 mt-[0.15rem]">
+          <button className="text-xl" onClick={increaseNumInCart}>
+            <AiOutlinePlus />
           </button>
-        )}
-      </div>
+          <p className="px-3 text-xl font-bold">{itemInCart.inCartAmount}</p>
+          <button className="text-xl" onClick={decreaseNumInCart}>
+            <AiOutlineMinus />
+          </button>
+        </div>
+      ) : (
+        <button
+          className="border border-black rounded-xl px-2 py-1 text-center text-base font-bold"
+          onClick={addToCart}
+        >
+          Hozzáadás
+        </button>
+      )}
     </div>
   );
 }
