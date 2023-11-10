@@ -21,16 +21,17 @@ export default function ProductPageRender({ pathname }) {
     (_, i) => i + 1
   );
 
+  const [shownProductArray, setShownProductArray] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
+    setCurrentPage(1);
     if (productItems.productArray.length <= 30) {
       setShownProductArray(productItems.productArray);
     } else {
       setShownProductArray(productItems.productArray.slice(0, 30));
     }
   }, [productItems.productArray]);
-
-  const [shownProductArray, setShownProductArray] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const pageChangeHandler = (page) => {
     const arrayHelper = (parseInt(page) - 1) * 30;
