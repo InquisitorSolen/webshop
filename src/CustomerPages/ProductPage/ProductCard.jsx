@@ -107,17 +107,17 @@ export default function ProductCard({ product, type }) {
   };
 
   return (
-    <div className="text-center border border-black rounded-xl p-6 bg-white w-fit h-fit">
-      <div className="w-fit h-fit">
-        <img src={product.src} alt="" width={150} height={150} />
+    <div className="flex flex-col justify-between items-center border w-[16rem] h-[25rem] p-6 bg-white ">
+      <img src={product.src} alt="" width={150} height={150} />
+      <div className="flex flex-col text-center justify-center items-center">
         <p>{product.name}</p>
-        <div className="flex flex-row items-center justify-center">
-          <p>
-            {product.type} {typeName}
-          </p>
-        </div>
+        <p>
+          {product.type} {typeName}
+        </p>
         <p>{product.quantity}</p>
         <p>{product.price} Ft</p>
+      </div>
+      <div>
         {itemInCart ? (
           <div className="flex justify-evenly">
             <button onClick={decreaseNumInCart}>
@@ -130,7 +130,7 @@ export default function ProductCard({ product, type }) {
           </div>
         ) : (
           <button
-            className="border border-black rounded-xl px-1 text-center text-base font-bold w-fit"
+            className="border border-black rounded-xl px-2 py-1 text-center text-base font-bold"
             onClick={addToCart}
           >
             Hozzáadás

@@ -17,7 +17,7 @@ export default function ProductPageRender({ pathname }) {
     .find((element) => element !== "");
 
   const pagesArray = Array.from(
-    { length: productItems.productArray.length },
+    { length: productItems.productArray.length / 30 + 1 },
     (_, i) => i + 1
   );
 
