@@ -1,4 +1,4 @@
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { getCart } from "../../Slices/cartSlice";
 import Cookies from "js-cookie";
@@ -24,7 +24,7 @@ export default function ProductCard({ product, type }) {
   const decreaseNumInCart = () => {
     const localCart = cart.cartProducts
       .map((item) => {
-        if (item.name === product.name) {
+        if (item.id === product.id) {
           if (item.inCartAmount === 1) {
             return 0;
           }
@@ -58,7 +58,7 @@ export default function ProductCard({ product, type }) {
 
   const increaseNumInCart = () => {
     const localCart = cart.cartProducts.map((item) => {
-      if (item.name === product.name) {
+      if (item.id === product.id) {
         return { ...item, inCartAmount: item.inCartAmount + 1 };
       } else {
         return item;
@@ -83,7 +83,11 @@ export default function ProductCard({ product, type }) {
   };
 
   const addToCart = () => {
-    const localproduct = { ...product, inCartAmount: 1 };
+    const localproduct = {
+      ...product,
+      inCartAmount: 1,
+      productCategory: typeName,
+    };
     const localCart = cart.cartProducts.map((item) => item);
     localCart.push(localproduct);
     dispatch(
@@ -118,12 +122,12 @@ export default function ProductCard({ product, type }) {
 
       {itemInCart ? (
         <div className="flex flex-row mb-1 mt-[0.15rem]">
-          <button className="text-xl" onClick={increaseNumInCart}>
-            <AiOutlinePlus />
+          <button className="text-xl" onClick={decreaseNumInCart}>
+            <AiOutlineMinusCircle className="text-2xl" />
           </button>
           <p className="px-3 text-xl font-bold">{itemInCart.inCartAmount}</p>
-          <button className="text-xl" onClick={decreaseNumInCart}>
-            <AiOutlineMinus />
+          <button className="text-xl" onClick={increaseNumInCart}>
+            <AiOutlinePlusCircle className="text-2xl" />
           </button>
         </div>
       ) : (

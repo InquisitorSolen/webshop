@@ -51,16 +51,16 @@ export default function ProductPageRender({ pathname }) {
   };
 
   return (
-    <div className="flex flex-col grow bg-white">
+    <div className="flex flex-col grow">
       <div className="bg-slate-200 flex flex-col md:flex-row">
         <h1 className="text-xl text-center md:text-start md:text-3xl font-bold md:ml-6 md:my-6">
           {categoryName}:
         </h1>
-        <p className="text-center md:text-start md:text-2xl font-semibold md:ml-7 md:my-7">
-          Összesen <b>{productItems.productArray.length}</b> talált termék
-        </p>
+        <h2 className="text-center md:text-start md:text-2xl font-semibold md:ml-7 md:my-7">
+          Összesen <b>{productItems.productArray.length}</b> termék
+        </h2>
       </div>
-      <div className="bg-slate-100 grow">
+      <div className="grow">
         <div className=" mt-6 grid grid-cols-1 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-flow-row gap-3 justify-center items-center content-center">
           {shownProductArray.map((product) => (
             <div

@@ -17,3 +17,7 @@ export const compare = (a, b) => {
   }
   return 0;
 };
+
+export const numberWithSpaces = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+};

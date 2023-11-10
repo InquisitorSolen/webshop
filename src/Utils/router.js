@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import NotFoundPage from "../UtilPages/NotFoundPage";
 import ShopLayout from "../Layouts/ShopLayout";
 import Signup from "../CustomerPages/Signup";
-import Cart from "../CustomerPages/Cart";
+import Cart from "../CustomerPages/CartPage/Cart";
 import Profile from "../CustomerPages/Profile";
 import Finances from "../AdminPages/Finances";
 import ProductsCalls from "../AdminPages/ProductsCalls";
