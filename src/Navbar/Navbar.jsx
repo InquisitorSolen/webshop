@@ -6,17 +6,20 @@ import NavLinks from "./NavLinks";
 import LoginBtn from "./LoginBtn";
 import NavAdminLinks from "./NavAdminLinks";
 
-export default function Navbar({ setLoginModalOpen }) {
+export default function Navbar({
+  setLoginModalOpen,
+  mobileNavOpen,
+  setMobileNavOpen,
+}) {
   const userdata = useSelector((state) => state.userReducer);
   const cart = useSelector((state) => state.cartReducer);
 
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [showMobilesublinks, setShowMobileSunlinks] = useState("");
 
   return (
-    <nav className="bg-white border-b border-black">
-      <div className="flex items-center font-medium justify-around">
-        <div className="z-50 p-5 md:w-auto w-full flex justify-between">
+    <nav className="bg-white border-b border-black w-full h-fit">
+      <div className="flex items-center font-medium justify-around h-fit">
+        <div className="z-50 p-5 md:w-auto w-full flex justify-between h-fit">
           <p>LOGO</p>
           <div
             className="text-3xl md:hidden"

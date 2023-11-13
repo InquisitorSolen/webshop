@@ -1,16 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
-import { getCart } from "../../Slices/cartSlice";
-import Cookies from "js-cookie";
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { numberWithSpaces } from "../../Utils/utilFunctions";
 import CartProductCard from "./CartProductCard";
 
 export default function Cart() {
   const cart = useSelector((state) => state.cartReducer);
-  const dispatch = useDispatch();
 
   const pagesArray = Array.from(
-    { length: cart.cartProducts / 10 + 1 },
+    { length: cart.cartProducts.length / 10 + 1 },
     (_, i) => i + 1
   );
 
@@ -26,70 +23,17 @@ export default function Cart() {
     }
   }, [cart.cartProducts]);
 
-  const increaseAmount = (name) => {
-    const itemPrice = cart.cartProducts
-      .map((item) => (item.name === name ? item.price : 0))
-      .filter((item) => item !== 0)[0];
-    const localCart = cart.cartProducts.map((item) => {
-      if (item.name === name) {
-        return { ...item, inCartAmount: item.inCartAmount + 1 };
-      } else {
-        return item;
-      }
-    });
-    dispatch(
-      getCart({
-        cartProducts: localCart,
-        cartPrice: cart.cartPrice + itemPrice,
-        cartItemNumber: cart.cartItemNumber + 1,
-      })
-    );
-    Cookies.set(
-      "cart",
-      JSON.stringify({
-        cartProducts: localCart,
-        cartPrice: cart.cartPrice + itemPrice,
-        cartItemNumber: cart.cartItemNumber + 1,
-      }),
-      { expires: 2 }
-    );
-  };
-
-  const decreaseAmount = (name) => {
-    const itemPrice = cart.cartProducts
-      .map((item) => (item.name === name ? item.price : 0))
-      .filter((item) => item !== 0)[0];
-    const localCart = cart.cartProducts
-      .map((item) => {
-        if (item.name === name) {
-          if (item.inCartAmount === 1) {
-            return 0;
-          }
-          return { ...item, inCartAmount: item.inCartAmount - 1 };
-        } else {
-          return item;
-        }
-      })
-      .filter((item) => item !== 0);
-    dispatch(
-      getCart({
-        cartProducts: localCart,
-        cartPrice: cart.cartPrice - itemPrice,
-        cartItemNumber: cart.cartItemNumber - 1,
-      })
-    );
-    if (cart.cartItemNumber - 1 !== 0) {
-      Cookies.set(
-        "cart",
-        JSON.stringify({
-          cartProducts: localCart,
-          cartPrice: cart.cartPrice - itemPrice,
-          cartItemNumber: cart.cartItemNumber - 1,
-        }),
-        { expires: 2 }
+  const pageChangeHandler = (page) => {
+    const arrayHelper = (parseInt(page) - 1) * 10;
+    setCurrentPage(parseInt(page));
+    if (arrayHelper + 10 > cart.cartProductslength) {
+      setShownProductArray(
+        cart.cartProducts.slice(arrayHelper, cart.cartProducts.length)
       );
     } else {
-      Cookies.remove("cart");
+      setShownProductArray(
+        cart.cartProducts.slice(arrayHelper, arrayHelper + 10)
+      );
     }
   };
 
@@ -110,6 +54,35 @@ export default function Cart() {
               <CartProductCard product={product} />
             </div>
           ))}
+          {cart.cartProducts.length > 10 && (
+            <div className="bg-slate-100 flex justify-center">
+              <div className="flex flex-row m-6">
+                {pagesArray.map((value) => {
+                  if (currentPage === value) {
+                    return (
+                      <button
+                        key={value}
+                        className=" border border-primary mx-1 w-10 h-10 bg-white font-bold text-center text-2xl"
+                        onClick={() => pageChangeHandler(value)}
+                      >
+                        {value}
+                      </button>
+                    );
+                  } else {
+                    return (
+                      <button
+                        key={value}
+                        className=" border mx-1 w-10 h-10 bg-white text-center text-2xl"
+                        onClick={() => pageChangeHandler(value)}
+                      >
+                        {value}
+                      </button>
+                    );
+                  }
+                })}
+              </div>
+            </div>
+          )}
         </div>
         <div className="border bg-white mr-6 h-fit">
           <h2 className="border-b text-xl font-bold px-12 mx-3 mt-6 pb-6">
@@ -121,7 +94,7 @@ export default function Cart() {
           </div>
           <div className="flex flex-row justify-between px-3 mx-3 my-6 border-b pb-6">
             <p>Összesen</p>
-            <p>{numberWithSpaces(cart.cartPrice)} Ft</p>
+            <p>{numberWithSpaces(parseInt(cart.cartPrice))} Ft</p>
           </div>
           <div className="flex flex-row justify-center px-3 mx-3 my-6">
             <button className="border border-primary rounded-2xl py-1 px-2 font-bold">

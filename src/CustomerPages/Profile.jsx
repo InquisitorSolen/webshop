@@ -19,7 +19,12 @@ export default function Profile() {
   useEffect(() => {
     setFamilyName(user.familyName);
     setSurname(user.surname);
-    setAddress(user.addresses[0]);
+    if (user.addresses.length === 0) {
+      setAddress(defaultAddress);
+    } else {
+      setAddress(user.addresses[0]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.addresses, user.familyName, user.surname]);
 
   const [familyName, setFamilyName] = useState(user.familyName);
@@ -49,19 +54,21 @@ export default function Profile() {
 
   const saveName = async (event) => {
     event.preventDefault();
+    const localuser = { ...user };
+    delete localuser.userLoading;
 
     if (user.admin) {
       dispatch(
         updateAdmin({
           id: user.id,
-          data: { ...user, familyName: familyName, surname: surname },
+          data: { ...localuser, familyName: familyName, surname: surname },
         })
       );
     } else {
       dispatch(
         updateCustomer({
           id: user.id,
-          data: { ...user, familyName: familyName, surname: surname },
+          data: { ...localuser, familyName: familyName, surname: surname },
         })
       );
     }
@@ -70,17 +77,18 @@ export default function Profile() {
   const addAddress = async (event) => {
     event.preventDefault();
     const localAddress = user.addresses.map((adr) => adr);
+    const localuser = { ...user };
+    delete localuser.userLoading;
     if (user.admin) {
       if (parseInt(selectVal) === 0) {
         localAddress.push(address);
       } else {
         localAddress.splice(selectVal - 1, 1, address);
       }
-      console.log(localAddress);
       dispatch(
         updateAdmin({
           id: user.id,
-          data: { ...user, addresses: localAddress },
+          data: { ...localuser, addresses: localAddress },
         })
       );
     } else {
@@ -92,7 +100,7 @@ export default function Profile() {
       dispatch(
         updateCustomer({
           id: user.id,
-          data: { ...user, addresses: localAddress },
+          data: { ...localuser, addresses: localAddress },
         })
       );
     }

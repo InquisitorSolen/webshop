@@ -15,7 +15,6 @@ const initialState = {
 export const updateAdmin = createAsyncThunk(
   "user/updateUserAdmin",
   async ({ id, data }, thunkAPI) => {
-    console.log({ id, data });
     const responseAdmin = await firebase
       .firestore()
       .collection("users")

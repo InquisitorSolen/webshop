@@ -12,10 +12,11 @@ import Cookies from "js-cookie";
 export default function ShopLayout() {
   const userdata = useSelector((state) => state.userReducer);
   const productCategory = useSelector((state) => state.productCategoryReducer);
-  const [loginModalOpen, setLoginModalOpen] = useState(false);
   const currentPath = useLocation();
-
   const dispatch = useDispatch();
+
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
     dispatch(getProductCategories());
@@ -30,7 +31,11 @@ export default function ShopLayout() {
 
   return (
     <div className="h-full flex flex-col">
-      <Navbar setLoginModalOpen={setLoginModalOpen} />
+      <Navbar
+        setLoginModalOpen={setLoginModalOpen}
+        mobileNavOpen={mobileNavOpen}
+        setMobileNavOpen={setMobileNavOpen}
+      />
       <LoginModal
         setLoginModalOpen={setLoginModalOpen}
         loginModalOpen={loginModalOpen}

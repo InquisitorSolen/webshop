@@ -1,6 +1,5 @@
 import { pwCheck } from "../Utils/regexChecks";
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { Link, useNavigate } from "react-router-dom";
 import firebase from "../Utils/firebase";
 
@@ -25,12 +24,11 @@ export default function Signup() {
         .createUserWithEmailAndPassword(email, pw)
         .then((res) => {
           if (res) {
-            const id = uuidv4();
             userRefFB
               .doc("customer")
               .update({
-                [id]: {
-                  id,
+                [res.uid]: {
+                  id: res.uid,
                   email,
                   familyName,
                   surname,
