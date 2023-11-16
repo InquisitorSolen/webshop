@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export default function Finances() {
+export default function Orders() {
   const userdata = useSelector((state) => state.userReducer);
 
   if (!userdata.admin) {
@@ -10,7 +10,7 @@ export default function Finances() {
 
   return (
     <>
-      <h1>Finances</h1>
+      <h1>Orders</h1>
     </>
   );
 }

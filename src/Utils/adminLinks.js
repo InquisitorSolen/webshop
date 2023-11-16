@@ -8,8 +8,8 @@ export const adminLinks = [
         link: "/admin/products",
       },
       {
-        name: "Pénzügyek",
-        link: "/admin/finances",
+        name: "Rendelések",
+        link: "/admin/orders",
       },
       {
         name: "Felhasználók",

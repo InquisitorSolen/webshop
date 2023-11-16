@@ -4,7 +4,7 @@ import ShopLayout from "../Layouts/ShopLayout";
 import Signup from "../CustomerPages/Signup";
 import Cart from "../CustomerPages/CartPage/Cart";
 import Profile from "../CustomerPages/Profile";
-import Finances from "../AdminPages/Finances";
+import Orders from "../AdminPages/Orders";
 import ProductsCalls from "../AdminPages/ProductsCalls";
 import ProductPageCalls from "../CustomerPages/ProductPage/ProductPageCalls";
 import Users from "../AdminPages/Users";
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
       { path: "/profile", element: <Profile /> },
       { path: "/product/*", element: <ProductPageCalls /> },
       { path: "/admin/products", element: <ProductsCalls /> },
-      { path: "/admin/finances", element: <Finances /> },
+      { path: "/admin/orders", element: <Orders /> },
       { path: "/admin/users", element: <Users /> },
     ],
   },
