@@ -13,11 +13,17 @@ const initialState = {
 export const updateMapAdmin = createAsyncThunk(
   "usersMap/updateUserAdmin",
   async ({ id, data }, thunkAPI) => {
+    await firebase
+      .firestore()
+      .collection("usersArrays")
+      .doc("admins")
+      .update({ [id]: data });
+
     const responseAdmin = await firebase
       .firestore()
       .collection("users")
-      .doc("admins")
-      .update({ [id]: data });
+      .doc(id)
+      .update(data);
 
     thunkAPI.dispatch(getAdminUsers());
     return responseAdmin;
@@ -27,11 +33,17 @@ export const updateMapAdmin = createAsyncThunk(
 export const updateMapCustomer = createAsyncThunk(
   "usersMap/updateUserCustomer",
   async ({ id, data }, thunkAPI) => {
+    await firebase
+      .firestore()
+      .collection("usersArrays")
+      .doc("customers")
+      .update({ [id]: data });
+
     const responseCustomer = await firebase
       .firestore()
       .collection("users")
-      .doc("customers")
-      .update({ [id]: data });
+      .doc(id)
+      .update(data);
 
     thunkAPI.dispatch(getCustomerUsers());
     return responseCustomer;
@@ -41,7 +53,7 @@ export const updateMapCustomer = createAsyncThunk(
 export const getAdminUsers = createAsyncThunk("usersMap/Admins", async () => {
   const responseAdmin = await firebase
     .firestore()
-    .collection("users")
+    .collection("usersArrays")
     .doc("admins")
     .get();
   return responseAdmin.data();
@@ -52,7 +64,7 @@ export const getCustomerUsers = createAsyncThunk(
   async () => {
     const responseCustomer = await firebase
       .firestore()
-      .collection("users")
+      .collection("usersArrays")
       .doc("customers")
       .get();
 
@@ -65,15 +77,21 @@ export const moveToAdmin = createAsyncThunk(
   async ({ id, data }, thunkAPI) => {
     await firebase
       .firestore()
-      .collection("users")
+      .collection("usersArrays")
       .doc("customers")
       .update({ [id]: firebase.firestore.FieldValue.delete() });
+
+    await firebase
+      .firestore()
+      .collection("usersArrays")
+      .doc("admins")
+      .update({ [id]: data });
 
     const response = await firebase
       .firestore()
       .collection("users")
-      .doc("admins")
-      .update({ [id]: data });
+      .doc(id)
+      .update(data);
 
     thunkAPI.dispatch(getAdminUsers());
     thunkAPI.dispatch(getCustomerUsers());
@@ -86,15 +104,21 @@ export const moveToCustomer = createAsyncThunk(
   async ({ id, data }, thunkAPI) => {
     await firebase
       .firestore()
-      .collection("users")
+      .collection("usersArrays")
       .doc("customers")
       .update({ [id]: data });
+
+    await firebase
+      .firestore()
+      .collection("usersArrays")
+      .doc("admins")
+      .update({ [id]: firebase.firestore.FieldValue.delete() });
 
     const response = await firebase
       .firestore()
       .collection("users")
-      .doc("admins")
-      .update({ [id]: firebase.firestore.FieldValue.delete() });
+      .doc(id)
+      .update(data);
 
     thunkAPI.dispatch(getAdminUsers());
     thunkAPI.dispatch(getCustomerUsers());
