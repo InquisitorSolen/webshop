@@ -4,8 +4,10 @@ import productCategoryReducer from "../Slices/productCaregorySlice";
 import productReducer from "../Slices/productSlice";
 import cartReducer from "../Slices/cartSlice";
 import usersMapReducer from "../Slices/usersMapSlice";
+import ordersReducer from "../Slices/ordersSlice";
 
 const rootReducers = combineReducers({
+  ordersReducer,
   usersMapReducer,
   userReducer,
   productCategoryReducer,

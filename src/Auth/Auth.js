@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         setCurrentUser(user);
-        dispatch(getUserAsync(user.email));
+        dispatch(getUserAsync(user.uid));
         setLoading(false);
       } else {
         console.log("-----");
@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
             surname: "",
             admin: false,
             addresses: [],
+            orders: [],
           })
         );
         setCurrentUser(null);

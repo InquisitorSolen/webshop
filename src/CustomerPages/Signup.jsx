@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import firebase from "../Utils/firebase";
 
 export default function Signup() {
-  const userRefFB = firebase.firestore().collection("users");
+  const userRefFB = firebase.firestore();
   const navigate = useNavigate();
 
   const [familyName, setFamilyName] = useState("");
@@ -22,10 +22,21 @@ export default function Signup() {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, pw)
-        .then((res) => {
+        .then(async (res) => {
           if (res) {
-            userRefFB
-              .doc("customer")
+            await userRefFB.collection("users").doc(res.uid).set({
+              id: res.uid,
+              email,
+              familyName,
+              surname,
+              lvl: 1,
+              admin: false,
+              addresses: [],
+              orders: {},
+            });
+            await userRefFB
+              .collection("usersArray")
+              .doc("customers")
               .update({
                 [res.uid]: {
                   id: res.uid,

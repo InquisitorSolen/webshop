@@ -7,6 +7,7 @@ const initialState = {
   email: "",
   familyName: "",
   surname: "",
+  orders: [],
   admin: false,
   addresses: [],
   userLoading: false,
@@ -40,31 +41,14 @@ export const updateCustomer = createAsyncThunk(
   }
 );
 
-export const getUserAsync = createAsyncThunk("user/getUser", async (email) => {
-  const responseCustomer = await firebase
+export const getUserAsync = createAsyncThunk("user/getUser", async (uid) => {
+  const response = await firebase
     .firestore()
     .collection("users")
-    .doc("customers")
+    .doc(uid)
     .get();
 
-  const responseAdmin = await firebase
-    .firestore()
-    .collection("users")
-    .doc("admins")
-    .get();
-
-  const customer = Object.entries(responseCustomer.data()).find(
-    (user) => user[1].email === email
-  );
-  const admin = Object.entries(responseAdmin.data()).find(
-    (user) => user[1].email === email
-  );
-
-  if (customer === undefined) {
-    return admin[1];
-  } else {
-    return customer[1];
-  }
+  return response.data();
 });
 
 export const userSlice = createSlice({
@@ -79,6 +63,7 @@ export const userSlice = createSlice({
       state.lvl = action.payload.lvl;
       state.admin = action.payload.admin;
       state.addresses = action.payload.addresses;
+      state.orders = action.payload.orders;
     },
   },
   extraReducers: (builder) => {
@@ -93,6 +78,7 @@ export const userSlice = createSlice({
       state.lvl = action.payload.lvl;
       state.admin = action.payload.admin;
       state.addresses = action.payload.addresses;
+      state.orders = action.payload.orders;
       state.userLoading = false;
     });
     builder.addCase(getUserAsync.rejected, (state) => {
