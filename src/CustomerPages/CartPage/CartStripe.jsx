@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import firebase from "../../Utils/firebase";
+import { loadStripe } from "@stripe/stripe-js";
 
 export default function CartStripe() {
   const cart = useSelector((state) => state.cartReducer);
@@ -20,26 +20,7 @@ export default function CartStripe() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: "card",
-      card: elements.getElement(CardElement),
-    });
-    if (!error) {
-      try {
-        const { id } = paymentMethod;
-        const response = await firebase
-          .firestore()
-          .collection("orders")
-          .doc(dateMontSlashes)
-          .update({
-            [dateDaySlashes]: { amount: cart.cartPrice, stripeID: id },
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      console.log(error.message);
-    }
+    const stripePromise = loadStripe();
   };
 
   return (

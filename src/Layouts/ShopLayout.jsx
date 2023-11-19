@@ -8,6 +8,7 @@ import Navbar from "../Navbar/Navbar";
 import LoginModal from "../Navbar/LoginModal";
 import MainPage from "../CustomerPages/MainPage";
 import Cookies from "js-cookie";
+import Footer from "../Footer/Footer";
 
 export default function ShopLayout() {
   const userdata = useSelector((state) => state.userReducer);
@@ -30,7 +31,7 @@ export default function ShopLayout() {
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex flex-col h-full justify-between">
       <Navbar
         setLoginModalOpen={setLoginModalOpen}
         mobileNavOpen={mobileNavOpen}
@@ -41,6 +42,7 @@ export default function ShopLayout() {
         loginModalOpen={loginModalOpen}
       />
       {currentPath.pathname === "/" ? <MainPage /> : <Outlet />}
+      <Footer />
     </div>
   );
 }

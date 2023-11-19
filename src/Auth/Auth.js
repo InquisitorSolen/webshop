@@ -19,7 +19,6 @@ export const AuthProvider = ({ children }) => {
         dispatch(getUserAsync(user.uid));
         setLoading(false);
       } else {
-        console.log("-----");
         dispatch(
           getUser({
             lvl: 0,

@@ -20,9 +20,13 @@ export default function Navbar({
     <nav className="bg-white border-b border-black w-full h-fit">
       <div className="flex items-center font-medium justify-around h-fit">
         <div className="z-50 p-5 md:w-auto w-full flex justify-between h-fit">
-          <p>LOGO</p>
+          <img
+            src={require("../assets/logo-black.png")}
+            alt="logo"
+            className="h-[50px]"
+          />
           <div
-            className="text-3xl md:hidden"
+            className="text-3xl flex items-center md:hidden"
             onClick={() => {
               setShowMobileSunlinks("");
               setMobileNavOpen(!mobileNavOpen);

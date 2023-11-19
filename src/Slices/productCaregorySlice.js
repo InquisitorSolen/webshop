@@ -45,7 +45,6 @@ export const deleteProductCategory = createAsyncThunk(
 export const editProductCategory = createAsyncThunk(
   "productCategories/editProductCategories",
   async ({ categoryName, oldCategoryName }, thunkAPI) => {
-    console.log(categoryName, oldCategoryName);
     const oldCategoryAsciiName = asciify(oldCategoryName);
     const categoryAsciiName = asciify(categoryName);
 

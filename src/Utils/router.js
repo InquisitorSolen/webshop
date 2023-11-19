@@ -9,6 +9,7 @@ import ProductsCalls from "../AdminPages/ProductsCalls";
 import ProductPageCalls from "../CustomerPages/ProductPage/ProductPageCalls";
 import Users from "../AdminPages/Users";
 import CartOrder from "../CustomerPages/CartPage/CartOrder";
+import Aboutus from "../CustomerPages/Aboutus";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       { path: "/admin/products", element: <ProductsCalls /> },
       { path: "/admin/orders", element: <Orders /> },
       { path: "/admin/users", element: <Users /> },
+      { path: "/aboutus", element: <Aboutus /> },
     ],
   },
   {
