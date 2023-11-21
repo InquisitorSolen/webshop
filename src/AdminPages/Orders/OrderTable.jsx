@@ -35,7 +35,7 @@ export default function OrdersTable({ selectedVal }) {
 
   return (
     <div className="flex flex-col m-6">
-      <table className="border border-black table-fixed text-center">
+      <table className="border border-black table-fixed text-center bg-white">
         <thead>
           <tr className="border-b-2 border-black">
             <th className="border-l border-black px-6">Rendelés időpontja</th>
@@ -63,7 +63,7 @@ export default function OrdersTable({ selectedVal }) {
                       });
                     }}
                     value={order.orederState}
-                    className="bg-slate-100 focus:outline-none"
+                    className="bg-white focus:outline-none"
                   >
                     <option value={0}>Megrendelve</option>
                     <option value={1}>Átadva futárnak</option>
@@ -72,7 +72,7 @@ export default function OrdersTable({ selectedVal }) {
                 </td>
                 <td className="border border-black px-6 py-3">
                   <button
-                    className=" border border-primary px-2 bg-slate-200 text-center rounded-xl"
+                    className=" border border-primary px-2 bg-white text-center rounded-xl hover:bg-blue-400"
                     onClick={() => orderModalHandler(order)}
                   >
                     Részletek

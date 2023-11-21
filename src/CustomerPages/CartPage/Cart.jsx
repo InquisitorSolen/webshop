@@ -50,7 +50,7 @@ export default function Cart() {
           Összesen <b>{cart.cartItemNumber}</b> terméket tartalmaz
         </h2>
       </div>
-      <div className="flex flex-row justify-evenly mt-3">
+      <div className="flex flex-row min-h-[30rem] justify-evenly mt-3">
         {cart.cartProducts.length === 0 ? (
           <div className="flex flex-col items-center justify-center">
             <FaShoppingCart className="w-20 h-20" />
@@ -106,45 +106,51 @@ export default function Cart() {
             <p>Termékek</p>
             <p>{cart.cartItemNumber}</p>
           </div>
-          {user.lvl === 2 && (
-            <div className="flex flex-row justify-between px-3 mx-3 my-6 border-b pb-6">
-              <p>Kedvezmény</p>
-              <p>15%</p>
-            </div>
-          )}
-          <div className="flex flex-row justify-between px-3 mx-3 my-6 border-b pb-6">
-            <p>Összesen</p>
-            {user.lvl === 2 && (
-              <div className="flex flex-col text-end">
-                <p className={`${user.lvl === 2 && "text-danger font-bold"}`}>
-                  {numberWithSpaces(
-                    parseInt(
-                      Math.round(cart.cartPrice - cart.cartPrice * 0.15) / 5
-                    ) * 5
-                  )}{" "}
-                  Ft
-                </p>
-                <p className="line-through text-sm">
-                  {numberWithSpaces(
-                    parseInt(Math.round(cart.cartPrice) / 5) * 5
-                  )}{" "}
-                  Ft
-                </p>
+          {cart.cartItemNumber !== 0 && (
+            <>
+              {user.lvl === 2 && (
+                <div className="flex flex-row justify-between px-3 mx-3 my-6 border-b pb-6">
+                  <p>Kedvezmény</p>
+                  <p>15%</p>
+                </div>
+              )}
+              <div className="flex flex-row justify-between px-3 mx-3 my-6 border-b pb-6">
+                <p>Összesen</p>
+                {user.lvl === 2 && (
+                  <div className="flex flex-col text-end">
+                    <p
+                      className={`${user.lvl === 2 && "text-danger font-bold"}`}
+                    >
+                      {numberWithSpaces(
+                        parseInt(
+                          Math.round(cart.cartPrice - cart.cartPrice * 0.15) / 5
+                        ) * 5
+                      )}{" "}
+                      Ft
+                    </p>
+                    <p className="line-through text-sm">
+                      {numberWithSpaces(
+                        parseInt(Math.round(cart.cartPrice) / 5) * 5
+                      )}{" "}
+                      Ft
+                    </p>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </>
+          )}
 
           <div className="flex flex-row justify-center px-3 mx-3 my-6">
             {cart.cartProducts.length === 0 ? (
               <button
-                className="border border-primary rounded-2xl py-1 px-2 font-bold"
+                className="border border-secondary bg-slate-200 rounded-2xl py-1 px-2 font-bold"
                 disabled
               >
                 Megrendelés
               </button>
             ) : (
               <Link
-                className="border border-primary rounded-2xl py-1 px-2 font-bold"
+                className="border border-primary rounded-2xl py-1 px-2 font-bold hover:bg-blue-400"
                 to="/cart/order"
               >
                 Megrendelés

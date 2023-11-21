@@ -98,7 +98,7 @@ export default function CartOrder() {
   return (
     <div className="flex grow justify-center">
       {/* Address Card */}
-      <div className="text-center border m-6 h-fit">
+      <div className="text-center border m-6 h-fit bg-white">
         <h1 className="mx-3 border-b py-6 px-3 font-bold text-xl">
           Kiszállítási cím:
         </h1>
@@ -107,7 +107,7 @@ export default function CartOrder() {
             <select
               onChange={handleSelectChange}
               value={selectVal}
-              className="bg-slate-100 focus:outline-none"
+              className="bg-white focus:outline-none"
             >
               <option value={0}>Másik cím választása</option>
               {user.addresses.map((address, key) => (
@@ -129,7 +129,7 @@ export default function CartOrder() {
                 <div className="flex flex-col w-60 mx-3 py-6 px-3 ">
                   <label>E-mail cím:</label>
                   <input
-                    className="mt-3 border bg-white text-center focus:outline-none"
+                    className="mt-3 border bg-slate-100 text-center focus:outline-none"
                     type="email"
                     name="email"
                     placeholder="E-mail cím"
@@ -141,7 +141,7 @@ export default function CartOrder() {
                 <div className="flex flex-col w-60 mx-3 py-6 px-3">
                   <label>Vásárló neve:</label>
                   <input
-                    className="mt-3 border bg-white text-center focus:outline-none"
+                    className="mt-3 border-b border-black text-center focus:outline-none"
                     type="text"
                     name="name"
                     placeholder="Vásárló neve"
@@ -157,7 +157,7 @@ export default function CartOrder() {
                 <div className="flex flex-col w-60 mx-3 py-6 px-3">
                   <label>Irányítószám:</label>
                   <input
-                    className="mt-3 border bg-white text-center focus:outline-none"
+                    className="mt-3 border-b border-black text-center focus:outline-none"
                     type="text"
                     name="postalCode"
                     placeholder="Irányítószám"
@@ -169,7 +169,7 @@ export default function CartOrder() {
                 <div className="flex flex-col w-60 mx-3 py-6 px-3">
                   <label>Város neve:</label>
                   <input
-                    className="mt-3 border bg-white text-center focus:outline-none"
+                    className="mt-3 border-b border-black text-center focus:outline-none"
                     type="text"
                     name="city"
                     placeholder="Város neve"
@@ -181,7 +181,7 @@ export default function CartOrder() {
                 <div className="flex flex-col w-60 mx-3 py-6 px-3">
                   <label>Közterület neve:</label>
                   <input
-                    className="mt-3 border bg-white text-center focus:outline-none"
+                    className="mt-3 border-b border-black text-center focus:outline-none"
                     type="text"
                     name="street"
                     placeholder="Közterület neve"
@@ -195,7 +195,7 @@ export default function CartOrder() {
                 <div className="flex flex-col w-60 mx-3 py-6 px-3">
                   <label>Épület száma:</label>
                   <input
-                    className="mt-3 border bg-white text-center focus:outline-none"
+                    className="mt-3 border-b border-black text-center focus:outline-none"
                     type="text"
                     name="building"
                     placeholder="Épület száma"
@@ -207,7 +207,7 @@ export default function CartOrder() {
                 <div className="flex flex-col w-60 mx-3 py-6 px-3">
                   <label>Emelet:</label>
                   <input
-                    className="mt-3 border bg-white text-center focus:outline-none"
+                    className="mt-3 border-b border-black text-center focus:outline-none"
                     type="text"
                     name="floor"
                     placeholder="Emelet"
@@ -219,7 +219,7 @@ export default function CartOrder() {
                 <div className="flex flex-col w-60 mx-3 py-6 px-3">
                   <label>Ajtó:</label>
                   <input
-                    className="mt-3 border bg-white text-center focus:outline-none"
+                    className="mt-3 border-b border-black text-center focus:outline-none"
                     type="text"
                     name="doorNumber"
                     placeholder="Ajtó"
@@ -236,19 +236,19 @@ export default function CartOrder() {
             <div className="flex flex-col">
               <div className="flex flex-col w-60 mx-3 py-6 px-3">
                 <label>Irányítószám:</label>
-                <p className="mt-3 border bg-white text-center">
+                <p className="mt-3 border-b border-black text-center">
                   {address.postalCode}
                 </p>
               </div>
               <div className="flex flex-col w-60 mx-3 py-6 px-3">
                 <label>Város neve:</label>
-                <p className="mt-3 border bg-white text-center">
+                <p className="mt-3 border-b border-black text-center">
                   {address.city}
                 </p>
               </div>
               <div className="flex flex-col w-60 mx-3 py-6 px-3">
                 <label>Közterület neve:</label>
-                <p className="mt-3 border bg-white text-center">
+                <p className="mt-3 border-b border-black text-center">
                   {address.street}
                 </p>
               </div>
@@ -256,19 +256,19 @@ export default function CartOrder() {
             <div className="flex flex-col">
               <div className="flex flex-col w-60 mx-3 py-6 px-3">
                 <label>Épület száma:</label>
-                <p className="mt-3 border bg-white text-center">
+                <p className="mt-3 border-b border-black text-center">
                   {address.building}
                 </p>
               </div>
               <div className="flex flex-col w-60 mx-3 py-6 px-3">
                 <label>Emelet:</label>
-                <p className="mt-3 border bg-white text-center">
+                <p className="mt-3 border-b border-black text-center">
                   {address.floor}
                 </p>
               </div>
               <div className="flex flex-col w-60 mx-3 py-6 px-3">
                 <label>Ajtó:</label>
-                <p className="mt-3 border bg-white text-center">
+                <p className="mt-3 border-b border-black text-center">
                   {address.doorNumber}
                 </p>
               </div>
@@ -277,7 +277,7 @@ export default function CartOrder() {
         )}
       </div>
       <div className="flex flex-col items-center">
-        <div className="text-center border m-6 h-fit">
+        <div className="text-center border m-6 h-fit bg-white">
           <h1 className="mx-3 border-b py-6 px-3 font-bold text-xl">
             Fizetési mód:
           </h1>
@@ -305,13 +305,13 @@ export default function CartOrder() {
           <button
             type="submit"
             form="addressForm"
-            className="border border-primary rounded-2xl py-1 px-2 font-bold w-fit bg-slate-200"
+            className="border border-primary rounded-2xl py-1 px-2 font-bold w-fit bg-white hover:bg-blue-400"
           >
             Megrendelés
           </button>
         ) : (
           <button
-            className="border border-primary rounded-2xl py-1 px-2 font-bold w-fit bg-slate-200"
+            className="border border-primary rounded-2xl py-1 px-2 font-bold w-fit bg-white hover:bg-blue-400"
             onClick={pay}
           >
             Megrendelés
