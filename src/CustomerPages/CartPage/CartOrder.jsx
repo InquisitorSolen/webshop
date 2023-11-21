@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
 import { getCart, setPurchase } from "../../Slices/cartSlice";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
 
 export default function CartOrder() {
   const cart = useSelector((state) => state.cartReducer);
@@ -74,18 +75,17 @@ export default function CartOrder() {
     }
 
     if (user.lvl === 0) {
-      const contact = {};
       dispatch(setPurchase({ user: null, data, contact }));
       dispatch(getCart({ cartProducts: [], cartPrice: 0, cartItemNumber: 0 }));
+      Cookies.remove("cart");
     } else {
-      if (user.lvl) {
-      }
-      const contact = {
+      const contactLocal = {
         email: user.email,
         name: `${user.familyName} ${user.surname}`,
       };
-      dispatch(setPurchase({ user, data, contact }));
+      dispatch(setPurchase({ user, data, contact: contactLocal }));
       dispatch(getCart({ cartProducts: [], cartPrice: 0, cartItemNumber: 0 }));
+      Cookies.remove("cart");
     }
 
     navigate("/");
