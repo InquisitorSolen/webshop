@@ -7,6 +7,7 @@ import { FaShoppingCart } from "react-icons/fa";
 
 export default function Cart() {
   const cart = useSelector((state) => state.cartReducer);
+  const user = useSelector((state) => state.userReducer);
 
   const pagesArray = Array.from(
     { length: cart.cartProducts.length / 10 + 1 },
@@ -105,10 +106,34 @@ export default function Cart() {
             <p>Termékek</p>
             <p>{cart.cartItemNumber}</p>
           </div>
+          {user.lvl === 2 && (
+            <div className="flex flex-row justify-between px-3 mx-3 my-6 border-b pb-6">
+              <p>Kedvezmény</p>
+              <p>15%</p>
+            </div>
+          )}
           <div className="flex flex-row justify-between px-3 mx-3 my-6 border-b pb-6">
             <p>Összesen</p>
-            <p>{numberWithSpaces(parseInt(cart.cartPrice))} Ft</p>
+            {user.lvl === 2 && (
+              <div className="flex flex-col text-end">
+                <p className={`${user.lvl === 2 && "text-danger font-bold"}`}>
+                  {numberWithSpaces(
+                    parseInt(
+                      Math.round(cart.cartPrice - cart.cartPrice * 0.15) / 5
+                    ) * 5
+                  )}{" "}
+                  Ft
+                </p>
+                <p className="line-through text-sm">
+                  {numberWithSpaces(
+                    parseInt(Math.round(cart.cartPrice) / 5) * 5
+                  )}{" "}
+                  Ft
+                </p>
+              </div>
+            )}
           </div>
+
           <div className="flex flex-row justify-center px-3 mx-3 my-6">
             {cart.cartProducts.length === 0 ? (
               <button

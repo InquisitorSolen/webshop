@@ -21,20 +21,24 @@ const currentMin = [year, month, day, curretnHour].join("-");
 
 export const setPurchase = createAsyncThunk(
   "cart/setPurchase",
-  async ({ user, data }) => {
+  async ({ user, data, contact }) => {
     console.log(user, data);
 
     let purchase = { ...data, date: dateDaySlashes, user: null };
 
     if (user !== null) {
       purchase = { ...purchase, user: user.id };
-      const userData = { ...user, orders: { [currentMin]: purchase } };
+      const userData = {
+        ...user,
+        orders: { ...user.orders, [currentMin]: purchase },
+      };
       await firebase
         .firestore()
         .collection("users")
         .doc(user.id)
         .update(userData);
     }
+    purchase = { ...purchase, ...contact, orederState: 0 };
     const response = await firebase
       .firestore()
       .collection("orders")

@@ -25,6 +25,7 @@ export default function CartOrder() {
     user.addresses.length === 0 ? defaultAddress : user.addresses[0]
   );
   const [paymentType, setPaymentType] = useState("cash");
+  const [contact, setContact] = useState({ email: "", name: "" });
 
   const handleSelectChange = (event) => {
     const val = parseInt(event.target.value);
@@ -35,6 +36,11 @@ export default function CartOrder() {
       setSelectVal(val);
       setAddress(user.addresses[val - 1]);
     }
+  };
+
+  const handleContactChange = (e) => {
+    const { name, value } = e.target;
+    setContact({ ...contact, [name]: value });
   };
 
   const changeHandler = (e) => {
@@ -53,17 +59,32 @@ export default function CartOrder() {
         name: `${item.name} ${item.type} ${item.productCategory}`,
       };
     });
-    const data = {
-      price: cart.cartPrice,
+    let data = {
       cartProducts: cartitems,
       address: fulladdress,
     };
+    if (user.lvl === 2) {
+      data = {
+        ...data,
+        price:
+          parseInt(Math.round(cart.cartPrice - cart.cartPrice * 0.15) / 5) * 5,
+      };
+    } else {
+      data = { ...data, price: parseInt(Math.round(cart.cartPrice) / 5) * 5 };
+    }
 
     if (user.lvl === 0) {
-      dispatch(setPurchase({ user: null, data }));
+      const contact = {};
+      dispatch(setPurchase({ user: null, data, contact }));
       dispatch(getCart({ cartProducts: [], cartPrice: 0, cartItemNumber: 0 }));
     } else {
-      dispatch(setPurchase({ user, data }));
+      if (user.lvl) {
+      }
+      const contact = {
+        email: user.email,
+        name: `${user.familyName} ${user.surname}`,
+      };
+      dispatch(setPurchase({ user, data, contact }));
       dispatch(getCart({ cartProducts: [], cartPrice: 0, cartItemNumber: 0 }));
     }
 
@@ -98,100 +119,134 @@ export default function CartOrder() {
           </div>
         )}
         {selectVal === "0" ? (
-          <form className="flex flex-row" id="addressForm" onSubmit={pay}>
-            <div className="flex flex-col">
-              <div className="flex flex-col w-40 mx-3 py-6 px-3">
-                <label>Irányítószám:</label>
-                <input
-                  className="mt-3 border bg-white text-center focus:outline-none"
-                  type="text"
-                  name="postalCode"
-                  placeholder="Irányítószám"
-                  value={address.postalCode}
-                  onChange={changeHandler}
-                  required
-                ></input>
+          <form
+            className="flex flex-col justify-center"
+            id="addressForm"
+            onSubmit={pay}
+          >
+            {user.lvl === 0 && (
+              <div className="mx-3 border-b py-6 px-3 flex flex-row">
+                <div className="flex flex-col w-60 mx-3 py-6 px-3 ">
+                  <label>E-mail cím:</label>
+                  <input
+                    className="mt-3 border bg-white text-center focus:outline-none"
+                    type="email"
+                    name="email"
+                    placeholder="E-mail cím"
+                    value={contact.email}
+                    onChange={handleContactChange}
+                    required
+                  ></input>
+                </div>
+                <div className="flex flex-col w-60 mx-3 py-6 px-3">
+                  <label>Vásárló neve:</label>
+                  <input
+                    className="mt-3 border bg-white text-center focus:outline-none"
+                    type="text"
+                    name="name"
+                    placeholder="Vásárló neve"
+                    value={contact.name}
+                    onChange={handleContactChange}
+                    required
+                  ></input>
+                </div>
               </div>
-              <div className="flex flex-col w-40 mx-3 py-6 px-3">
-                <label>Város neve:</label>
-                <input
-                  className="mt-3 border bg-white text-center focus:outline-none"
-                  type="text"
-                  name="city"
-                  placeholder="Város neve"
-                  value={address.city}
-                  onChange={changeHandler}
-                  required
-                ></input>
+            )}
+            <div className="flex flex-row justify-center">
+              <div className="flex flex-col">
+                <div className="flex flex-col w-60 mx-3 py-6 px-3">
+                  <label>Irányítószám:</label>
+                  <input
+                    className="mt-3 border bg-white text-center focus:outline-none"
+                    type="text"
+                    name="postalCode"
+                    placeholder="Irányítószám"
+                    value={address.postalCode}
+                    onChange={changeHandler}
+                    required
+                  ></input>
+                </div>
+                <div className="flex flex-col w-60 mx-3 py-6 px-3">
+                  <label>Város neve:</label>
+                  <input
+                    className="mt-3 border bg-white text-center focus:outline-none"
+                    type="text"
+                    name="city"
+                    placeholder="Város neve"
+                    value={address.city}
+                    onChange={changeHandler}
+                    required
+                  ></input>
+                </div>
+                <div className="flex flex-col w-60 mx-3 py-6 px-3">
+                  <label>Közterület neve:</label>
+                  <input
+                    className="mt-3 border bg-white text-center focus:outline-none"
+                    type="text"
+                    name="street"
+                    placeholder="Közterület neve"
+                    value={address.street}
+                    onChange={changeHandler}
+                    required
+                  ></input>
+                </div>
               </div>
-              <div className="flex flex-col w-40 mx-3 py-6 px-3">
-                <label>Közterület neve:</label>
-                <input
-                  className="mt-3 border bg-white text-center focus:outline-none"
-                  type="text"
-                  name="street"
-                  placeholder="Közterület neve"
-                  value={address.street}
-                  onChange={changeHandler}
-                  required
-                ></input>
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <div className="flex flex-col w-40 mx-3 py-6 px-3">
-                <label>Épület száma:</label>
-                <input
-                  className="mt-3 border bg-white text-center focus:outline-none"
-                  type="text"
-                  name="building"
-                  placeholder="Épület száma"
-                  value={address.building}
-                  onChange={changeHandler}
-                  required
-                ></input>
-              </div>
-              <div className="flex flex-col w-40 mx-3 py-6 px-3">
-                <label>Emelet:</label>
-                <input
-                  className="mt-3 border bg-white text-center focus:outline-none"
-                  type="text"
-                  name="floor"
-                  placeholder="Emelet"
-                  value={address.floor}
-                  onChange={changeHandler}
-                  required
-                ></input>
-              </div>
-              <div className="flex flex-col w-40 mx-3 py-6 px-3">
-                <label>Ajtó:</label>
-                <input
-                  className="mt-3 border bg-white text-center focus:outline-none"
-                  type="text"
-                  name="doorNumber"
-                  placeholder="Ajtó"
-                  value={address.doorNumber}
-                  onChange={changeHandler}
-                  required
-                ></input>
+              <div className="flex flex-col">
+                <div className="flex flex-col w-60 mx-3 py-6 px-3">
+                  <label>Épület száma:</label>
+                  <input
+                    className="mt-3 border bg-white text-center focus:outline-none"
+                    type="text"
+                    name="building"
+                    placeholder="Épület száma"
+                    value={address.building}
+                    onChange={changeHandler}
+                    required
+                  ></input>
+                </div>
+                <div className="flex flex-col w-60 mx-3 py-6 px-3">
+                  <label>Emelet:</label>
+                  <input
+                    className="mt-3 border bg-white text-center focus:outline-none"
+                    type="text"
+                    name="floor"
+                    placeholder="Emelet"
+                    value={address.floor}
+                    onChange={changeHandler}
+                    required
+                  ></input>
+                </div>
+                <div className="flex flex-col w-60 mx-3 py-6 px-3">
+                  <label>Ajtó:</label>
+                  <input
+                    className="mt-3 border bg-white text-center focus:outline-none"
+                    type="text"
+                    name="doorNumber"
+                    placeholder="Ajtó"
+                    value={address.doorNumber}
+                    onChange={changeHandler}
+                    required
+                  ></input>
+                </div>
               </div>
             </div>
           </form>
         ) : (
-          <div className="flex flex-row">
+          <div className="flex flex-row justify-center">
             <div className="flex flex-col">
-              <div className="flex flex-col w-40 mx-3 py-6 px-3">
+              <div className="flex flex-col w-60 mx-3 py-6 px-3">
                 <label>Irányítószám:</label>
                 <p className="mt-3 border bg-white text-center">
                   {address.postalCode}
                 </p>
               </div>
-              <div className="flex flex-col w-40 mx-3 py-6 px-3">
+              <div className="flex flex-col w-60 mx-3 py-6 px-3">
                 <label>Város neve:</label>
                 <p className="mt-3 border bg-white text-center">
                   {address.city}
                 </p>
               </div>
-              <div className="flex flex-col w-40 mx-3 py-6 px-3">
+              <div className="flex flex-col w-60 mx-3 py-6 px-3">
                 <label>Közterület neve:</label>
                 <p className="mt-3 border bg-white text-center">
                   {address.street}
@@ -199,19 +254,19 @@ export default function CartOrder() {
               </div>
             </div>
             <div className="flex flex-col">
-              <div className="flex flex-col w-40 mx-3 py-6 px-3">
+              <div className="flex flex-col w-60 mx-3 py-6 px-3">
                 <label>Épület száma:</label>
                 <p className="mt-3 border bg-white text-center">
                   {address.building}
                 </p>
               </div>
-              <div className="flex flex-col w-40 mx-3 py-6 px-3">
+              <div className="flex flex-col w-60 mx-3 py-6 px-3">
                 <label>Emelet:</label>
                 <p className="mt-3 border bg-white text-center">
                   {address.floor}
                 </p>
               </div>
-              <div className="flex flex-col w-40 mx-3 py-6 px-3">
+              <div className="flex flex-col w-60 mx-3 py-6 px-3">
                 <label>Ajtó:</label>
                 <p className="mt-3 border bg-white text-center">
                   {address.doorNumber}
