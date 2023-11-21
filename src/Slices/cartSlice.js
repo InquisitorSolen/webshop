@@ -22,8 +22,6 @@ const currentMin = [year, month, day, curretnHour].join("-");
 export const setPurchase = createAsyncThunk(
   "cart/setPurchase",
   async ({ user, data, contact }) => {
-    console.log(user, data, contact);
-
     let purchase = { ...data, date: dateDaySlashes, user: null };
 
     if (user !== null) {
@@ -68,7 +66,7 @@ export const setPurchase = createAsyncThunk(
                 <b>Fizetés módja:</b> kézpénzzel kiszállításkor
                 <br/>
                 <br/>
-                Rendelését ezuton is küszönjük! 
+                Rendelését ezuton is köszönjük! 
                 <br/>
                 AlkIO csapat
               `,

@@ -1,16 +1,26 @@
 import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getOrderMonths } from "../Slices/ordersSlice";
+import Loader from "../UtilPages/Loader";
+import OrdersRender from "./Orders/OrdersRender";
 
 export default function Orders() {
   const userdata = useSelector((state) => state.userReducer);
+  const orders = useSelector((state) => state.ordersReducer);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getOrderMonths());
+  }, [dispatch]);
 
   if (!userdata.admin) {
     return <Navigate to="*" />;
   }
 
-  return (
-    <>
-      <h1>Orders</h1>
-    </>
-  );
+  if (orders.adminMonthsLoading) {
+    return <Loader />;
+  }
+
+  return <OrdersRender />;
 }

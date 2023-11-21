@@ -37,6 +37,14 @@ export const compareUser = (a, b) => {
   return 0;
 };
 
+export const compareOrders = (a, b) => {
+  if (a[0] < b[0]) {
+    return -1;
+  } else {
+    return 1;
+  }
+};
+
 export const numberWithSpaces = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 };

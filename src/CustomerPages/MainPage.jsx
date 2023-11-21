@@ -16,6 +16,7 @@ export default function MainPage() {
       snapshot.docs.forEach((doc) => {
         product.push({ ...doc.data(), id: doc.id });
       });
+      console.log(product);
     }
   );
 
