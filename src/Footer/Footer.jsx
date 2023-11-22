@@ -12,7 +12,7 @@ export default function Footer() {
           />
           <div className="flex flex-col h-[100px] justify-center ml-3">
             <a href="tel:+11111111111">+11 11 111 1111 </a>
-            <a href="mailto:nonwork@nonwork.com">nonwork@nonwork.com</a>
+            <a href="mailto:alkio2535@gmail.com">alkio2535@gmail.com</a>
           </div>
         </div>
         <div className="flex flex-col justify-center items-center">
