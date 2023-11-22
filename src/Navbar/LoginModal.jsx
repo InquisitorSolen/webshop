@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { IoIosClose } from "react-icons/io";
 import Modal from "react-modal";
 import firebase from "../Utils/firebase";
 import modalStyle from "../Utils/modalStyle";
@@ -38,24 +39,30 @@ export default function LoginModal({ setLoginModalOpen, loginModalOpen }) {
       onRequestClose={closeModal}
     >
       <div className="flex flex-col gap-4">
-        <p className="text-center font-medium">Lépjen be Fiókjába</p>
-        <form onSubmit={onSignIn} className="flex flex-col gap-3">
+        <div className="flex flex-row justify-between mb-3 text-center">
+          <div className="w-7"></div>
+          <p className="text-center text-2xl font-bold">Lépjen be Fiókjába</p>
+          <button className="flex text-2xl text-danger" onClick={closeModal}>
+            <IoIosClose />
+          </button>
+        </div>
+        <form onSubmit={onSignIn} className="flex flex-col gap-6">
           <input
             type="email"
             ref={emailRef}
             placeholder="Email cím"
             required
-            className="border border-black rounded my-1 px-2"
+            className="border-b w-96 pl-3 focus:outline-none"
           ></input>
           <input
             type="password"
             ref={pwRef}
             placeholder="Jelszó"
             required
-            className="border border-black rounded my-1 px-2"
+            className="border-b w-96 pl-3 focus:outline-none"
           ></input>
           <div className="flex items-center justify-center">
-            <button className="border border-black rounded-xl mx-2  px-2">
+            <button className="border border-primary hover:bg-primary hover:text-white rounded-xl py-1 px-2 font-bold">
               Belépés
             </button>
           </div>

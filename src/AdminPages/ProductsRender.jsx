@@ -33,8 +33,6 @@ export default function ProductsRender() {
     return <Loader />;
   }
 
-  console.log(productItems);
-
   return (
     <div className="grow">
       <ProductsWeb

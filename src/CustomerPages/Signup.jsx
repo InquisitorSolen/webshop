@@ -99,7 +99,7 @@ export default function Signup() {
 
   return (
     <div className="h-screen flex flex-col items-center justify-center">
-      <div className="border border-black shadow-xl rounded-3xl p-6 text-center min-w-[350px]">
+      <div className="border border-black shadow-xl rounded-3xl p-6 text-center min-w-[350px] bg-white">
         <h1 className="mb-6 text-xl font-bold">Regisztrálj ingyenesen!</h1>
         <div className="flex flex-col md:flex-row">
           <form onSubmit={onSubmit} className="flex flex-col">
@@ -109,7 +109,7 @@ export default function Signup() {
               onChange={(event) => setFamilyName(event.target.value)}
               placeholder="Vezetéknév"
               required
-              className="border-b my-2 px-2 focus:outline-none focus:border-b"
+              className="border-b my-2 px-2 focus:outline-none w-60"
             ></input>
             <input
               type="text"
@@ -117,7 +117,7 @@ export default function Signup() {
               onChange={(event) => setSurname(event.target.value)}
               placeholder="Keresztnev(ek)"
               required
-              className="border-b my-2 px-2 focus:outline-none focus:border-b"
+              className="border-b my-2 px-2 focus:outline-none w-60"
             ></input>
             <input
               value={email}
@@ -125,7 +125,7 @@ export default function Signup() {
               type="email"
               placeholder="Email cím"
               required
-              className="border-b my-2 px-2 focus:outline-none focus:border-b"
+              className="border-b my-2 px-2 focus:outline-none w-60"
             ></input>
             <input
               value={pw}
@@ -133,7 +133,7 @@ export default function Signup() {
               type="password"
               placeholder="Jelszó"
               required
-              className="border-b my-2 px-2 focus:outline-none focus:border-b"
+              className="border-b my-2 px-2 focus:outline-none w-60"
             ></input>
             <input
               value={pwConf}
@@ -141,9 +141,9 @@ export default function Signup() {
               type="password"
               placeholder="Jelszó megerősítése"
               required
-              className="border-b my-2 px-2 focus:outline-none focus:border-b"
+              className="border-b my-2 px-2 focus:outline-none w-60"
             ></input>
-            <button className="border border-black rounded-xl mx-16 my-6 px-2 py-1">
+            <button className="border border-primary rounded-xl mx-16 my-6 px-2 py-1 font-bold hover:bg-primary hover:text-white">
               Regisztráció
             </button>
           </form>

@@ -25,11 +25,11 @@ export default function LoginBtn({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col justify-center items-center">
       {currentUser === null ? (
         <>
           <button
-            className="border border-black rounded-xl md:mx-2 md:px-2 mx-[30%]"
+            className="border border-primary rounded-xl w-fit px-2 py-1 font-bold hover:bg-primary hover:text-white"
             onClick={login}
           >
             Bejelentkezés
@@ -45,10 +45,10 @@ export default function LoginBtn({
           </p>
         </>
       ) : (
-        <div className="flex flex-col md:flex-row md:gap-4">
+        <div className="flex flex-col md:flex-row md:gap-4 ">
           <Link
             to="/profile"
-            className="flex flex-col mb-2 font-bold text-lg items-center pb-3 md:pb-0 md:mb-0"
+            className="flex flex-col mb-2 font-bold text-lg items-center pb-3 md:pb-0 md:mb-0 hover:text-slate-600"
             onClick={() => {
               if (mobile) {
                 setShowMobileSunlinks("");
@@ -61,7 +61,7 @@ export default function LoginBtn({
           </Link>
           <div className="flex items-center justify-center">
             <button
-              className="border border-black rounded-xl mx-2 px-2"
+              className="border border-primary rounded-xl mx-2 px-2 py-1 hover:bg-primary hover:text-white"
               onClick={onSignOut}
             >
               <Link to="/">Kijelentkezés</Link>

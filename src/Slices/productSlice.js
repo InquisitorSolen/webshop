@@ -32,7 +32,6 @@ export const getNewProduct = createAsyncThunk(
       .doc("product")
       .get();
 
-    console.log(response.data());
     return response.data();
   }
 );
@@ -99,7 +98,6 @@ export const productSlice = createSlice({
       state.newProductLoading = true;
     });
     builder.addCase(getNewProduct.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.newProductsObj = action.payload;
       state.newProductsArray = Object.values(action.payload).sort(
         compareNewProducts
