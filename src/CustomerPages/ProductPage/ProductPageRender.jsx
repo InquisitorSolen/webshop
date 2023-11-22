@@ -61,7 +61,7 @@ export default function ProductPageRender({ pathname }) {
         </h2>
       </div>
       <div className="grow">
-        <div className=" mt-6 grid grid-cols-1 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-flow-row gap-3 justify-center items-center content-center">
+        <div className=" my-6 grid grid-cols-1 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-flow-row gap-3 justify-center items-center content-center">
           {shownProductArray.map((product) => (
             <div
               key={product.id}
@@ -74,7 +74,7 @@ export default function ProductPageRender({ pathname }) {
       </div>
       {productItems.productArray.length > 30 && (
         <div className="bg-slate-100 flex justify-center">
-          <div className="flex flex-row m-6">
+          <div className="flex flex-row mx-6 mb-6">
             {pagesArray.map((value) => {
               if (currentPage === value) {
                 return (

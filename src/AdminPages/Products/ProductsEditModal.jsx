@@ -1,6 +1,10 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { updateProduct } from "../../Slices/productSlice";
+import {
+  deleteNewProduct,
+  updateNewProduct,
+  updateProduct,
+} from "../../Slices/productSlice";
 import Modal from "react-modal";
 import modalStyle from "../../Utils/modalStyle";
 
@@ -12,7 +16,18 @@ export default function ProductsEditModal({
   categoryName,
   defaultproduct,
 }) {
+  const productItems = useSelector((state) => state.productReducer);
   const dispatch = useDispatch();
+
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDay();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const sec = date.getSeconds();
+  const curretnHour = [hours, minutes, sec].join(":");
+  const currentMin = [year, month, day, curretnHour].join("-");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,6 +57,26 @@ export default function ProductsEditModal({
             price: parseInt(editProduct.price),
             description: editProduct.description,
           },
+        })
+      );
+      const newProduct = {
+        id: id,
+        time: currentMin,
+        name: editProduct.name,
+        type: editProduct.type,
+        quantity: editProduct.quantity,
+        src: editProduct.src,
+        price: parseInt(editProduct.price),
+        description: editProduct.description,
+        category: categoryName,
+      };
+      if (productItems.newProductsArray.length === 5) {
+        dispatch(deleteNewProduct({ id: productItems.newProductsArray[0].id }));
+      }
+      dispatch(
+        updateNewProduct({
+          id,
+          product: newProduct,
         })
       );
     } else {

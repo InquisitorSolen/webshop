@@ -1,4 +1,5 @@
 import { getCart } from "../Slices/cartSlice";
+import { getNewProduct } from "../Slices/productSlice";
 import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router";
 import { getProductCategories } from "../Slices/productCaregorySlice";
@@ -24,6 +25,7 @@ export default function ShopLayout() {
     if (Cookies.get("cart") !== undefined) {
       dispatch(getCart(JSON.parse(Cookies.get("cart"))));
     }
+    dispatch(getNewProduct());
   }, [dispatch]);
 
   if (userdata.userLoading || productCategory.categoriesLoading) {

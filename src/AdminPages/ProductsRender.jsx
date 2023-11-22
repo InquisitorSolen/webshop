@@ -1,16 +1,15 @@
 import { asciify } from "../Utils/regexChecks";
-import { getProduct } from "../Slices/productSlice";
+import { getNewProduct, getProduct } from "../Slices/productSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import firebase from "../Utils/firebase";
 import Loader from "../UtilPages/Loader";
 import ProductsMobile from "./Products/ProductsMobile";
 import ProductsWeb from "./Products/ProductsWeb";
 
 export default function ProductsRender() {
   const productCategory = useSelector((state) => state.productCategoryReducer);
+  const productItems = useSelector((state) => state.productReducer);
   const dispatch = useDispatch();
-  const productRefFB = firebase.firestore().collection("Products");
 
   const [categoryName, setCategoryName] = useState(
     productCategory.productCategoriesKeys[0]
@@ -21,7 +20,8 @@ export default function ProductsRender() {
 
   useEffect(() => {
     dispatch(getProduct(categoryName));
-  }, [categoryName, dispatch, productRefFB]);
+    dispatch(getNewProduct());
+  }, [categoryName, dispatch]);
 
   const handleSelectChange = (event) => {
     event.preventDefault();
@@ -29,9 +29,11 @@ export default function ProductsRender() {
     setCategoryName(asciify(event.target.value));
   };
 
-  if (productCategory.categoriesLoading) {
+  if (productCategory.categoriesLoading || productItems.newProductLoading) {
     return <Loader />;
   }
+
+  console.log(productItems);
 
   return (
     <div className="grow">

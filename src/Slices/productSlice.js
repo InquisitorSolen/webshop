@@ -1,11 +1,14 @@
-import { compare } from "../Utils/utilFunctions";
+import { compare, compareNewProducts } from "../Utils/utilFunctions";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import firebase from "../Utils/firebase";
 
 const initialState = {
   productObj: {},
   productArray: [],
-  productLoading: true,
+  productLoading: false,
+  newProductsArray: [],
+  newProductsObj: {},
+  newProductLoading: false,
 };
 
 export const getProduct = createAsyncThunk(
@@ -20,6 +23,20 @@ export const getProduct = createAsyncThunk(
   }
 );
 
+export const getNewProduct = createAsyncThunk(
+  "productItems/getNewProduct",
+  async () => {
+    const response = await firebase
+      .firestore()
+      .collection("newProducts")
+      .doc("product")
+      .get();
+
+    console.log(response.data());
+    return response.data();
+  }
+);
+
 export const deleteProduct = createAsyncThunk(
   "productItems/deleteProduct",
   async ({ categoryName, product }, thunkAPI) => {
@@ -29,6 +46,20 @@ export const deleteProduct = createAsyncThunk(
       .doc(categoryName)
       .update({ [product]: firebase.firestore.FieldValue.delete() });
     thunkAPI.dispatch(getProduct(categoryName));
+    thunkAPI.dispatch(deleteNewProduct({ id: product }));
+    return response;
+  }
+);
+
+export const deleteNewProduct = createAsyncThunk(
+  "productItems/deleteNewProduct",
+  async ({ id }, thunkAPI) => {
+    const response = await firebase
+      .firestore()
+      .collection("newProducts")
+      .doc("product")
+      .update({ [id]: firebase.firestore.FieldValue.delete() });
+    thunkAPI.dispatch(getNewProduct());
     return response;
   }
 );
@@ -46,11 +77,39 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
+export const updateNewProduct = createAsyncThunk(
+  "productItems/updateNewProduct",
+  async ({ id, product }, thunkAPI) => {
+    const response = await firebase
+      .firestore()
+      .collection("newProducts")
+      .doc("product")
+      .update({ [id]: product });
+    thunkAPI.dispatch(getNewProduct());
+    return response;
+  }
+);
+
 export const productSlice = createSlice({
   name: "productItems",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(getNewProduct.pending, (state) => {
+      state.newProductLoading = true;
+    });
+    builder.addCase(getNewProduct.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.newProductsObj = action.payload;
+      state.newProductsArray = Object.values(action.payload).sort(
+        compareNewProducts
+      );
+      state.newProductLoading = false;
+    });
+    builder.addCase(getNewProduct.rejected, (state) => {
+      state.newProductLoading = false;
+    });
+
     builder.addCase(getProduct.pending, (state) => {
       state.productLoading = true;
     });
@@ -60,7 +119,7 @@ export const productSlice = createSlice({
       state.productLoading = false;
     });
     builder.addCase(getProduct.rejected, (state) => {
-      state.productLoading = true;
+      state.productLoading = false;
     });
 
     builder.addCase(deleteProduct.pending, (state) => {
@@ -70,7 +129,7 @@ export const productSlice = createSlice({
       state.productLoading = false;
     });
     builder.addCase(deleteProduct.rejected, (state) => {
-      state.productLoading = true;
+      state.productLoading = false;
     });
 
     builder.addCase(updateProduct.pending, (state) => {
@@ -80,7 +139,17 @@ export const productSlice = createSlice({
       state.productLoading = false;
     });
     builder.addCase(updateProduct.rejected, (state) => {
-      state.productLoading = true;
+      state.productLoading = false;
+    });
+
+    builder.addCase(updateNewProduct.pending, (state) => {
+      state.newProductLoading = true;
+    });
+    builder.addCase(updateNewProduct.fulfilled, (state) => {
+      state.newProductLoading = false;
+    });
+    builder.addCase(updateNewProduct.rejected, (state) => {
+      state.newProductLoading = false;
     });
   },
 });

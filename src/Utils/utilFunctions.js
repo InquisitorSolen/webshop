@@ -45,6 +45,14 @@ export const compareOrders = (a, b) => {
   }
 };
 
+export const compareNewProducts = (a, b) => {
+  if (a.time < b.time) {
+    return -1;
+  } else {
+    return 1;
+  }
+};
+
 export const numberWithSpaces = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 };
