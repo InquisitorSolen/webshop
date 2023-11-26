@@ -129,7 +129,7 @@ export default function CartOrder() {
                 <div className="flex flex-col w-60 mx-3 py-6 px-3 ">
                   <label>E-mail cím:</label>
                   <input
-                    className="mt-3 border bg-slate-100 text-center focus:outline-none"
+                    className="mt-3 border-b border-black text-center focus:outline-none"
                     type="email"
                     name="email"
                     placeholder="E-mail cím"

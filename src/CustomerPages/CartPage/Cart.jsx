@@ -116,7 +116,7 @@ export default function Cart() {
               )}
               <div className="flex flex-row justify-between px-3 mx-3 my-6 border-b pb-6">
                 <p>Összesen</p>
-                {user.lvl === 2 && (
+                {user.lvl === 2 ? (
                   <div className="flex flex-col text-end">
                     <p
                       className={`${user.lvl === 2 && "text-danger font-bold"}`}
@@ -131,6 +131,19 @@ export default function Cart() {
                     <p className="line-through text-sm">
                       {numberWithSpaces(
                         parseInt(Math.round(cart.cartPrice) / 5) * 5
+                      )}{" "}
+                      Ft
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col text-end">
+                    <p
+                      className={`${user.lvl === 2 && "text-danger font-bold"}`}
+                    >
+                      {numberWithSpaces(
+                        parseInt(
+                          Math.round(cart.cartPrice - cart.cartPrice * 0.15) / 5
+                        ) * 5
                       )}{" "}
                       Ft
                     </p>

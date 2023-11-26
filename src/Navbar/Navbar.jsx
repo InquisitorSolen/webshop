@@ -38,7 +38,7 @@ export default function Navbar({
         <ul className="md:flex hidden uppercase items-center gap-8">
           <li>
             <Link to="/" className="py-7 px-3 inline-block font-bold">
-              WebShop
+              Nyitólap
             </Link>
           </li>
           <li className="flex">
@@ -94,7 +94,7 @@ export default function Navbar({
                 setMobileNavOpen(!mobileNavOpen);
               }}
             >
-              WebShop
+              Nyitólap
             </Link>
           </li>
           <li className="flex">
