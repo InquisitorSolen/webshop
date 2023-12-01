@@ -13,31 +13,18 @@ const initialState = {
   userLoading: false,
 };
 
-export const updateAdmin = createAsyncThunk(
+export const updateUser = createAsyncThunk(
   "user/updateUserAdmin",
   async ({ id, data }, thunkAPI) => {
+    console.log(data);
     const responseAdmin = await firebase
       .firestore()
       .collection("users")
-      .doc("admins")
-      .update({ [id]: data });
+      .doc(id)
+      .update(data);
 
-    thunkAPI.dispatch(getUserAsync(data.email));
+    thunkAPI.dispatch(getUserAsync(id));
     return responseAdmin;
-  }
-);
-
-export const updateCustomer = createAsyncThunk(
-  "user/updateUserCustomer",
-  async ({ id, data }, thunkAPI) => {
-    const responseCustomer = await firebase
-      .firestore()
-      .collection("users")
-      .doc("customers")
-      .update({ [id]: data });
-
-    thunkAPI.dispatch(getUserAsync(data.email));
-    return responseCustomer;
   }
 );
 
@@ -56,7 +43,6 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     getUser(state, action) {
-      state.userLoading = action.payload.userLoading;
       state.email = action.payload.email;
       state.familyName = action.payload.familyName;
       state.surname = action.payload.surname;
@@ -85,23 +71,13 @@ export const userSlice = createSlice({
       state.userLoading = false;
     });
 
-    builder.addCase(updateCustomer.pending, (state) => {
+    builder.addCase(updateUser.pending, (state) => {
       state.userLoading = true;
     });
-    builder.addCase(updateCustomer.fulfilled, (state) => {
+    builder.addCase(updateUser.fulfilled, (state) => {
       state.userLoading = false;
     });
-    builder.addCase(updateCustomer.rejected, (state) => {
-      state.userLoading = false;
-    });
-
-    builder.addCase(updateAdmin.pending, (state) => {
-      state.userLoading = true;
-    });
-    builder.addCase(updateAdmin.fulfilled, (state) => {
-      state.userLoading = false;
-    });
-    builder.addCase(updateAdmin.rejected, (state) => {
+    builder.addCase(updateUser.rejected, (state) => {
       state.userLoading = false;
     });
   },
