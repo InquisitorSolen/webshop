@@ -23,7 +23,6 @@ export default function Signup() {
         .auth()
         .createUserWithEmailAndPassword(email, pw)
         .then(async (res) => {
-          console.log(res);
           if (res) {
             await userRefFB.collection("users").doc(res.user.uid).set({
               id: res.user.uid,
