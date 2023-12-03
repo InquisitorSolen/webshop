@@ -7,9 +7,8 @@ export default function ProfileOrder() {
   const user = useSelector((state) => state.userReducer);
 
   const localOrders = Object.values(user.orders);
-  const localArray = localOrders.map(() => false);
 
-  const [showData, setShowData] = useState(localArray);
+  const [showData, setShowData] = useState("");
 
   return (
     <div className="flex flex-col grow items-centere m-6">
@@ -20,24 +19,22 @@ export default function ProfileOrder() {
               <button
                 className="flex felx-row items-center"
                 onClick={() => {
-                  if (!showData[key]) {
-                    const subArray = localArray;
-                    subArray.fill(true, key, key + 1);
-                    setShowData(subArray);
+                  if (showData === key) {
+                    setShowData("");
                   } else {
-                    setShowData(localArray);
+                    setShowData(key);
                   }
                 }}
               >
                 <h1 className="font-bold text-lg mr-6">{order.date}</h1>
                 <h2 className="text-lg">{order.address}</h2>
-                {showData[key] ? <BsChevronUp /> : <BsChevronDown />}
+                {showData === key ? <BsChevronUp /> : <BsChevronDown />}
               </button>
               <h1 className="text-lg font-bold">
                 {numberWithSpaces(order.price)} Ft
               </h1>
             </div>
-            {showData[key] && (
+            {showData === key && (
               <div className="flex flex-col">
                 {order.cartProducts.map((product) => {
                   return (
