@@ -23,9 +23,10 @@ export default function Signup() {
         .auth()
         .createUserWithEmailAndPassword(email, pw)
         .then(async (res) => {
+          console.log(res);
           if (res) {
-            await userRefFB.collection("users").doc(res.uid).set({
-              id: res.uid,
+            await userRefFB.collection("users").doc(res.user.uid).set({
+              id: res.user.uid,
               email,
               familyName,
               surname,
@@ -35,23 +36,27 @@ export default function Signup() {
               orders: {},
             });
             await userRefFB
-              .collection("usersArray")
+              .collection("usersArrays")
               .doc("customers")
-              .update({
-                [res.uid]: {
-                  id: res.uid,
-                  email,
-                  familyName,
-                  surname,
-                  lvl: 1,
-                  admin: false,
-                  addresses: [],
-                  orders: {},
+              .set(
+                {
+                  [res.user.uid]: {
+                    id: res.user.uid,
+                    email,
+                    familyName,
+                    surname,
+                    lvl: 1,
+                    admin: false,
+                    addresses: [],
+                    orders: {},
+                  },
                 },
-              })
+                { merge: true }
+              )
               .catch((err) => {
                 console.error(err);
               });
+            firebase.auth().currentUser.sendEmailVerification();
           }
         })
         .then(navigate("/"))

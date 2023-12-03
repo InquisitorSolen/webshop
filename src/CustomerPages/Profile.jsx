@@ -99,9 +99,11 @@ export default function Profile() {
         </div>
         <div className="flex flex-row gap-6 items-center">
           <button
-            className={`border ${
+            className={`${
               selectPage === "2"
-                ? "border-primary hover:bg-primary hover:text-white"
+                ? "border border-primary hover:bg-primary hover:text-white"
+                : Object.keys(user.orders).length === 0
+                ? "border-2 border-primary bg-slate-600 text-white"
                 : "border-slate-600 bg-slate-600 text-white"
             } rounded-2xl py-1 px-2 font-bold  h-fit`}
             disabled={selectPage === "1"}
@@ -113,13 +115,15 @@ export default function Profile() {
           </button>
           <button
             className={`border ${
-              user.orders.length === 0
+              Object.keys(user.orders).length === 0
                 ? "border-slate-600 bg-slate-600 text-white"
                 : selectPage === "1"
                 ? "border-primary hover:bg-primary hover:text-white"
                 : "border-slate-600 bg-slate-600 text-white"
             }  rounded-2xl py-1 px-2 font-bold  h-fit`}
-            disabled={user.orders.length === 0 || selectPage === "2"}
+            disabled={
+              Object.keys(user.orders).length === 0 || selectPage === "2"
+            }
             onClick={() => {
               setSelectPage("2");
             }}

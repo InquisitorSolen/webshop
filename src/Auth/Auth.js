@@ -16,8 +16,6 @@ export const AuthProvider = ({ children }) => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         const date = new Date().getTime() - 172800000;
-        console.log(date);
-        console.log(user.metadata.lastLoginAt);
         if (user.metadata.lastLoginAt < date) {
           firebase.auth().signOut();
           dispatch(
