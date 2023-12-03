@@ -15,9 +15,29 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        setCurrentUser(user);
-        dispatch(getUserAsync(user.uid));
-        setLoading(false);
+        const date = new Date().getTime() - 172800000;
+        console.log(date);
+        console.log(user.metadata.lastLoginAt);
+        if (user.metadata.lastLoginAt < date) {
+          firebase.auth().signOut();
+          dispatch(
+            getUser({
+              lvl: 0,
+              email: "",
+              familyName: "",
+              surname: "",
+              admin: false,
+              addresses: [],
+              orders: [],
+            })
+          );
+          setCurrentUser(null);
+          setLoading(false);
+        } else {
+          setCurrentUser(user);
+          dispatch(getUserAsync(user.uid));
+          setLoading(false);
+        }
       } else {
         dispatch(
           getUser({

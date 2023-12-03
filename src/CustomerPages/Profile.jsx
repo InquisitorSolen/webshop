@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../Slices/userSlice";
 import Loader from "../UtilPages/Loader";
 import ProfileOrder from "./ProfilePage/ProfileOrder";
+import ProfileDeleteModal from "./ProfilePage/ProfileDeleteModal";
 
 export default function Profile() {
   const user = useSelector((state) => state.userReducer);
@@ -35,6 +36,7 @@ export default function Profile() {
     user.addresses.length === 0 ? defaultAddress : user.addresses[0]
   );
   const [selectPage, setSelectPage] = useState("1");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -125,7 +127,12 @@ export default function Profile() {
             Rendelések
           </button>
         </div>
-        <button className="border border-danger rounded-2xl py-1 px-2 font-bold hover:bg-danger h-fit my-7 mr-6">
+        <button
+          className="border border-danger rounded-2xl py-1 px-2 font-bold hover:bg-danger h-fit my-7 mr-6"
+          onClick={() => {
+            setModalOpen(true);
+          }}
+        >
           Profil törlése
         </button>
       </div>
@@ -298,6 +305,7 @@ export default function Profile() {
       ) : (
         <ProfileOrder />
       )}
+      <ProfileDeleteModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
     </div>
   );
 }
