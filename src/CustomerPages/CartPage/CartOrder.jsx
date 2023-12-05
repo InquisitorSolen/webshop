@@ -17,8 +17,14 @@ export default function CartOrder() {
   const [stripePromise, setStripePromise] = useState(null);
 
   useEffect(() => {
-    setStripePromise(loadStripe(`${process.env.STRIPE_PUBLISHABLE_KEY}`));
+    setStripePromise(
+      loadStripe(
+        "pk_test_51OCJpmDnWpHcKHorBKPVwjbC5Edu7X1ODbwRyisSQBD4z0j0vV5PA1fc9o7xCjVQtP8OFYaeuK3JhwUXB2qful3I00E9r476pA"
+      )
+    );
   }, []);
+
+  console.log(stripePromise);
 
   const defaultAddress = {
     postalCode: "",
@@ -338,7 +344,7 @@ export default function CartOrder() {
           </button>
         )}
       </div>
-      {stripePromise && (
+      {stripePromise !== null && (
         <Elements stripe={stripePromise}>
           <CartStripeModal setOpenModal={setOpenModal} openModal={openModal} />
         </Elements>

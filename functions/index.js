@@ -1,19 +1,42 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+const functions = require("firebase-functions");
 
-const {onRequest} = require("firebase-functions/v2/https");
-const logger = require("firebase-functions/logger");
+const express = require("express");
+const app = express();
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
+require("dotenv").config();
 
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+const stripe = require("stripe")(process.env.STRIPE_SECRET_TEST_KEY);
+
+const bodyParser = require("body-parser");
+
+const cors = require("cors");
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cors());
+
+app.post("/payment", cors(), async (req, res) => {
+  let { amount, id } = req.body;
+
+  try {
+    await stripe.paymentIntents.create({
+      amount,
+      currency: "HUF",
+      description: "AlkIO Vásárlás",
+      payment_method: id,
+      confirm: true,
+    });
+
+    res.json({
+      message: "Payment successful",
+      success: true,
+    });
+  } catch (error) {
+    res.json({
+      message: "Payment failed",
+      success: false,
+    });
+  }
+});
+
+exports.api = functions.region("europe-west1").https.onRequest(app);

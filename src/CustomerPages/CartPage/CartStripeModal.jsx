@@ -6,6 +6,7 @@ import { cardStyle, modalStyle } from "../../Utils/style";
 import Modal from "react-modal";
 import "./CartStripeModal.css";
 import { numberWithSpaces } from "../../Utils/utilFunctions";
+import axios from "axios";
 
 export default function CartStripeModal({ openModal, setOpenModal }) {
   const cart = useSelector((state) => state.cartReducer);
@@ -35,12 +36,15 @@ export default function CartStripeModal({ openModal, setOpenModal }) {
       try {
         const { id } = paymentMethod;
         // this should be passed to backend
-        const response = {
-          amount:
-            parseInt(Math.round(cart.cartPrice - cart.cartPrice * 0.15) / 5) *
-            5,
-          id,
-        };
+        const response = await axios.post(
+          "https://europe-west1-webshop-d4135.cloudfunctions.net/api/payment",
+          {
+            amount:
+              parseInt(Math.round(cart.cartPrice - cart.cartPrice * 0.15) / 5) *
+              5,
+            id,
+          }
+        );
 
         if (response.data.success) {
           console.log("payment success");
@@ -51,6 +55,7 @@ export default function CartStripeModal({ openModal, setOpenModal }) {
       }
     } else {
       console.log("CreatePaymentError", error.message);
+      console.log("CreatePaymentError", error);
     }
   };
 
