@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import Modal from "react-modal";
-import modalStyle from "../../Utils/modalStyle";
+import { modalStyle } from "../../Utils/style";
 import firebase from "../../Utils/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../../Slices/userSlice";

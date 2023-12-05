@@ -1,5 +1,5 @@
 import Modal from "react-modal";
-import modalStyle from "../../Utils/modalStyle";
+import { modalStyle } from "../../Utils/style";
 
 export default function OrderDetailsModal({
   order,

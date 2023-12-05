@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import Modal from "react-modal";
 import firebase from "../Utils/firebase";
-import modalStyle from "../Utils/modalStyle";
+import { modalStyle } from "../Utils/style";
 
 export default function LoginModal({ setLoginModalOpen, loginModalOpen }) {
   const emailRef = useRef();

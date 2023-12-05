@@ -6,7 +6,7 @@ import {
   updateProduct,
 } from "../../Slices/productSlice";
 import Modal from "react-modal";
-import modalStyle from "../../Utils/modalStyle";
+import { modalStyle } from "../../Utils/style";
 
 export default function ProductsEditModal({
   editProductModalOpen,

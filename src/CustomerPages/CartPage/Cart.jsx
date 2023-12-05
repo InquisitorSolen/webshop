@@ -163,7 +163,7 @@ export default function Cart() {
               </button>
             ) : (
               <Link
-                className="border border-primary rounded-2xl py-1 px-2 font-bold hover:bg-blue-400"
+                className="border border-primary rounded-2xl py-1 px-2 font-bold hover:bg-primary hover:text-white"
                 to="/cart/order"
               >
                 Megrendelés

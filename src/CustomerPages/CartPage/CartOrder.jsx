@@ -1,14 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getCart, setPurchase } from "../../Slices/cartSlice";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
+import CartStripeModal from "./CartStripeModal";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
 export default function CartOrder() {
   const cart = useSelector((state) => state.cartReducer);
   const user = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // eslint-disable-next-line no-unused-vars
+  const [stripePromise, setStripePromise] = useState(null);
+
+  useEffect(() => {
+    setStripePromise(loadStripe(`${process.env.STRIPE_PUBLISHABLE_KEY}`));
+  }, []);
 
   const defaultAddress = {
     postalCode: "",
@@ -27,6 +37,7 @@ export default function CartOrder() {
   );
   const [paymentType, setPaymentType] = useState("cash");
   const [contact, setContact] = useState({ email: "", name: "" });
+  const [openModal, setOpenModal] = useState(false);
 
   const handleSelectChange = (event) => {
     const val = parseInt(event.target.value);
@@ -52,43 +63,52 @@ export default function CartOrder() {
   const pay = (e) => {
     e.preventDefault();
 
-    const fulladdress = `${address.postalCode} ${address.city} ${address.street} ${address.building} ${address.floor} ${address.doorNumber} `;
-    const cartitems = cart.cartProducts.map((item) => {
-      return {
-        id: item.id,
-        quantity: item.inCartAmount,
-        name: `${item.name} ${item.type} ${item.productCategory}`,
+    if (paymentType === "cash") {
+      const fulladdress = `${address.postalCode} ${address.city} ${address.street} ${address.building} ${address.floor} ${address.doorNumber} `;
+      const cartitems = cart.cartProducts.map((item) => {
+        return {
+          id: item.id,
+          quantity: item.inCartAmount,
+          name: `${item.name} ${item.type} ${item.productCategory}`,
+        };
+      });
+      let data = {
+        cartProducts: cartitems,
+        address: fulladdress,
+        paymentType,
       };
-    });
-    let data = {
-      cartProducts: cartitems,
-      address: fulladdress,
-    };
-    if (user.lvl === 2) {
-      data = {
-        ...data,
-        price:
-          parseInt(Math.round(cart.cartPrice - cart.cartPrice * 0.15) / 5) * 5,
-      };
-    } else {
-      data = { ...data, price: parseInt(Math.round(cart.cartPrice) / 5) * 5 };
-    }
+      if (user.lvl === 2) {
+        data = {
+          ...data,
+          price:
+            parseInt(Math.round(cart.cartPrice - cart.cartPrice * 0.15) / 5) *
+            5,
+        };
+      } else {
+        data = { ...data, price: parseInt(Math.round(cart.cartPrice) / 5) * 5 };
+      }
 
-    if (user.lvl === 0) {
-      dispatch(setPurchase({ user: null, data, contact }));
-      dispatch(getCart({ cartProducts: [], cartPrice: 0, cartItemNumber: 0 }));
-      Cookies.remove("cart");
+      if (user.lvl === 0) {
+        dispatch(setPurchase({ user: null, data, contact }));
+        dispatch(
+          getCart({ cartProducts: [], cartPrice: 0, cartItemNumber: 0 })
+        );
+        Cookies.remove("cart");
+      } else {
+        const contactLocal = {
+          email: user.email,
+          name: `${user.familyName} ${user.surname}`,
+        };
+        dispatch(setPurchase({ user, data, contact: contactLocal }));
+        dispatch(
+          getCart({ cartProducts: [], cartPrice: 0, cartItemNumber: 0 })
+        );
+        Cookies.remove("cart");
+      }
+      navigate("/");
     } else {
-      const contactLocal = {
-        email: user.email,
-        name: `${user.familyName} ${user.surname}`,
-      };
-      dispatch(setPurchase({ user, data, contact: contactLocal }));
-      dispatch(getCart({ cartProducts: [], cartPrice: 0, cartItemNumber: 0 }));
-      Cookies.remove("cart");
+      setOpenModal(true);
     }
-
-    navigate("/");
   };
 
   if (cart.cartProducts.length === 0) {
@@ -285,7 +305,7 @@ export default function CartOrder() {
             <label>Utánvét:</label>
             <input
               type="radio"
-              onChange={setPaymentType}
+              onChange={(e) => setPaymentType(e.target.value)}
               value="cash"
               checked={paymentType === "cash"}
             ></input>
@@ -294,10 +314,10 @@ export default function CartOrder() {
             <label>Bankkártya:</label>
             <input
               type="radio"
-              onChange={setPaymentType}
+              onChange={(e) => setPaymentType(e.target.value)}
               value="card"
               checked={paymentType === "card"}
-              disabled
+              disabled={stripePromise === null}
             ></input>
           </div>
         </div>
@@ -305,19 +325,24 @@ export default function CartOrder() {
           <button
             type="submit"
             form="addressForm"
-            className="border border-primary rounded-2xl py-1 px-2 font-bold w-fit bg-white hover:bg-blue-400"
+            className="border border-primary rounded-2xl py-1 px-2 font-bold w-fit bg-white hover:bg-primary hover:text-white"
           >
             Megrendelés
           </button>
         ) : (
           <button
-            className="border border-primary rounded-2xl py-1 px-2 font-bold w-fit bg-white hover:bg-blue-400"
+            className="border border-primary rounded-2xl py-1 px-2 font-bold w-fit bg-white hover:bg-primary hover:text-white"
             onClick={pay}
           >
             Megrendelés
           </button>
         )}
       </div>
+      {stripePromise && (
+        <Elements stripe={stripePromise}>
+          <CartStripeModal setOpenModal={setOpenModal} openModal={openModal} />
+        </Elements>
+      )}
     </div>
   );
 }

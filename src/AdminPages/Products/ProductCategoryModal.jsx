@@ -6,7 +6,7 @@ import { asciify } from "../../Utils/regexChecks";
 import { useDispatch } from "react-redux";
 import Modal from "react-modal";
 import firebase from "../../Utils/firebase";
-import modalStyle from "../../Utils/modalStyle";
+import { modalStyle } from "../../Utils/style";
 
 export default function ProductCategoryModal({
   addCategoryModalOpen,
