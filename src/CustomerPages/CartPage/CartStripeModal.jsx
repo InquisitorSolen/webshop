@@ -101,7 +101,7 @@ export default function CartStripeModal({
             }
             closeModal();
             navigate("/");
-          }, 30000);
+          }, 5000);
         } else {
           setPaymentError(true);
         }

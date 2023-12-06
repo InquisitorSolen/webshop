@@ -120,7 +120,7 @@ export default function CartOrder() {
   };
 
   if (cart.cartProducts.length === 0) {
-    return <Navigate to="*" />;
+    return <Navigate to="/" />;
   }
 
   return (
