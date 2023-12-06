@@ -16,15 +16,16 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.post("/payment", cors(), async (req, res) => {
-  let { amount, id } = req.body;
+  let { price, id } = req.body;
 
   try {
     await stripe.paymentIntents.create({
-      amount,
-      currency: "HUF",
+      amount: price,
+      currency: "huf",
       description: "AlkIO Vásárlás",
       payment_method: id,
       confirm: true,
+      return_url: "https://webshop-d4135.firebaseapp.com/",
     });
 
     res.json({
@@ -35,6 +36,7 @@ app.post("/payment", cors(), async (req, res) => {
     res.json({
       message: "Payment failed",
       success: false,
+      error,
     });
   }
 });

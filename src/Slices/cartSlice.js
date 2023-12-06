@@ -21,7 +21,7 @@ const currentMin = [year, month, day, curretnHour].join("-");
 
 export const setPurchase = createAsyncThunk(
   "cart/setPurchase",
-  async ({ user, data, contact }) => {
+  async ({ user, data, contact, payType }) => {
     let purchase = { ...data, date: dateDaySlashes, user: null };
 
     if (user !== null) {
@@ -41,37 +41,69 @@ export const setPurchase = createAsyncThunk(
       .firestore()
       .collection("orders")
       .doc(dateMontSlashes)
-      .update({ [currentMin]: purchase });
+      .set({ [currentMin]: purchase }, { merge: true });
 
-    firebase
-      .firestore()
-      .collection("mail")
-      .add({
-        to: [`${contact.email}`],
-        message: {
-          subject: "AlkIO rendelés",
-          text: "",
-          html: `<h2>Rendelését ${dateDaySlashes}-i dátummal fogadtuk ${
-            contact.name
-          } név alatt</h2> 
-                <h3>A rendelés várhatólag 7 napon belül kiszállításra kerül</h3>
-                <br/>
-                <b>Rendelés tartalma:</b> <br/>
-                  ${data.cartProducts.map((item) => {
-                    return `${item.name}  ${item.quantity} db <br>`;
-                  })}
-                <br/>
-                <b>A rendelés összege:</b> ${data.price} Ft
-                <br/>
-                <b>Fizetés módja:</b> kézpénzzel kiszállításkor
-                <br/>
-                <br/>
-                Rendelését ezuton is köszönjük! 
-                <br/>
-                AlkIO csapat
-              `,
-        },
-      });
+    if (payType === "card") {
+      firebase
+        .firestore()
+        .collection("mail")
+        .add({
+          to: [`${contact.email}`],
+          message: {
+            subject: "AlkIO rendelés",
+            text: "",
+            html: `<h2>Rendelését ${dateDaySlashes}-i dátummal fogadtuk ${
+              contact.name
+            } név alatt</h2> 
+                    <h3>A rendelés várhatólag 7 napon belül kiszállításra kerül</h3>
+                    <br/>
+                    <b>Rendelés tartalma:</b> <br/>
+                      ${data.cartProducts.map((item) => {
+                        return `${item.name}  ${item.quantity} db <br>`;
+                      })}
+                    <br/>
+                    <b>A rendelés összege:</b> ${data.price} Ft
+                    <br/>
+                    <b>Fizetés módja:</b> bankkártyával fizetve
+                    <br/>
+                    <br/>
+                    Rendelését ezuton is köszönjük! 
+                    <br/>
+                    AlkIO csapat
+                  `,
+          },
+        });
+    } else {
+      firebase
+        .firestore()
+        .collection("mail")
+        .add({
+          to: [`${contact.email}`],
+          message: {
+            subject: "AlkIO rendelés",
+            text: "",
+            html: `<h2>Rendelését ${dateDaySlashes}-i dátummal fogadtuk ${
+              contact.name
+            } név alatt</h2> 
+                    <h3>A rendelés várhatólag 7 napon belül kiszállításra kerül</h3>
+                    <br/>
+                    <b>Rendelés tartalma:</b> <br/>
+                      ${data.cartProducts.map((item) => {
+                        return `${item.name}  ${item.quantity} db <br>`;
+                      })}
+                    <br/>
+                    <b>A rendelés összege:</b> ${data.price} Ft
+                    <br/>
+                    <b>Fizetés módja:</b> kézpénzzel kiszállításkor
+                    <br/>
+                    <br/>
+                    Rendelését ezuton is köszönjük! 
+                    <br/>
+                    AlkIO csapat
+                  `,
+          },
+        });
+    }
 
     return response;
   }

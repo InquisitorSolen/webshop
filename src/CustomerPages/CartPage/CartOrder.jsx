@@ -24,8 +24,6 @@ export default function CartOrder() {
     );
   }, []);
 
-  console.log(stripePromise);
-
   const defaultAddress = {
     postalCode: "",
     city: "",
@@ -44,6 +42,7 @@ export default function CartOrder() {
   const [paymentType, setPaymentType] = useState("cash");
   const [contact, setContact] = useState({ email: "", name: "" });
   const [openModal, setOpenModal] = useState(false);
+  const [paymentInfo, setPaymentInfo] = useState(null);
 
   const handleSelectChange = (event) => {
     const val = parseInt(event.target.value);
@@ -69,33 +68,34 @@ export default function CartOrder() {
   const pay = (e) => {
     e.preventDefault();
 
-    if (paymentType === "cash") {
-      const fulladdress = `${address.postalCode} ${address.city} ${address.street} ${address.building} ${address.floor} ${address.doorNumber} `;
-      const cartitems = cart.cartProducts.map((item) => {
-        return {
-          id: item.id,
-          quantity: item.inCartAmount,
-          name: `${item.name} ${item.type} ${item.productCategory}`,
-        };
-      });
-      let data = {
-        cartProducts: cartitems,
-        address: fulladdress,
-        paymentType,
+    const fulladdress = `${address.postalCode} ${address.city} ${address.street} ${address.building} ${address.floor} ${address.doorNumber} `;
+    const cartitems = cart.cartProducts.map((item) => {
+      return {
+        id: item.id,
+        quantity: item.inCartAmount,
+        name: `${item.name} ${item.type} ${item.productCategory}`,
       };
-      if (user.lvl === 2) {
-        data = {
-          ...data,
-          price:
-            parseInt(Math.round(cart.cartPrice - cart.cartPrice * 0.15) / 5) *
-            5,
-        };
-      } else {
-        data = { ...data, price: parseInt(Math.round(cart.cartPrice) / 5) * 5 };
-      }
+    });
+    let data = {
+      cartProducts: cartitems,
+      address: fulladdress,
+      paymentType,
+    };
+    if (user.lvl === 2) {
+      data = {
+        ...data,
+        price:
+          parseInt(Math.round(cart.cartPrice - cart.cartPrice * 0.15) / 5) * 5,
+      };
+    } else {
+      data = { ...data, price: parseInt(Math.round(cart.cartPrice) / 5) * 5 };
+    }
 
+    setPaymentInfo(data);
+
+    if (paymentType === "cash") {
       if (user.lvl === 0) {
-        dispatch(setPurchase({ user: null, data, contact }));
+        dispatch(setPurchase({ user: null, data, contact, payType: "cash" }));
         dispatch(
           getCart({ cartProducts: [], cartPrice: 0, cartItemNumber: 0 })
         );
@@ -105,7 +105,9 @@ export default function CartOrder() {
           email: user.email,
           name: `${user.familyName} ${user.surname}`,
         };
-        dispatch(setPurchase({ user, data, contact: contactLocal }));
+        dispatch(
+          setPurchase({ user, data, contact: contactLocal, payType: "cash" })
+        );
         dispatch(
           getCart({ cartProducts: [], cartPrice: 0, cartItemNumber: 0 })
         );
@@ -346,7 +348,12 @@ export default function CartOrder() {
       </div>
       {stripePromise !== null && (
         <Elements stripe={stripePromise}>
-          <CartStripeModal setOpenModal={setOpenModal} openModal={openModal} />
+          <CartStripeModal
+            setOpenModal={setOpenModal}
+            openModal={openModal}
+            paymentInfo={paymentInfo}
+            contact={contact}
+          />
         </Elements>
       )}
     </div>
