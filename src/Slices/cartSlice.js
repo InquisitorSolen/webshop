@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import firebase from "../Utils/firebase";
+import { getUserAsync } from "./userSlice";
 
 const initialState = {
   cartProducts: [],
@@ -21,7 +22,7 @@ const currentMin = [year, month, day, curretnHour].join("-");
 
 export const setPurchase = createAsyncThunk(
   "cart/setPurchase",
-  async ({ user, data, contact, payType }) => {
+  async ({ user, data, contact, payType }, thunkAPI) => {
     let purchase = { ...data, date: dateDaySlashes, user: null };
 
     if (user !== null) {
@@ -104,7 +105,9 @@ export const setPurchase = createAsyncThunk(
           },
         });
     }
-
+    if (user !== null) {
+      thunkAPI.dispatch(getUserAsync(user.uid));
+    }
     return response;
   }
 );
